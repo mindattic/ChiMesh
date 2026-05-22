@@ -9,7 +9,7 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22c*
+*Last updated: 2026.05.22d*
 
 ---
 
@@ -276,6 +276,14 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22d
+
+- **Back-filled .c update notes.** The .c build (preview-image rollout) deployed without a corresponding entry below. Added retroactive notes for .c so the changelog is contiguous.
+
+### 2026.05.22c
+
+- **Part-card preview images.** All ten core parts now show a product photo on their card in the shopping list: RAK4631, RAK19003, LiFePO4 cell, 18650 holder, TP5000, 5V/2W panel, 915 MHz SMA antenna, IPEX→SMA pigtail, IP65 enclosure, M12 gland. Images are base64-encoded into a per-pid CSS rule by `build-html.js` (reads `imageFile` from `config/parts.json`), so the HTM stays single-file with no external asset fetches.
 
 ### 2026.05.22b
 

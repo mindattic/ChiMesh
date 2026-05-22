@@ -1,8 +1,10 @@
 # deploy.ps1 - ChiMesh FTP deploy.
 #
-# 1. Regenerates ChiMesh.htm from ChiMesh.md (build-html.js).
-# 2. Stamps index.htm with a "Last Updated" comment.
-# 3. Uploads ChiMesh.md, ChiMesh.htm, and index.htm to the FTP target
+# 1. Pulls subscribed components (fonts, shared CSS) from
+#    MindAttic.Components/sync/sync-chimesh.ps1 into build-html.js.
+# 2. Regenerates ChiMesh.htm from ChiMesh.md (build-html.js).
+# 3. Stamps index.htm with a "Last Updated" comment.
+# 4. Uploads ChiMesh.md, ChiMesh.htm, and index.htm to the FTP target
 #    (defaults to /mindattic.com/chimesh/) via curl.exe.
 #
 # Credentials live in scripts/cli/deploy.settings.json (gitignored). Start from
@@ -10,13 +12,41 @@
 
 param (
     [string]$SettingsFile = "$PSScriptRoot\deploy.settings.json",
-    [switch]$NoBuild
+    [switch]$NoBuild,
+    [switch]$NoSync
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+
+# ---------------------------------------------------------------------------
+# Pull latest subscribed components from MindAttic.Components.
+# Sibling repo at ../MindAttic.Components splices font / shared-CSS marker
+# blocks into scripts/cli/build-html.js. Run BEFORE the version bump so the
+# build that follows reflects any upstream component updates.
+# ---------------------------------------------------------------------------
+if (-not $NoSync) {
+    $componentsRoot = Join-Path (Split-Path -Parent $repoRoot) 'MindAttic.Components'
+    $syncScript     = Join-Path $componentsRoot 'sync\sync-chimesh.ps1'
+    if (-not (Test-Path $syncScript)) {
+        Write-Error @"
+MindAttic.Components sync script not found at:
+    $syncScript
+
+Either clone MindAttic.Components next to ChiMesh, or pass -NoSync to skip the
+component refresh and deploy whatever is currently spliced into build-html.js.
+"@
+        exit 1
+    }
+    Write-Host "Syncing MindAttic.Components -> build-html.js ..."
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $syncScript -ChiMeshRoot $repoRoot
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "sync-chimesh.ps1 failed (exit $LASTEXITCODE). Aborting deploy."
+        exit 1
+    }
+}
 
 # ---------------------------------------------------------------------------
 # Load settings

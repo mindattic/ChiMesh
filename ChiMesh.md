@@ -9,7 +9,7 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22h*
+*Last updated: 2026.05.22i*
 
 ---
 
@@ -276,6 +276,10 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22i
+
+- **Deploy now pulls subscribed components first.** `deploy.ps1` runs `MindAttic.Components/sync/sync-chimesh.ps1` before the version bump, so every deploy picks up the latest fonts and shared CSS from the sibling components repo without a manual sync step. Pass `-NoSync` (or skip if the components repo isn't checked out next to ChiMesh) and the deploy proceeds against whatever is already spliced into `build-html.js`. `.claude/commands/deploy.md` updated to describe the full 5-step flow.
 
 ### 2026.05.22h
 

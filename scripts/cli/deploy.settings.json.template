@@ -7,5 +7,8 @@
   "FtpPassword":    "REPLACE_ME",
   "FtpRemotePath":  "/mindattic.com/chimesh",
   "FtpUseSsl":      true,
-  "FtpPassive":     true
+  "FtpPassive":     true,
+
+  "_FtpInsecure_comment": "Skip TLS cert validation. Default true (covers shared-hosting FTPS where the cert doesn't match the FTP hostname/IP). Set false when you control the cert chain and want strict validation.",
+  "FtpInsecure":    true
 }

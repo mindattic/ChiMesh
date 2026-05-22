@@ -3,10 +3,12 @@
     Walk one USB-connected RAK4631 Meshtastic node through the standard ChiMesh provisioning steps.
 
 .DESCRIPTION
-    Uses the `meshtastic` Python CLI to set region, role, channel name, PSK, and
-    owner name on whichever Meshtastic device is on the first serial port the
-    CLI finds. Idempotent — re-running on an already-provisioned node is safe
-    and just confirms the existing values.
+    Uses the `meshtastic` Python CLI to set region, role, channel-zero name,
+    and owner name on whichever Meshtastic device is on the first serial port
+    the CLI finds. The channel PSK is left at the Meshtastic default — generate
+    one separately when you're ready for the deployment phase. Idempotent —
+    re-running on an already-provisioned node is safe and just confirms the
+    existing values.
 
     Prereq:  pip install --upgrade meshtastic
 
@@ -76,7 +78,6 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host $info
     exit 2
 }
-$idLine = ($info | Select-String -Pattern '^\s*Owner|^\s*My info').FirstMatch
 Write-Ok 'node responding'
 
 # 4. Push config in one pass — the CLI batches --set / --ch-set arguments.
@@ -94,16 +95,23 @@ if ($LASTEXITCODE -ne 0) {
     exit 3
 }
 
-# The CLI reboots the node after writes — give it a moment before reading back.
-Start-Sleep -Seconds 3
+# The CLI reboots the node after writes. Poll `--info` rather than guess at
+# a fixed sleep: nRF52840 reboots in ~2 s typically, but USB-CDC re-enumeration
+# can take up to ~8 s on some Windows hosts. Retry up to 5×2s before giving up.
+Write-Info 'waiting for node to come back from reboot ...'
+$confirm = $null
+for ($i = 0; $i -lt 5; $i++) {
+    Start-Sleep -Seconds 2
+    $confirm = & meshtastic @portArgs --info 2>&1
+    if ($LASTEXITCODE -eq 0) { break }
+}
+if ($LASTEXITCODE -ne 0) {
+    Write-Warn2 'read-back failed after 10s (node may still be rebooting). Try `meshtastic --info` again in 10s.'
+    exit 0
+}
 
 # 5. Read back and confirm.
 Write-Info 'reading back config ...'
-$confirm = & meshtastic @portArgs --info 2>&1
-if ($LASTEXITCODE -ne 0) {
-    Write-Warn2 'read-back failed (node may still be rebooting). Try `meshtastic --info` again in 10s.'
-    exit 0
-}
 
 $regionOk  = ($confirm -join "`n") -match [regex]::Escape($Region)
 $roleOk    = ($confirm -join "`n") -match [regex]::Escape($Role)

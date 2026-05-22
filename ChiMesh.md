@@ -9,7 +9,7 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22f*
+*Last updated: 2026.05.22g*
 
 ---
 
@@ -276,6 +276,16 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22g
+
+- **`provision-node.ps1` docstring fix.** Top synopsis claimed it sets the PSK; it does not (and never has). Updated to match the actual behavior — sets region, role, channel-zero name, and owner; PSK stays at Meshtastic's default.
+- **`provision-node.ps1` dead code removed.** Dropped an `$idLine` assignment that captured an `Owner` / `My info` regex match and then never used it.
+- **`provision-node.ps1` reboot wait is now a poll, not a magic sleep.** Replaced the unexplained `Start-Sleep -Seconds 3` after a config write with a 5×2s retry loop against `meshtastic --info`, with a comment naming the constraint (USB-CDC re-enumeration on Windows can take up to ~8 s after an nRF52840 reboot).
+- **`healthcheck-mesh.ps1` peer-count parse is now version-resilient.** Was matching the meshtastic CLI's ASCII-table border (`^\s*\|\s*\d+\s*\|`), which has changed shape across CLI versions. Now counts unique Meshtastic node IDs (`!XXXXXXXX` 8-hex-char tokens) in the output instead.
+- **`healthcheck-mesh.ps1` channel-name parse no longer false-positives.** The previous `name:…` regex was greedy enough to match owner name, board name, or region name first depending on output ordering. Replaced with a precise match on the `channelName=` query parameter embedded in the Primary channel URL.
+- **`deploy.ps1` no longer hard-codes `--insecure`.** Curl's TLS-cert bypass is now configurable via `FtpInsecure` in `deploy.settings.json` (default `true` for back-compat with shared-hosting FTPS endpoints, which usually serve a cert that doesn't match the FTP host). Template documents how to flip it off.
+- **`deploy.ps1` refuses to deploy without a valid `*Last updated:*` line.** A missing or malformed version stamp used to log a warning and continue, which could ship un-versioned builds. Now hard-fails (`exit 1`) so every deploy guarantees a version bump that pairs with its Update Notes entry.
 
 ### 2026.05.22f
 

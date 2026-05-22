@@ -1,4 +1,4 @@
-﻿<!-- Last Updated: 2026-05-22T17:27:33Z -->
+﻿<!-- Last Updated: 2026-05-22T17:33:42Z -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -656,7 +656,7 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
 </ol>
 </blockquote>
 <p><a href="https://github.com/mindattic/ChiMesh">github.com/mindattic/ChiMesh</a></p>
-<p><em>Last updated: 2026.05.22f</em></p>
+<p><em>Last updated: 2026.05.22g</em></p>
 <hr>
 <h2 id="01-configure">01. Configure <a class="heading-anchor" href="#01-configure" aria-label="link to this section">#</a></h2>
 <div class="config-widget" id="config-widget">
@@ -1143,6 +1143,16 @@ meshtastic --set-owner chimesh-001
 </tbody></table>
 <hr>
 <h2 id="update-notes">Update Notes <a class="heading-anchor" href="#update-notes" aria-label="link to this section">#</a></h2>
+<h3 id="20260522g">2026.05.22g <a class="heading-anchor" href="#20260522g" aria-label="link to this section">#</a></h3>
+<ul>
+<li><strong><code>provision-node.ps1</code> docstring fix.</strong> Top synopsis claimed it sets the PSK; it does not (and never has). Updated to match the actual behavior — sets region, role, channel-zero name, and owner; PSK stays at Meshtastic&#39;s default.</li>
+<li><strong><code>provision-node.ps1</code> dead code removed.</strong> Dropped an <code>$idLine</code> assignment that captured an <code>Owner</code> / <code>My info</code> regex match and then never used it.</li>
+<li><strong><code>provision-node.ps1</code> reboot wait is now a poll, not a magic sleep.</strong> Replaced the unexplained <code>Start-Sleep -Seconds 3</code> after a config write with a 5×2s retry loop against <code>meshtastic --info</code>, with a comment naming the constraint (USB-CDC re-enumeration on Windows can take up to ~8 s after an nRF52840 reboot).</li>
+<li><strong><code>healthcheck-mesh.ps1</code> peer-count parse is now version-resilient.</strong> Was matching the meshtastic CLI&#39;s ASCII-table border (<code>^\s*\|\s*\d+\s*\|</code>), which has changed shape across CLI versions. Now counts unique Meshtastic node IDs (<code>!XXXXXXXX</code> 8-hex-char tokens) in the output instead.</li>
+<li><strong><code>healthcheck-mesh.ps1</code> channel-name parse no longer false-positives.</strong> The previous <code>name:…</code> regex was greedy enough to match owner name, board name, or region name first depending on output ordering. Replaced with a precise match on the <code>channelName=</code> query parameter embedded in the Primary channel URL.</li>
+<li><strong><code>deploy.ps1</code> no longer hard-codes <code>--insecure</code>.</strong> Curl&#39;s TLS-cert bypass is now configurable via <code>FtpInsecure</code> in <code>deploy.settings.json</code> (default <code>true</code> for back-compat with shared-hosting FTPS endpoints, which usually serve a cert that doesn&#39;t match the FTP host). Template documents how to flip it off.</li>
+<li><strong><code>deploy.ps1</code> refuses to deploy without a valid <code>*Last updated:*</code> line.</strong> A missing or malformed version stamp used to log a warning and continue, which could ship un-versioned builds. Now hard-fails (<code>exit 1</code>) so every deploy guarantees a version bump that pairs with its Update Notes entry.</li>
+</ul>
 <h3 id="20260522f">2026.05.22f <a class="heading-anchor" href="#20260522f" aria-label="link to this section">#</a></h3>
 <ul>
 <li><strong>Rule #2 clarified.</strong> The top callout previously read <em>&quot;Never plug USB-C into the RAK19003 with an LFP cell installed,&quot;</em> which implied you could never re-flash a deployed node. Rewritten to <em>&quot;…while the LFP cell is wired into the JST,&quot;</em> with a pointer to the §6.1 unplug-JST → plug-USB-C re-flash procedure that was already documented further down.</li>

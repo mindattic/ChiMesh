@@ -93,27 +93,31 @@ if ($infoText -match 'role["\s:=]+([A-Z_]+)') {
     Write-Warn2 'could not parse role from --info output'
 }
 
-# 5. Channel 0 name?
+# 5. Channel 0 name? Match the channelName= query param embedded in the
+# Primary channel URL — that's the one deterministic place across CLI
+# versions. The bare "name:" heuristic is too broad (it matches owner
+# name, board name, region name, etc., depending on output ordering).
 Write-Step '5. channel 0 name'
-if ($infoText -match 'Primary channel URL') {
-    # Newer CLI prints the channel URL — name is embedded.
-    Write-Ok 'primary channel URL present (verify name matches your build sheet)'
-} elseif ($infoText -match 'name["\s:=]+"?([A-Za-z0-9_-]+)"?') {
-    $chName = $matches[1]
-    Write-Ok "channel name = $chName"
+if ($infoText -match 'channelName=([^&\s"]+)') {
+    Write-Ok ("channel name = " + $matches[1])
+} elseif ($infoText -match 'Primary channel URL') {
+    Write-Warn2 'primary channel URL present but channelName param not parsed — verify manually'
 } else {
-    Write-Warn2 'could not parse channel name'
+    Write-Warn2 'could not parse channel name from --info'
 }
 
 # 6. NodeDB has at least one peer (proves the mesh saw a neighbor at some point)?
+# Count node IDs (`!XXXXXXXX` — 8 hex chars after a bang) instead of parsing
+# the CLI's ASCII table border, which has changed shape across versions.
 Write-Step '6. NodeDB peer count'
 $nodes = & meshtastic @portArgs --nodes 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Warn2 'meshtastic --nodes failed; skipping peer-count check'
 } else {
-    $peerLines = $nodes | Where-Object { $_ -match '^\s*\|\s*\d+\s*\|' }
-    # Subtract 1 for our own node listed in the table.
-    $peerCount = [Math]::Max(0, $peerLines.Count - 1)
+    $nodeIds  = [regex]::Matches(($nodes -join "`n"), '![0-9a-fA-F]{8}')
+    $uniqueIds = $nodeIds | ForEach-Object { $_.Value } | Sort-Object -Unique
+    # Subtract 1 for our own node ID listed alongside the peers.
+    $peerCount = [Math]::Max(0, $uniqueIds.Count - 1)
     if ($peerCount -ge 1) {
         Write-Ok ("known peers: $peerCount")
     } else {

@@ -39,6 +39,13 @@ $ftpPass    = $cfg.FtpPassword
 $remotePath = $cfg.FtpRemotePath.TrimEnd('/')
 $useSsl     = [bool]$cfg.FtpUseSsl
 $usePassive = [bool]$cfg.FtpPassive
+# FtpInsecure: when true, curl skips TLS cert validation (--insecure). Many
+# shared-hosting FTPS endpoints serve a cert that doesn't match the FTP
+# hostname (or use a raw IP, which can never match a cert SAN), so the
+# pragmatic default is true. Set to false when you control the cert chain
+# and want strict validation.
+$ftpInsecureProp = $cfg.PSObject.Properties['FtpInsecure']
+$ftpInsecure = if ($null -ne $ftpInsecureProp) { [bool]$ftpInsecureProp.Value } else { $true }
 
 # ---------------------------------------------------------------------------
 # Auto-bump the build version stamped in ChiMesh.md's "Last updated:" line.
@@ -63,8 +70,16 @@ if (Test-Path $mdPath) {
         [System.IO.File]::WriteAllText($mdPath, $mdContent, (New-Object System.Text.UTF8Encoding($false)))
         Write-Host "Bumped build: $oldDate$oldLetter -> $newVersion"
     } else {
-        Write-Warning "No '*Last updated: YYYY.MM.DD<letter>*' line found in ChiMesh.md - skipping version bump."
+        # Hard-fail: every deploy must bump the version stamp so the live HTM
+        # matches the matching Update Notes entry. A missing/malformed line
+        # would silently ship an un-versioned build. Restore the line or
+        # fix its format ("*Last updated: YYYY.MM.DD<letter>*") and retry.
+        Write-Error "No '*Last updated: YYYY.MM.DD<letter>*' line found in ChiMesh.md - refusing to deploy."
+        exit 1
     }
+} else {
+    Write-Error "ChiMesh.md not found at: $mdPath"
+    exit 1
 }
 
 # ---------------------------------------------------------------------------
@@ -119,9 +134,10 @@ foreach ($name in $wanted) {
 # ---------------------------------------------------------------------------
 # Deploy via curl.exe
 # ---------------------------------------------------------------------------
-$curlArgs = @('--ftp-create-dirs', '--insecure')
-if ($usePassive) { $curlArgs += '--ftp-pasv' }
-if ($useSsl)     { $curlArgs += '--ssl-reqd' }
+$curlArgs = @('--ftp-create-dirs')
+if ($usePassive)  { $curlArgs += '--ftp-pasv' }
+if ($useSsl)      { $curlArgs += '--ssl-reqd' }
+if ($ftpInsecure) { $curlArgs += '--insecure' }
 
 Write-Host ""
 Write-Host "Deploying to ftp://${ftpHost}:${ftpPort}${remotePath}/ ..."

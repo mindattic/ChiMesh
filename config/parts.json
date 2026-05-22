@@ -1,13 +1,14 @@
 {
-  "_description": "Parts catalog for the ChiMesh v0 build — 3 solar-powered RAK4631 Meshtastic nodes for proof-of-mesh in Chicago. Prices are per node; the page widget multiplies by node count. All ten parts are compatibility-checked end-to-end: Solar panel (5V) -> TP5000 (LFP-configured) -> LiFePO4 cell -> JST-PHR-2 on RAK19003 -> RAK4631 -> IPEX -> SMA pigtail -> 915 MHz antenna.",
+  "_description": "Parts catalog for the ChiMesh v0 build — 3 solar-powered RAK4631 Meshtastic nodes for proof-of-mesh in Chicago. Prices on 'core' parts are per node; 'consumable' parts are shared across all nodes; 'tools' are one-time and excluded from the build estimate. All parts are compatibility-checked end-to-end: Solar panel (5V) -> TP5000 (LFP-configured) -> LiFePO4 cell -> JST-PHR-2 on RAK19003 -> RAK4631 -> IPEX -> SMA pigtail -> 915 MHz SMA antenna. CRITICAL: do NOT charge an LFP cell through the RAK19003 USB-C port; its onboard charger is Li-ion only (4.2 V termination) and will overcharge LFP (3.65 V max). See ChiMesh.md section 03 for the workflow.",
   "_priorityOrder": ["official", "amazon", "reputable"],
 
   "pricesAsOf": "2026-05-22",
-  "pricesNote": "Per-node estimates in USD. Stock varies; verify via the Google Shopping link on each card before ordering.",
+  "pricesNote": "Per-node estimates in USD. Tools and consumables are shared / one-time and excluded from the per-node total. Verify via the Google Shopping link on each card before ordering.",
 
   "categories": {
     "core": "Required for every node — one of each per node.",
-    "consumable": "Cheap misc parts you may already have. Order once, share across all 3 nodes."
+    "consumable": "Shared across all 3 nodes — order one kit.",
+    "tools": "One-time tools. You may already own these; the build estimate excludes them."
   },
 
   "parts": [
@@ -16,6 +17,7 @@
       "category": "core",
       "name": "RAK4631 WisBlock Core (nRF52840 + SX1262 LoRa)",
       "price": 25,
+      "imageFile": "images/rak4631.png",
       "note": "The brain. Nordic nRF52840 MCU with Semtech SX1262 LoRa radio on one module. Listens at ~7 mA (vs ~17 mA for Heltec V3) which is what makes solar viable in Chicago winter. Make sure you get the 915 MHz US variant, not the 868 MHz EU variant.",
       "specs": [
         { "label": "MCU",      "value": "Nordic nRF52840 @ 64 MHz (ARM Cortex-M4F)" },
@@ -40,6 +42,7 @@
       "category": "core",
       "name": "RAK19003 WisBlock Mini Base Board",
       "price": 10,
+      "imageFile": "images/rak19003.png",
       "note": "Carrier board for the RAK4631. Adds USB-C (for flashing only — do NOT use to charge LFP), JST-PHR-2 battery connector, and IPEX antenna pass-through. The Mini variant is the smallest base and fits inside a 100x68x50mm enclosure with room for the cell and panel cable.",
       "specs": [
         { "label": "Battery in", "value": "JST-PHR-2 (2.5 mm pitch)" },
@@ -60,6 +63,7 @@
       "category": "core",
       "name": "LiFePO4 18650 Cell (IFR18650, ~1500 mAh)",
       "price": 5,
+      "imageFile": "images/lfp-18650.png",
       "note": "MUST be LiFePO4 (LFP / IFR18650), NOT Li-ion. Chicago winters charge below 0°C; Li-ion plates lithium permanently in those conditions and kills the cell in one winter. LFP charges safely to ~-10°C and lasts 2000-5000 cycles vs 500-1000 for Li-ion. Half the mAh in the same form factor is the price of admission.",
       "specs": [
         { "label": "Chemistry","value": "LiFePO4 (IFR18650)" },
@@ -81,6 +85,7 @@
       "category": "core",
       "name": "Single 18650 Battery Holder with Leads",
       "price": 1,
+      "imageFile": "images/18650-holder.png",
       "note": "Plain plastic single-cell holder with pre-soldered red/black wires. Get the 'with leads' variant, not the PCB-mount type — you need wires you can crimp into the JST-PHR-2 connector on the RAK19003.",
       "specs": [
         { "label": "Cells",   "value": "1 x 18650" },
@@ -98,6 +103,7 @@
       "category": "core",
       "name": "TP5000 Solar Charge Controller (LFP-configurable)",
       "price": 2,
+      "imageFile": "images/tp5000-lfp.jpg",
       "note": "CRITICAL: this board has a jumper that selects between Li-ion (4.2 V termination) and LFP (3.6 V termination). Set it for LFP before connecting. Stock charge controllers in cheap solar lamps are tuned for Li-ion and will damage an LFP cell — that is why we bypass anything that came with the panel and use this module instead. Solar panel goes to this module's IN+/IN-; LFP cell connects to its BAT+/BAT-; the BAT output then feeds the RAK19003 JST-PHR-2 directly.",
       "specs": [
         { "label": "IC",         "value": "TP5000" },
@@ -117,6 +123,7 @@
       "category": "core",
       "name": "5V / 2W Monocrystalline Solar Panel (~110 x 80 mm)",
       "price": 5,
+      "imageFile": "images/solar-panel-5v-2w.png",
       "note": "Sized for the Chicago winter floor: ~150-200 mAh/day harvest in December assuming 1.5 peak sun hours and a slightly dirty panel face. Summer harvests 3-5x more, plenty of margin. Open-circuit voltage ~6.5 V, MPP ~5 V; pairs cleanly with the TP5000 input range. Output wires usually bare — terminate into the TP5000 IN+/IN- screw terminal or solder.",
       "specs": [
         { "label": "Cell type","value": "Monocrystalline silicon" },
@@ -137,6 +144,7 @@
       "category": "core",
       "name": "915 MHz SMA Antenna (~5 dBi rubber duck)",
       "price": 5,
+      "imageFile": "images/antenna-915-sma.png",
       "note": "Must be SMA (not RP-SMA). Match the frequency to your region — 915 MHz for US/AU, 868 MHz for EU, 433 MHz for AS923. A 5 dBi whip gives the best size-vs-range tradeoff for proof-of-mesh; upgrade to a fiberglass colinear (8+ dBi) later if you put a node on a rooftop. Antenna stays vertical for matching polarization with the rest of the Meshtastic network.",
       "specs": [
         { "label": "Connector","value": "SMA male (NOT RP-SMA)" },
@@ -157,18 +165,19 @@
       "category": "core",
       "name": "IPEX (u.FL) to SMA Pigtail, ~10 cm",
       "price": 3,
-      "note": "The RAK4631 module has an IPEX (u.FL) antenna footprint; this cable adapts it to a standard SMA bulkhead through the enclosure wall. Get the female-SMA-bulkhead version (panel-mount nut) so it threads through the hole you drill in the case. RG178 coax is standard; 100–150 mm is the right length for a 100 mm box.",
+      "imageFile": "images/pigtail-ipex-sma.png",
+      "note": "The RAK4631 has an IPEX (u.FL) antenna footprint; this cable adapts it to a standard SMA bulkhead through the enclosure wall. Get the female-SMA-bulkhead version (panel-mount nut) so it threads through the hole you drill in the case. RG178 coax is standard; 100-150 mm is the right length for a 100 mm box. WARNING: SMA and RP-SMA look identical but are NOT interchangeable. Buy SMA (used for LoRa); RP-SMA is for WiFi/Helium. RAK's own 'u-fl-to-rp-sma-cable' is RP-SMA — do not use it here. Adafruit #851 is SMA (correct); Adafruit #852 is RP-SMA (wrong).",
       "specs": [
         { "label": "End A",   "value": "IPEX / u.FL (mates RAK4631)" },
         { "label": "End B",   "value": "SMA female bulkhead w/ panel nut" },
         { "label": "Length",  "value": "~100–150 mm" },
         { "label": "Coax",    "value": "RG178" }
       ],
-      "searchFor": "https://www.google.com/search?udm=28&q=IPEX+ufl+to+SMA+bulkhead+pigtail",
+      "searchFor": "https://www.google.com/search?udm=28&q=IPEX+ufl+to+SMA+female+bulkhead+pigtail",
       "tiers": [
-        { "tier": "official",  "url": "https://store.rakwireless.com/products/u-fl-to-rp-sma-cable" },
         { "tier": "amazon",    "url": "https://www.amazon.com/s?k=IPEX+ufl+to+SMA+bulkhead+pigtail+RG178" },
-        { "tier": "reputable", "url": "https://www.adafruit.com/product/851" }
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/851" },
+        { "tier": "reputable", "url": "https://store.rokland.com/products/2-pack-ufl-ipex4-mhf4-to-sma-female-pigtail-antenna-wifi-iot-dev-cable" }
       ]
     },
     {
@@ -176,6 +185,7 @@
       "category": "core",
       "name": "IP65 ABS Weatherproof Junction Box (~100 x 68 x 50 mm)",
       "price": 5,
+      "imageFile": "images/enclosure-ip65.png",
       "note": "Cheap clear or grey ABS box from any hardware site. IP65 is enough for a vertical wall mount; if you flat-mount it skyward, look for IP66+. Internal volume fits the RAK19003 + Mini base + 18650 holder + TP5000 + slack cable. Drill one hole on top/side for the antenna SMA bulkhead and one on the bottom for the panel cable gland.",
       "specs": [
         { "label": "Rating",  "value": "IP65 (dust + jets)" },
@@ -195,6 +205,7 @@
       "category": "core",
       "name": "M12 IP68 Cable Gland (for solar panel pass-through)",
       "price": 1,
+      "imageFile": "images/cable-gland-m12.png",
       "note": "Threaded gland that seals around the solar panel's output cable as it enters the enclosure. M12 fits a small drilled hole; M16 if you have a thicker cable. Skip if you'd rather use silicone sealant in a smaller hole, but the gland is reusable when you swap parts.",
       "specs": [
         { "label": "Thread",  "value": "M12 x 1.5" },
@@ -212,18 +223,172 @@
       "id": "misc-wire-jst-screws",
       "category": "consumable",
       "name": "JST-PHR-2 connectors + 22 AWG silicone wire + M3 screws",
-      "price": 2,
-      "note": "Buy once, share across all 3 nodes. JST-PHR-2 male housings + crimp terminals connect the battery holder leads to the RAK19003. 22 AWG silicone-jacket wire handles all the low-voltage hops cleanly. M3x6 / M3x8 screws + double-sided VHB foam tape mount the panel and board to the enclosure interior.",
+      "price": 8,
+      "inTotal": false,
+      "note": "Shared across all 3 nodes — order one kit. JST-PHR-2 male housings + crimp terminals connect the battery holder leads to the RAK19003. 22 AWG silicone-jacket wire handles all low-voltage hops cleanly. M3x6 / M3x8 screws + double-sided VHB foam tape mount the panel and board to the enclosure interior.",
       "specs": [
         { "label": "JST",   "value": "PHR-2 housings + crimp pins (2.0 mm pitch)" },
-        { "label": "Wire",  "value": "22 AWG silicone, red + black, ~1 m each" },
-        { "label": "Screws","value": "M3x6 + M3x8, ~10 ea" },
+        { "label": "Wire",  "value": "22 AWG silicone, red + black, ~3 m each" },
+        { "label": "Screws","value": "M3x6 + M3x8, ~30 ea" },
         { "label": "Tape",  "value": "3M VHB or generic foam, ~25 mm wide" }
       ],
       "searchFor": "https://www.google.com/search?udm=28&q=JST+PHR-2+connector+kit",
       "tiers": [
         { "tier": "amazon",    "url": "https://www.amazon.com/s?k=JST+PHR-2+crimp+connector+kit" },
-        { "tier": "reputable", "url": "https://www.digikey.com/en/products/filter/rectangular-connectors-housings/315?s=N4IgjCBcoLQOxVAYygMwIYBsDOBTANCAPZQDaIATAAwiUC6AvowDb2vsCu1jIAdgPYBLAE4Bjas34A2YbwAOIWZTBN6HEAF8gA" }
+        { "tier": "reputable", "url": "https://www.digikey.com/en/products/connectors-interconnects/rectangular-connectors-housings/315" }
+      ]
+    },
+    {
+      "id": "heat-shrink-assortment",
+      "category": "consumable",
+      "name": "Heat-shrink tubing assortment (2-8 mm)",
+      "price": 8,
+      "inTotal": false,
+      "note": "Shared across all 3 nodes. Use 2-4 mm for individual solder joints (panel leads, cell leads), 6-8 mm for the JST pigtail bundle. Black is fine; coloured packs help differentiate red/black joints visually.",
+      "specs": [
+        { "label": "Sizes",   "value": "2, 3, 4, 6, 8 mm assortment" },
+        { "label": "Ratio",   "value": "2:1 shrink (standard)" },
+        { "label": "Material","value": "Polyolefin" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=heat+shrink+tubing+assortment+2+to+8mm",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=heat+shrink+tubing+assortment+polyolefin" }
+      ]
+    },
+    {
+      "id": "solder-rosin",
+      "category": "consumable",
+      "name": "60/40 rosin-core solder, 0.8 mm",
+      "price": 8,
+      "inTotal": false,
+      "note": "Shared across all 3 nodes (and probably your next 30 projects). 0.8 mm is the right diameter for the small pads on the TP5000 and RAK19003. Skip lead-free unless you specifically want to — 60/40 leaded flows easier and is forgiving for hand-soldering.",
+      "specs": [
+        { "label": "Alloy",   "value": "Sn60 / Pb40 (or Sn63/Pb37)" },
+        { "label": "Diameter","value": "0.8 mm" },
+        { "label": "Flux",    "value": "Rosin core, no-clean" },
+        { "label": "Spool",   "value": "~50–100 g is plenty" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=60%2F40+rosin+core+solder+0.8mm",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=60%2F40+rosin+core+solder+0.8mm" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/145" }
+      ]
+    },
+    {
+      "id": "tool-soldering-iron",
+      "category": "tools",
+      "name": "Temperature-controlled soldering iron",
+      "price": 50,
+      "inTotal": false,
+      "note": "Any temperature-controlled iron is fine. A Pinecil V2 or a Hakko FX-888D handles every joint in this build. The cheap fixed-temperature 'pencil' irons work too but tend to burn pads on the small SMD pads of the TP5000 / RAK19003 — go controlled if you can.",
+      "specs": [
+        { "label": "Power",   "value": "~60 W minimum" },
+        { "label": "Temp",    "value": "Adjustable, 250–400°C" },
+        { "label": "Tip",     "value": "Fine conical or 1.6 mm chisel" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=Pinecil+V2+soldering+iron",
+      "tiers": [
+        { "tier": "official",  "url": "https://pine64.com/product/pinecil-smart-mini-portable-soldering-iron/" },
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=Pinecil+V2+soldering+iron" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/1204" }
+      ]
+    },
+    {
+      "id": "tool-multimeter",
+      "category": "tools",
+      "name": "Digital multimeter",
+      "price": 25,
+      "inTotal": false,
+      "note": "Used during troubleshooting to verify cell voltage (3.2-3.65 V on a healthy LFP), panel open-circuit voltage (~6 V), and TP5000 output. Any cheap DMM works — even a $15 Harbor Freight model is enough for DC volts in this range. Auto-ranging is convenient but not required.",
+      "specs": [
+        { "label": "DC Volts","value": "0-20 V range minimum" },
+        { "label": "Continuity","value": "Yes (for finding broken solder joints)" },
+        { "label": "Resolution","value": "0.01 V or better" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=digital+multimeter+auto+ranging+DC",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=digital+multimeter+auto+ranging" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/2034" }
+      ]
+    },
+    {
+      "id": "tool-wire-strippers",
+      "category": "tools",
+      "name": "Wire strippers + flush cutters",
+      "price": 15,
+      "inTotal": false,
+      "note": "Strippers sized for 20-24 AWG handle the 22 AWG silicone wire cleanly. Flush cutters (also called diagonal cutters or 'snips') trim component leads and zip-tie ends without nicking adjacent wire. Often sold as a combo pair.",
+      "specs": [
+        { "label": "Strip range","value": "10–24 AWG" },
+        { "label": "Cutters",    "value": "Flush / diagonal, ~125 mm" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=wire+strippers+flush+cutters+combo",
+      "tiers": [
+        { "tier": "amazon",      "url": "https://www.amazon.com/s?k=wire+strippers+22+AWG+flush+cutters" },
+        { "tier": "reputable",   "url": "https://www.adafruit.com/product/527" }
+      ]
+    },
+    {
+      "id": "tool-crimp",
+      "category": "tools",
+      "name": "JST crimp tool (for PHR-2 terminals)",
+      "price": 20,
+      "inTotal": false,
+      "note": "Optional but recommended. A proper crimp on a JST-PHR-2 terminal is far more reliable than a pliers-squashed one and is what you want for an outdoor unattended node. Generic 'IWS-3220M' or 'Engineer PA-09' work fine. Alternative: buy pre-crimped JST pigtails on Amazon and skip this tool entirely.",
+      "specs": [
+        { "label": "Range",  "value": "0.08-0.5 mm² (24-20 AWG)" },
+        { "label": "Type",   "value": "Ratcheting, JST-compatible jaws" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=IWS-3220M+JST+crimp+tool",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=IWS-3220M+crimp+tool" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/3853" }
+      ]
+    },
+    {
+      "id": "tool-heat-gun",
+      "category": "tools",
+      "name": "Heat gun (mini) or lighter",
+      "price": 15,
+      "inTotal": false,
+      "note": "Shrinks heat-shrink tubing over solder joints. A mini USB-C heat gun is overkill and great; a $2 lighter also works for one-off joints. Hair dryer is too cool to shrink most polyolefin tubing.",
+      "specs": [
+        { "label": "Temp",   "value": "120-200°C is plenty" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=mini+heat+gun+USB-C+heat+shrink",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=mini+heat+gun+heat+shrink" }
+      ]
+    },
+    {
+      "id": "tool-drill",
+      "category": "tools",
+      "name": "Drill + bits (6 mm + 12 mm step or twist)",
+      "price": 30,
+      "inTotal": false,
+      "note": "For drilling the enclosure: 6 mm hole for the SMA bulkhead nut, 12 mm hole for the M12 cable gland. A cordless drill + a metric bit set covers both; a step bit ('unibit') makes cleaner holes in plastic. If you have neither, a soldering iron melted carefully through ABS works in a pinch (do it outdoors — fumes).",
+      "specs": [
+        { "label": "Sizes",   "value": "6 mm + 12 mm (or step bit)" },
+        { "label": "Material","value": "HSS or step / unibit" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=cordless+drill+metric+bit+set+step+bit",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=step+drill+bit+set+metric" }
+      ]
+    },
+    {
+      "id": "tool-screwdriver",
+      "category": "tools",
+      "name": "Phillips #1 screwdriver",
+      "price": 5,
+      "inTotal": false,
+      "note": "Most IP65 enclosure lids use 4x M3 or 4x #4 Phillips screws. Any small Phillips driver works.",
+      "specs": [
+        { "label": "Type", "value": "Phillips #1 (PH1)" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=Phillips+%231+screwdriver",
+      "tiers": [
+        { "tier": "amazon", "url": "https://www.amazon.com/s?k=Phillips+%231+screwdriver" }
       ]
     }
   ]

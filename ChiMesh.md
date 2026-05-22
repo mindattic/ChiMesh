@@ -187,6 +187,16 @@ A workable Chicago layout:
 
 **Antenna orientation.** Vertical. Most Meshtastic networks are vertically polarized; a sideways antenna costs you ~3 dB instantly.
 
+### 6.3 Power budget
+
+Rough draw for the RAK4631 (SX1262 + nRF52840) running stock Meshtastic in continuous receive:
+
+- **SX1262 in RX:** ~4.6 mA
+- **nRF52840 active** (BLE off, CPU lightly loaded): ~3–6 mA
+- **Combined at 3.3 V:** ~8–12 mA average in steady listen, with brief spikes to ~120 mA on TX bursts.
+
+Over 24 hours that's **~200–280 mAh consumed**. The 3000 mAh LFP cell + 5 W panel handles that comfortably in Chicago summer. The December margin is much thinner — short days, low sun angle, snow on the panel — which is the real reason the v0 panel-aim rule above says "tilt ~41°, never flat."
+
 ✅ **Checkpoint:** *All 3 nodes deployed, solar panels facing the sky, antennas vertical, enclosure lids closed and sealed.*
 
 ---
@@ -276,6 +286,14 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22k
+
+- **Power-budget subsection.** Added §6.3 with the rough current draw for the RAK4631 (SX1262 ~4.6 mA RX + nRF52840 ~3–6 mA active = ~8–12 mA average at 3.3 V, ~120 mA TX bursts, ~200–280 mAh/day). Explains why the 3000 mAh LFP + 5 W panel works in Chicago summer but tightens in December — and grounds the §6.2 "tilt ~41°, never flat" panel-aim rule in actual numbers instead of asserting it.
+
+### 2026.05.22j
+
+- **MindAttic.Components rename + re-sync.** Sibling components repo was renamed; `deploy.ps1`'s sync step now points at the new path and the spliced fonts/CSS were re-pulled. Stamp-only republish — no guide content changed.
 
 ### 2026.05.22i
 

@@ -9,7 +9,7 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22g*
+*Last updated: 2026.05.22h*
 
 ---
 
@@ -276,6 +276,10 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22h
+
+- **TOC positioning.** `.toc` is now `position: absolute; top: 60px;` so the contents panel docks at a fixed offset from the top of the page instead of flowing inline.
 
 ### 2026.05.22g
 

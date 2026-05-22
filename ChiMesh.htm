@@ -1,4 +1,4 @@
-﻿<!-- Last Updated: 2026-05-22T17:33:42Z -->
+﻿<!-- Last Updated: 2026-05-22T17:57:41Z -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -327,6 +327,8 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
    §  TOC (sticky sidebar on desktop, hidden on mobile)
    ────────────────────────────────────────────────────────────────────── */
 .toc {
+  position: absolute;
+  top: 60px;
   font-size: 0.9em;
   color: var(--text2);
   padding: 14px 16px 16px;
@@ -656,7 +658,7 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
 </ol>
 </blockquote>
 <p><a href="https://github.com/mindattic/ChiMesh">github.com/mindattic/ChiMesh</a></p>
-<p><em>Last updated: 2026.05.22g</em></p>
+<p><em>Last updated: 2026.05.22h</em></p>
 <hr>
 <h2 id="01-configure">01. Configure <a class="heading-anchor" href="#01-configure" aria-label="link to this section">#</a></h2>
 <div class="config-widget" id="config-widget">
@@ -1143,6 +1145,10 @@ meshtastic --set-owner chimesh-001
 </tbody></table>
 <hr>
 <h2 id="update-notes">Update Notes <a class="heading-anchor" href="#update-notes" aria-label="link to this section">#</a></h2>
+<h3 id="20260522h">2026.05.22h <a class="heading-anchor" href="#20260522h" aria-label="link to this section">#</a></h3>
+<ul>
+<li><strong>TOC positioning.</strong> <code>.toc</code> is now <code>position: absolute; top: 60px;</code> so the contents panel docks at a fixed offset from the top of the page instead of flowing inline.</li>
+</ul>
 <h3 id="20260522g">2026.05.22g <a class="heading-anchor" href="#20260522g" aria-label="link to this section">#</a></h3>
 <ul>
 <li><strong><code>provision-node.ps1</code> docstring fix.</strong> Top synopsis claimed it sets the PSK; it does not (and never has). Updated to match the actual behavior — sets region, role, channel-zero name, and owner; PSK stays at Meshtastic&#39;s default.</li>

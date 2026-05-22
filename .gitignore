@@ -1,0 +1,34 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Node (build-html.js uses marked + highlight.js)
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local secrets — never commit a real .env / FTP creds
+.env
+config/.env
+config/*.local.*
+scripts/cli/deploy.settings.json
+
+# Editor
+.vscode/
+.idea/
+
+# Build artifacts
+out/
+dist/
+
+# Runtime logs from the .claude PostToolUse hook
+.claude/html-rebuild.log
+.claude/pull-latest.log

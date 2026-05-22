@@ -1,0 +1,70 @@
+{
+  "_description": "Stub parts catalog for the ChiMesh build. Schema mirrors Claudia's parts.json so build-html.js renders the gallery using placeholder data. Real parts land later; for now these three exist only to exercise the gallery layout, the per-part card, the specs table, and the multi-tier 'find-deals' link list.",
+  "_priorityOrder": ["amazon", "official", "reputable"],
+
+  "pricesAsOf": "2026-05-22",
+  "pricesNote": "Placeholder prices for layout review. Replace before publishing.",
+
+  "categories": {
+    "core": "Required for every build.",
+    "optional": "Optional add-ons."
+  },
+
+  "parts": [
+    {
+      "id": "stub-part-a",
+      "category": "core",
+      "name": "Stub Part A",
+      "match": "**Stub Part A**",
+      "price": 19,
+      "note": "Placeholder note. Real note lands later — usually one specific gotcha first-time builders hit (variant to pick, version to avoid, etc.).",
+      "specs": [
+        { "label": "SKU",   "value": "STUB-A-0001" },
+        { "label": "Spec1", "value": "Placeholder value 1" },
+        { "label": "Spec2", "value": "Placeholder value 2" },
+        { "label": "Form",  "value": "00 × 00 mm" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=placeholder+part+a",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=placeholder+part+a" },
+        { "tier": "official",  "url": "https://example.com/stub-part-a" },
+        { "tier": "reputable", "url": "https://example.com/reseller/stub-part-a" }
+      ]
+    },
+    {
+      "id": "stub-part-b",
+      "category": "core",
+      "name": "Stub Part B",
+      "match": "**Stub Part B**",
+      "price": 12,
+      "note": "Placeholder note for Stub Part B.",
+      "specs": [
+        { "label": "SKU",      "value": "STUB-B-0002" },
+        { "label": "Capacity", "value": "Placeholder capacity" },
+        { "label": "Speed",    "value": "Placeholder speed rating" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=placeholder+part+b",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=placeholder+part+b" },
+        { "tier": "reputable", "url": "https://example.com/reseller/stub-part-b" }
+      ]
+    },
+    {
+      "id": "stub-part-c",
+      "category": "optional",
+      "name": "Stub Part C",
+      "match": "**Stub Part C**",
+      "price": 35,
+      "note": "Placeholder note for an optional add-on part.",
+      "specs": [
+        { "label": "SKU",  "value": "STUB-C-0003" },
+        { "label": "Type", "value": "Placeholder type" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=placeholder+part+c",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=placeholder+part+c" },
+        { "tier": "official",  "url": "https://example.com/stub-part-c" }
+      ]
+    }
+  ]
+}

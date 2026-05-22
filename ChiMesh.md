@@ -5,11 +5,11 @@
 > **Two non-negotiable rules.**
 >
 > 1. **LiFePO4, not Li-ion.** Chicago winters charge below 0°C. Li-ion cells permanently plate lithium when charged that cold and can fail dangerously by summer. LFP is non-negotiable for any outdoor ChiMesh node.
-> 2. **Never plug USB-C into the RAK19003 with an LFP cell installed.** The RAK19003's onboard charger is Li-ion only (4.3 V max) and will overcharge an LFP cell (3.65 V max). Flash and provision over USB-C *before* the cell goes in; after that, the cell only ever charges via the TP5000 from the solar panel.
+> 2. **Never plug USB-C into the RAK19003 while the LFP cell is wired into the JST.** The RAK19003's onboard charger is Li-ion only (4.2 V termination) and will overcharge an LFP cell (3.65 V max). The safe re-flash procedure is in §6.1: unplug the JST-PHR-2, plug USB-C, do your work, unplug USB-C, plug the JST back in.
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22e*
+*Last updated: 2026.05.22f*
 
 ---
 
@@ -54,7 +54,7 @@ RAK4631 IPEX  →  pigtail  →  SMA bulkhead  →  915 MHz antenna
 
 ### 3.3 Build steps
 
-> **DO NOT INSTALL THE LFP CELL UNTIL SECTION 06.** Sections 04 and 05 want you connecting USB-C to the RAK19003 for flashing and provisioning. The RAK19003's onboard charger pushes 4.3 V, which will overcharge an LFP cell (3.65 V max). Cell goes in AFTER firmware + config are done.
+> **DO NOT INSTALL THE LFP CELL UNTIL SECTION 06.** Sections 04 and 05 want you connecting USB-C to the RAK19003 for flashing and provisioning. The RAK19003's onboard charger terminates at 4.2 V (Li-ion), which will overcharge an LFP cell (3.65 V max). Cell goes in AFTER firmware + config are done.
 
 1. **Set the TP5000 jumper to LFP (3.6 V).** This is the single most important step. The board ships with the jumper in either position; LFP termination is usually labeled `4.2/3.6` or `Li-ion/LiFePO4`. Wrong jumper = dead cell in weeks.
 2. **Solder the solar panel leads to the TP5000 `IN+` / `IN-` pads.** Red to `+`, black to `-`. Heat-shrink the joint — the enclosure isn't fully sealed if the panel cable enters with bare conductors.
@@ -277,9 +277,15 @@ Reads the connected node and prints any error states from `--info`.
 
 ## Update Notes
 
+### 2026.05.22f
+
+- **Rule #2 clarified.** The top callout previously read *"Never plug USB-C into the RAK19003 with an LFP cell installed,"* which implied you could never re-flash a deployed node. Rewritten to *"…while the LFP cell is wired into the JST,"* with a pointer to the §6.1 unplug-JST → plug-USB-C re-flash procedure that was already documented further down.
+- **Voltage figures normalized.** Three places in the MD said the RAK19003 charger pushes "4.3 V max" while `config/parts.json` correctly used "4.2 V termination." Standardized to 4.2 V (the actual Li-ion termination spec) across the guide.
+- **Cross-reference fix.** `config/parts.json`'s top-level `_description` pointed at "section 03 for the workflow" — but the LFP-protection workflow lives in §6.1 (§03 only has the don't-install-yet warning). Updated to point at §6.1.
+
 ### 2026.05.22e
 
-- **Custom fonts baked in.** Outfit (variable, 100–900) now drives body text site-wide; the Attic display face renders the `#chimesh` page title. Both fonts are base64-inlined into the HTM via `MindAttic.Content/sync/sync-chimesh.ps1`, so the guide stays a single self-contained file with no external font requests.
+- **Custom fonts baked in.** Outfit (variable, 100–900) now drives body text site-wide; the Attic display face renders the `#chimesh` page title. Both fonts are base64-inlined into the HTM via `MindAttic.Components/sync/sync-chimesh.ps1`, so the guide stays a single self-contained file with no external font requests.
 
 ### 2026.05.22d
 
@@ -292,7 +298,7 @@ Reads the connected node and prints any error states from `--info`.
 ### 2026.05.22b
 
 - **Second-pass review.** Added the two non-negotiable rules to the top callout (LFP-not-Li-ion + never-USB-C-with-cell-installed).
-- **Workflow re-sequenced.** Cell installation moved from section 03 step 8 to a new section 6.1, so the user flashes (section 04) and provisions (section 05) over USB-C while the cell holder is still empty. Prevents the RAK19003's 4.3 V Li-ion charger from overcharging an LFP cell.
+- **Workflow re-sequenced.** Cell installation moved from section 03 step 8 to a new section 6.1, so the user flashes (section 04) and provisions (section 05) over USB-C while the cell holder is still empty. Prevents the RAK19003's 4.2 V Li-ion charger from overcharging an LFP cell.
 - **Added Tools subsection** (3.1) listing soldering iron, multimeter, drill+bits, heat gun, wire strippers, JST crimp tool, Phillips screwdriver. New `tools` category in `config/parts.json` with one card each (excluded from the per-node total via `inTotal: false`).
 - **Added consumables.** Heat-shrink tubing assortment and 60/40 rosin-core solder — both excluded from the per-node total since they're one-time / shared.
 - **Pigtail fix.** RAK's `u-fl-to-rp-sma-cable` is RP-SMA (wrong for LoRa). Removed from the IPEX→SMA part's tier list; replaced with Rokland's correct SMA cable. Added an explicit SMA-vs-RP-SMA warning to the pigtail's note and to section 03 step 6.

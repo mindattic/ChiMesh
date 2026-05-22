@@ -1,3 +1,4 @@
+﻿<!-- Last Updated: 2026-05-22T06:27:54Z -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -522,15 +523,11 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
 <li><a href="#01-configure">01. Configure</a></li>
 <li><a href="#02-shopping-list">02. Shopping list</a></li>
 <li><a href="#03-assemble">03. Assemble</a></li>
-<li><a href="#04-flash-microsd">04. Flash microSD</a></li>
-<li><a href="#05-system-setup">05. System setup</a></li>
-<li><a href="#06-install-software">06. Install software</a></li>
-<li><a href="#07-api-key">07. API key</a></li>
-<li><a href="#08-configure-software">08. Configure software</a></li>
-<li><a href="#09-healthcheck">09. Healthcheck</a></li>
-<li><a href="#10-run">10. Run</a></li>
-<li><a href="#11-case">11. Case</a></li>
-<li><a href="#12-troubleshooting">12. Troubleshooting</a></li>
+<li><a href="#04-flash-firmware">04. Flash firmware</a></li>
+<li><a href="#05-configure-node">05. Configure node</a></li>
+<li><a href="#06-deploy">06. Deploy</a></li>
+<li><a href="#07-verify-mesh">07. Verify mesh</a></li>
+<li><a href="#08-troubleshooting">08. Troubleshooting</a></li>
 <li><a href="#reference">Reference</a></li>
 <li><a href="#summary-stack">Summary stack</a></li>
 <li><a href="#update-notes">Update Notes</a></li></ol></nav>
@@ -538,36 +535,32 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
   <main class="page" id="main-content">
 
 <h1 id="chimesh">ChiMesh</h1>
-<p><em>[Tagline TBD — a 2–3 sentence pitch goes here. This paragraph occupies the same visual slot as Claudia&#39;s intro: short, dense, links the reader to what they&#39;ll have at the end. Placeholder text only; real copy lands once the spec stabilises.]</em></p>
+<p><strong>Chicago LoRa Meshtastic mesh — proof-of-mesh build.</strong> Three solar-powered RAK4631 nodes in weatherproof IP65 enclosures that prove multi-hop LoRa routing across the city. Total ~$192 for the proof batch (parts per node × 3 + shared consumables). No lamp disguise yet — that&#39;s v2 once the protocol is proven.</p>
 <blockquote>
-<p><strong>Heads-up.</strong> This <code>&gt;</code> block renders as a sidebar callout. Use it for the one constraint a first-time builder is most likely to miss. Placeholder only.</p>
+<p><strong>Heads-up: LiFePO4, not Li-ion.</strong> Chicago winters charge below 0°C. Li-ion cells permanently plate lithium when charged that cold and can fail dangerously by summer. LFP is non-negotiable for any outdoor ChiMesh node — see the cell row in the shopping list.</p>
 </blockquote>
 <p><a href="https://github.com/mindattic/ChiMesh">github.com/mindattic/ChiMesh</a></p>
-<p><em>Last updated: 2026.05.22a</em></p>
+<p><em>Last updated: 2026.05.22b</em></p>
 <hr>
 <h2 id="01-configure">01. Configure <a class="heading-anchor" href="#01-configure" aria-label="link to this section">#</a></h2>
 <div class="config-widget" id="config-widget">
   <p>Pick what you have or plan to buy and the guide below adapts. Choices save automatically.</p>
   <div class="config-grid">
     <label class="config-row">
-      <span class="config-label">Battery / portability</span>
-      <select data-config="battery" aria-label="Battery / portability"><option value="no">No - desktop, wall-powered</option><option value="yes">Yes - PiSugar 3 (portable)</option></select>
+      <span class="config-label">LoRa region</span>
+      <select data-config="region" aria-label="LoRa region"><option value="us915">US — 915 MHz (default)</option><option value="eu868">EU — 868 MHz</option><option value="au915">AU — 915 MHz</option><option value="as923">AS — 923 MHz</option></select>
     </label>
     <label class="config-row">
-      <span class="config-label">Speech-to-text (ASR)</span>
-      <select data-config="asr" aria-label="Speech-to-text (ASR)"><option value="whisper-cpp">Whisper (local, free)</option><option value="openai">OpenAI Whisper API (cloud, fast)</option><option value="google">Google STT (cloud)</option></select>
+      <span class="config-label">Node role</span>
+      <select data-config="role" aria-label="Node role"><option value="router_client">ROUTER_CLIENT — fixed node, relays + chats (default)</option><option value="router">ROUTER — fixed backbone, relay only</option><option value="client">CLIENT — portable, low power</option></select>
     </label>
     <label class="config-row">
-      <span class="config-label">Text-to-speech (TTS)</span>
-      <select data-config="tts" aria-label="Text-to-speech (TTS)"><option value="openai">OpenAI gpt-4o-mini-tts (recommended, native)</option><option value="elevenlabs">ElevenLabs (best quality, requires patch)</option><option value="piper">Piper (local, free, robotic)</option></select>
+      <span class="config-label">Deployment scenario</span>
+      <select data-config="deployment" aria-label="Deployment scenario"><option value="balcony">Balcony / fence — outdoor, ~2nd-3rd floor (default)</option><option value="apartment_window">Apartment window — indoor, high-rise</option><option value="rooftop">Rooftop — outdoor, max altitude</option><option value="ground_pole">Ground pole / yard — outdoor, low altitude</option></select>
     </label>
     <label class="config-row">
-      <span class="config-label">3D-printed case</span>
-      <select data-config="case" aria-label="3D-printed case"><option value="none">No case</option><option value="fdm">FDM (filament) print</option><option value="sla">SLA (resin) print</option></select>
-    </label>
-    <label class="config-row">
-      <span class="config-label">Smart-home control</span>
-      <select data-config="smarthome" aria-label="Smart-home control"><option value="none">None</option><option value="kasa">TP-Link Kasa (HS103/KP125M)</option><option value="shelly">Shelly Plug US</option><option value="sonoff">Sonoff S31 + Tasmota</option></select>
+      <span class="config-label">Antenna upgrade</span>
+      <select data-config="antenna" aria-label="Antenna upgrade"><option value="rubber5">5 dBi rubber duck (default, fits BOM)</option><option value="rubber3">3 dBi short whip (compact, less range)</option><option value="fiberglass8">8+ dBi fiberglass colinear (rooftop only)</option></select>
     </label>
   </div>
   <button type="button" class="config-reset" id="config-reset">Reset to defaults</button>
@@ -575,44 +568,125 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
 
 <hr>
 <h2 id="02-shopping-list">02. Shopping list <a class="heading-anchor" href="#02-shopping-list" aria-label="link to this section">#</a></h2>
+<p>The total below is <strong>per node</strong>. Multiply by your planned node count — minimum 3 to actually prove multi-hop routing (otherwise there&#39;s no chain to forward through). Consumables are shared across all nodes, not per-node.</p>
 <div class="parts-gallery-wrap" id="parts-gallery">
 <p>Each card opens its Google Shopping search in a new tab so you can verify current prices. Cards that don't apply to your configuration are hidden, and the total below updates live.</p>
 <div class="parts-category">
-<h3 id="gallery-core">core <span class="part-cat-blurb">— Required for every build.</span></h3>
+<h3 id="gallery-core">core <span class="part-cat-blurb">— Required for every node — one of each per node.</span></h3>
 <div class="parts-grid">
-<div class="part-card" data-pid="stub-part-a" data-price="19">
+<div class="part-card" data-pid="rak4631" data-price="25">
         
         <div class="part-body">
-          <div class="part-name">Stub Part A</div>
-          <div class="part-price">~$19</div>
-          <dl class="part-specs"><dt>SKU</dt><dd>STUB-A-0001</dd><dt>Spec2</dt><dd>Placeholder value 2</dd><dt>Spec1</dt><dd>Placeholder value 1</dd><dt>Form</dt><dd>00 × 00 mm</dd></dl>
-          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://example.com/stub-part-a" target="_blank" rel="noopener noreferrer">Official</a><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=placeholder+part+a" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://example.com/reseller/stub-part-a" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
-          <div class="part-note">Placeholder note. Real note lands later — usually one specific gotcha first-time builders hit (variant to pick, version to avoid, etc.).</div>
+          <div class="part-name">RAK4631 WisBlock Core (nRF52840 + SX1262 LoRa)</div>
+          <div class="part-price">~$25</div>
+          <dl class="part-specs"><dt>MCU</dt><dd>Nordic nRF52840 @ 64 MHz (ARM Cortex-M4F)</dd><dt>Wireless</dt><dd>BLE 5 + LoRa (no Wi-Fi)</dd><dt>Radio</dt><dd>Semtech SX1262 LoRa, up to +22 dBm</dd><dt>RX current</dt><dd>~6–8 mA listening</dd><dt>Frequency</dt><dd>915 MHz (US) — pick correct SKU for region</dd><dt>Sleep</dt><dd>~3 µA System OFF, ~7 µA w/ RAM retain</dd><dt>RAM/Flash</dt><dd>256 KB SRAM / 1 MB flash</dd><dt>Antenna</dt><dd>IPEX (u.FL) connector on-module</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://store.rakwireless.com/products/rak4631-lpwan-node" target="_blank" rel="noopener noreferrer">Official</a><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=RAK4631+WisBlock+Core+915MHz" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.mouser.com/c/?q=RAK4631" target="_blank" rel="noopener noreferrer">Reputable #1</a><a class="part-link" href="https://store.rokland.com/search?q=RAK4631" target="_blank" rel="noopener noreferrer">Reputable #2</a></div>
+          <div class="part-note">The brain. Nordic nRF52840 MCU with Semtech SX1262 LoRa radio on one module. Listens at ~7 mA (vs ~17 mA for Heltec V3) which is what makes solar viable in Chicago winter. Make sure you get the 915 MHz US variant, not the 868 MHz EU variant.</div>
         </div>
       </div>
-<div class="part-card" data-pid="stub-part-b" data-price="12">
+<div class="part-card" data-pid="rak19003" data-price="10">
         
         <div class="part-body">
-          <div class="part-name">Stub Part B</div>
-          <div class="part-price">~$12</div>
-          <dl class="part-specs"><dt>SKU</dt><dd>STUB-B-0002</dd><dt>Speed</dt><dd>Placeholder speed rating</dd><dt>Capacity</dt><dd>Placeholder capacity</dd></dl>
-          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=placeholder+part+b" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://example.com/reseller/stub-part-b" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
-          <div class="part-note">Placeholder note for Stub Part B.</div>
+          <div class="part-name">RAK19003 WisBlock Mini Base Board</div>
+          <div class="part-price">~$10</div>
+          <dl class="part-specs"><dt>Battery in</dt><dd>JST-PHR-2 (2.5 mm pitch)</dd><dt>Form</dt><dd>~35 x 60 mm</dd><dt>USB</dt><dd>USB-C, flashing/console only</dd><dt>Slots</dt><dd>1 core + 1 IO (sensors optional)</dd><dt>Antenna</dt><dd>IPEX pass-through to module</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://store.rakwireless.com/products/wisblock-base-board-rak19003" target="_blank" rel="noopener noreferrer">Official</a><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=RAK19003+WisBlock+Mini+Base" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.mouser.com/c/?q=RAK19003" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">Carrier board for the RAK4631. Adds USB-C (for flashing only — do NOT use to charge LFP), JST-PHR-2 battery connector, and IPEX antenna pass-through. The Mini variant is the smallest base and fits inside a 100x68x50mm enclosure with room for the cell and panel cable.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="lfp-18650" data-price="5">
+        
+        <div class="part-body">
+          <div class="part-name">LiFePO4 18650 Cell (IFR18650, ~1500 mAh)</div>
+          <div class="part-price">~$5</div>
+          <dl class="part-specs"><dt>Chemistry</dt><dd>LiFePO4 (IFR18650)</dd><dt>Capacity</dt><dd>~1500 mAh typical</dd><dt>Nominal</dt><dd>3.2 V</dd><dt>Charge T</dt><dd>-10°C to +55°C</dd><dt>Charge</dt><dd>3.6 V termination (NOT 4.2)</dd><dt>Cycles</dt><dd>~2000-5000</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=LiFePO4+18650+IFR18650+1500mAh" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://batteryhookup.com/collections/lifepo4" target="_blank" rel="noopener noreferrer">Reputable #1</a><a class="part-link" href="https://www.aliexpress.us/w/wholesale-IFR18650.html" target="_blank" rel="noopener noreferrer">Reputable #2</a></div>
+          <div class="part-note">MUST be LiFePO4 (LFP / IFR18650), NOT Li-ion. Chicago winters charge below 0°C; Li-ion plates lithium permanently in those conditions and kills the cell in one winter. LFP charges safely to ~-10°C and lasts 2000-5000 cycles vs 500-1000 for Li-ion. Half the mAh in the same form factor is the price of admission.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="18650-holder" data-price="1">
+        
+        <div class="part-body">
+          <div class="part-name">Single 18650 Battery Holder with Leads</div>
+          <div class="part-price">~$1</div>
+          <dl class="part-specs"><dt>Cells</dt><dd>1 x 18650</dd><dt>Material</dt><dd>ABS plastic</dd><dt>Leads</dt><dd>Red + black, ~150 mm</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=18650+battery+holder+single+wire+leads" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.adafruit.com/product/4288" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">Plain plastic single-cell holder with pre-soldered red/black wires. Get the &#39;with leads&#39; variant, not the PCB-mount type — you need wires you can crimp into the JST-PHR-2 connector on the RAK19003.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="tp5000-lfp" data-price="2">
+        
+        <div class="part-body">
+          <div class="part-name">TP5000 Solar Charge Controller (LFP-configurable)</div>
+          <div class="part-price">~$2</div>
+          <dl class="part-specs"><dt>IC</dt><dd>TP5000</dd><dt>Chemistry</dt><dd>Li-ion 4.2 V OR LFP 3.6 V via jumper</dd><dt>Input</dt><dd>4.5–8 V DC (5 V solar panel fits)</dd><dt>MPPT</dt><dd>No (linear) — fine for 2 W class panels</dd><dt>Charge curr</dt><dd>Adjustable, up to ~1 A</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=TP5000+LiFePO4+charger+module" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.aliexpress.us/w/wholesale-TP5000.html" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">CRITICAL: this board has a jumper that selects between Li-ion (4.2 V termination) and LFP (3.6 V termination). Set it for LFP before connecting. Stock charge controllers in cheap solar lamps are tuned for Li-ion and will damage an LFP cell — that is why we bypass anything that came with the panel and use this module instead. Solar panel goes to this module&#39;s IN+/IN-; LFP cell connects to its BAT+/BAT-; the BAT output then feeds the RAK19003 JST-PHR-2 directly.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="solar-panel-5v-2w" data-price="5">
+        
+        <div class="part-body">
+          <div class="part-name">5V / 2W Monocrystalline Solar Panel (~110 x 80 mm)</div>
+          <div class="part-price">~$5</div>
+          <dl class="part-specs"><dt>Cell type</dt><dd>Monocrystalline silicon</dd><dt>Form</dt><dd>~110 x 80 mm, epoxy-coated</dd><dt>Rated</dt><dd>5 V / 2 W (~400 mA short-circuit)</dd><dt>Output</dt><dd>Bare wire pair (red/black)</dd><dt>Voc</dt><dd>~6.5 V open-circuit</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=5V+2W+mini+solar+panel+monocrystalline" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.adafruit.com/category/57" target="_blank" rel="noopener noreferrer">Reputable #1</a><a class="part-link" href="https://voltaicsystems.com/2-watt-panel" target="_blank" rel="noopener noreferrer">Reputable #2</a></div>
+          <div class="part-note">Sized for the Chicago winter floor: ~150-200 mAh/day harvest in December assuming 1.5 peak sun hours and a slightly dirty panel face. Summer harvests 3-5x more, plenty of margin. Open-circuit voltage ~6.5 V, MPP ~5 V; pairs cleanly with the TP5000 input range. Output wires usually bare — terminate into the TP5000 IN+/IN- screw terminal or solder.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="antenna-915-sma" data-price="5">
+        
+        <div class="part-body">
+          <div class="part-name">915 MHz SMA Antenna (~5 dBi rubber duck)</div>
+          <div class="part-price">~$5</div>
+          <dl class="part-specs"><dt>Connector</dt><dd>SMA male (NOT RP-SMA)</dd><dt>VSWR</dt><dd>≤ 1.5 typical</dd><dt>Frequency</dt><dd>902–928 MHz (US ISM)</dd><dt>Length</dt><dd>~195 mm</dd><dt>Gain</dt><dd>~5 dBi</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://store.rakwireless.com/collections/antennas" target="_blank" rel="noopener noreferrer">Official</a><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=915MHz+SMA+5dBi+antenna+rubber+duck" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.mouser.com/c/passive-components/antennas/?frequency=915%20MHz" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">Must be SMA (not RP-SMA). Match the frequency to your region — 915 MHz for US/AU, 868 MHz for EU, 433 MHz for AS923. A 5 dBi whip gives the best size-vs-range tradeoff for proof-of-mesh; upgrade to a fiberglass colinear (8+ dBi) later if you put a node on a rooftop. Antenna stays vertical for matching polarization with the rest of the Meshtastic network.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="pigtail-ipex-sma" data-price="3">
+        
+        <div class="part-body">
+          <div class="part-name">IPEX (u.FL) to SMA Pigtail, ~10 cm</div>
+          <div class="part-price">~$3</div>
+          <dl class="part-specs"><dt>End A</dt><dd>IPEX / u.FL (mates RAK4631)</dd><dt>Length</dt><dd>~100–150 mm</dd><dt>End B</dt><dd>SMA female bulkhead w/ panel nut</dd><dt>Coax</dt><dd>RG178</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://store.rakwireless.com/products/u-fl-to-rp-sma-cable" target="_blank" rel="noopener noreferrer">Official</a><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=IPEX+ufl+to+SMA+bulkhead+pigtail" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.adafruit.com/product/851" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">The RAK4631 module has an IPEX (u.FL) antenna footprint; this cable adapts it to a standard SMA bulkhead through the enclosure wall. Get the female-SMA-bulkhead version (panel-mount nut) so it threads through the hole you drill in the case. RG178 coax is standard; 100–150 mm is the right length for a 100 mm box.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="enclosure-ip65" data-price="5">
+        
+        <div class="part-body">
+          <div class="part-name">IP65 ABS Weatherproof Junction Box (~100 x 68 x 50 mm)</div>
+          <div class="part-price">~$5</div>
+          <dl class="part-specs"><dt>Rating</dt><dd>IP65 (dust + jets)</dd><dt>External</dt><dd>~100 x 68 x 50 mm</dd><dt>Material</dt><dd>ABS or polycarbonate</dd><dt>Mount</dt><dd>Wall-mount tabs or DIN</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=IP65+ABS+junction+box+100x68x50mm" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.mcmaster.com/electrical-enclosures/" target="_blank" rel="noopener noreferrer">Reputable #1</a><a class="part-link" href="https://www.hammfg.com/electrical/products/plastic" target="_blank" rel="noopener noreferrer">Reputable #2</a></div>
+          <div class="part-note">Cheap clear or grey ABS box from any hardware site. IP65 is enough for a vertical wall mount; if you flat-mount it skyward, look for IP66+. Internal volume fits the RAK19003 + Mini base + 18650 holder + TP5000 + slack cable. Drill one hole on top/side for the antenna SMA bulkhead and one on the bottom for the panel cable gland.</div>
+        </div>
+      </div>
+<div class="part-card" data-pid="cable-gland-m12" data-price="1">
+        
+        <div class="part-body">
+          <div class="part-name">M12 IP68 Cable Gland (for solar panel pass-through)</div>
+          <div class="part-price">~$1</div>
+          <dl class="part-specs"><dt>Thread</dt><dd>M12 x 1.5</dd><dt>Cable OD</dt><dd>3-6.5 mm</dd><dt>Rating</dt><dd>IP68</dd><dt>Material</dt><dd>Nylon (PA66)</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=M12+nylon+cable+gland+IP68" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.mcmaster.com/cable-glands/" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">Threaded gland that seals around the solar panel&#39;s output cable as it enters the enclosure. M12 fits a small drilled hole; M16 if you have a thicker cable. Skip if you&#39;d rather use silicone sealant in a smaller hole, but the gland is reusable when you swap parts.</div>
         </div>
       </div>
 </div>
 </div>
 <div class="parts-category">
-<h3 id="gallery-optional">optional <span class="part-cat-blurb">— Optional add-ons.</span></h3>
+<h3 id="gallery-consumable">consumable <span class="part-cat-blurb">— Cheap misc parts you may already have. Order once, share across all 3 nodes.</span></h3>
 <div class="parts-grid">
-<div class="part-card" data-pid="stub-part-c" data-price="35">
+<div class="part-card" data-pid="misc-wire-jst-screws" data-price="2">
         
         <div class="part-body">
-          <div class="part-name">Stub Part C</div>
-          <div class="part-price">~$35</div>
-          <dl class="part-specs"><dt>SKU</dt><dd>STUB-C-0003</dd><dt>Type</dt><dd>Placeholder type</dd></dl>
-          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://example.com/stub-part-c" target="_blank" rel="noopener noreferrer">Official</a><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=placeholder+part+c" target="_blank" rel="noopener noreferrer">Google</a></div>
-          <div class="part-note">Placeholder note for an optional add-on part.</div>
+          <div class="part-name">JST-PHR-2 connectors + 22 AWG silicone wire + M3 screws</div>
+          <div class="part-price">~$2</div>
+          <dl class="part-specs"><dt>JST</dt><dd>PHR-2 housings + crimp pins (2.0 mm pitch)</dd><dt>Screws</dt><dd>M3x6 + M3x8, ~10 ea</dd><dt>Wire</dt><dd>22 AWG silicone, red + black, ~1 m each</dd><dt>Tape</dt><dd>3M VHB or generic foam, ~25 mm wide</dd></dl>
+          <div class="part-links"><span class="part-links-label">Buy:</span><a class="part-link" href="https://www.google.com/search?udm=28&amp;q=JST+PHR-2+connector+kit" target="_blank" rel="noopener noreferrer">Google</a><a class="part-link" href="https://www.digikey.com/en/products/filter/rectangular-connectors-housings/315?s=N4IgjCBcoLQOxVAYygMwIYBsDOBTANCAPZQDaIATAAwiUC6AvowDb2vsCu1jIAdgPYBLAE4Bjas34A2YbwAOIWZTBN6HEAF8gA" target="_blank" rel="noopener noreferrer">Reputable #1</a></div>
+          <div class="part-note">Buy once, share across all 3 nodes. JST-PHR-2 male housings + crimp terminals connect the battery holder leads to the RAK19003. 22 AWG silicone-jacket wire handles all the low-voltage hops cleanly. M3x6 / M3x8 screws + double-sided VHB foam tape mount the panel and board to the enclosure interior.</div>
         </div>
       </div>
 </div>
@@ -626,157 +700,174 @@ img { max-width: 100%; height: auto; border-radius: 6px; }
 
 <hr>
 <h2 id="03-assemble">03. Assemble <a class="heading-anchor" href="#03-assemble" aria-label="link to this section">#</a></h2>
-<p><strong>Total time:</strong> <em>~TBD minutes.</em></p>
+<p><strong>Total time:</strong> <em>~30 minutes per node, once parts are in hand.</em></p>
+<p>The wiring is one signal path with two sub-paths:</p>
+<pre><code>Solar panel  →  TP5000 (LFP jumper <span class="hljs-keyword">set</span>!)  →  LiFePO4 <span class="hljs-comment">cell</span>  →  <span class="hljs-comment">JST-PHR-2</span>  →  <span class="hljs-comment">RAK19003</span>  →  <span class="hljs-comment">RAK4631</span>
+RAK4631 <span class="hljs-comment">IPEX</span>  →  <span class="hljs-comment">pigtail</span>  →  <span class="hljs-comment">SMA bulkhead</span>  →  <span class="hljs-comment">915 MHz antenna</span>
+</code></pre>
 <ol>
-<li>Step one placeholder — short, imperative voice.</li>
-<li>Step two placeholder — call out one specific pin / port / cable.</li>
-<li>Step three placeholder — visual sanity check before powering on.</li>
+<li><strong>Set the TP5000 jumper to LFP (3.6 V).</strong> This is the single most important step. The board ships with the jumper in either position; LFP termination is usually labeled <code>4.2/3.6</code> or <code>Li-ion/LiFePO4</code>. Wrong jumper = dead cell in weeks.</li>
+<li><strong>Solder the solar panel leads to the TP5000 <code>IN+</code> / <code>IN-</code> pads.</strong> Red to <code>+</code>, black to <code>-</code>. Heat-shrink the joint — the enclosure isn&#39;t fully sealed if the panel cable enters with bare conductors.</li>
+<li><strong>Solder the LFP cell holder leads to the TP5000 <code>BAT+</code> / <code>BAT-</code> pads.</strong> Don&#39;t insert the cell yet.</li>
+<li><strong>Crimp a JST-PHR-2 onto a short pair of 22 AWG wires</strong>, then solder the other end of those wires to the TP5000&#39;s <code>BAT+</code> / <code>BAT-</code> pads (in parallel with the cell-holder leads). This is the output that feeds the RAK19003.</li>
+<li><strong>Snap the RAK4631 onto the RAK19003 Mini Base.</strong> Align the silk-screen markers, press until the board-to-board connector seats fully.</li>
+<li><strong>Connect the IPEX pigtail.</strong> The u.FL connector on the RAK4631 is fragile — press straight down with a thumbnail until it clicks. Mount the SMA bulkhead end through the drilled hole in the top of the enclosure (panel nut on the outside).</li>
+<li><strong>Plug the JST-PHR-2 from the TP5000 into the RAK19003 battery input.</strong> It only fits one way.</li>
+<li><strong>Insert the LFP cell.</strong> The RAK19003 red LED should blip briefly. If you&#39;ve already flashed firmware, the RAK4631 user LED may pulse; blank is also fine — firmware lands in section 04.</li>
+<li><strong>Mount everything inside the enclosure.</strong> Foam-tape the TP5000 to one wall, the RAK19003 + Mini Base to the opposite wall, the cell holder along the floor. Route the panel cable out through the M12 gland.</li>
+<li><strong>Visual sanity check.</strong> Antenna is vertical when the enclosure is mounted in its final orientation. No bare wire near the SMA bulkhead. Cell is seated and the holder spring is in contact.</li>
 </ol>
-<div class="when" data-when-tier="portable">
-<ol start="4">
-<li>Optional step for the portable tier — appears only when that configurator option is selected.</div>
-<div class="when" data-when-tier="stationary">
-<strong>Stationary layout placeholder</strong> — appears only when that configurator option is selected.</div></li>
-</ol>
-<p>✅ <strong>Checkpoint:</strong> <em>[What &quot;done&quot; looks like for this section — one observable signal.]</em></p>
+<div class="when" data-when-deployment="rooftop">
+<p><strong>Rooftop note.</strong> Grounding is a real concern when the antenna is your highest point. Add a gas-discharge tube (GDT) lightning arrestor on the SMA line before the radio — cheap insurance for a board you can&#39;t easily reach.</p>
+</div>
+
+<p>✅ <strong>Checkpoint:</strong> <em>Cell installed, RAK19003 red LED blipped on power-up, antenna threaded through enclosure wall, panel cable sealed at the gland.</em></p>
 <hr>
-<h2 id="04-flash-microsd">04. Flash microSD <a class="heading-anchor" href="#04-flash-microsd" aria-label="link to this section">#</a></h2>
-<h3 id="41-install-imager">4.1 Install imager <a class="heading-anchor" href="#41-install-imager" aria-label="link to this section">#</a></h3>
-<p>Placeholder text for installing the flashing tool.</p>
-<h3 id="42-flash">4.2 Flash <a class="heading-anchor" href="#42-flash" aria-label="link to this section">#</a></h3>
+<h2 id="04-flash-firmware">04. Flash firmware <a class="heading-anchor" href="#04-flash-firmware" aria-label="link to this section">#</a></h2>
+<p>ChiMesh runs stock Meshtastic firmware. We&#39;re not forking — for v0 the value is in deployment + config conventions, not custom firmware.</p>
+<h3 id="41-open-the-web-flasher">4.1 Open the web flasher <a class="heading-anchor" href="#41-open-the-web-flasher" aria-label="link to this section">#</a></h3>
+<p>In <strong>Chrome or Edge</strong> (Web Serial isn&#39;t in Firefox/Safari), open:</p>
+<pre><code><span class="hljs-template-variable">{{<span class="hljs-name">FLASHER_URL</span>}}</span>
+</code></pre>
+<h3 id="42-connect-and-flash">4.2 Connect and flash <a class="heading-anchor" href="#42-connect-and-flash" aria-label="link to this section">#</a></h3>
 <ol>
-<li>Open the imager.</li>
-<li>Pick the device.</li>
-<li>Pick the OS image.</li>
-<li>Pick the storage target.</li>
-<li>Set hostname, user, password, Wi-Fi, locale.</li>
-<li>Write.</li>
+<li>Plug the RAK19003&#39;s USB-C into your computer.</li>
+<li>Click <strong>Select Device</strong>. Pick <strong>RAK4631</strong> from the dropdown.</li>
+<li>Pick the latest stable Meshtastic 2.5.x build.</li>
+<li>Pick <strong>Region: US</strong> (default; adjust if you&#39;re outside the US).</li>
+<li>Click <strong>Flash</strong>, allow the browser&#39;s serial-port prompt.</li>
+<li>Wait ~30 seconds. The board reboots into the Meshtastic firmware automatically.</li>
 </ol>
-<h3 id="43-first-boot">4.3 First boot <a class="heading-anchor" href="#43-first-boot" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash">ssh user@chimesh.local
-</code></pre>
-<p>✅ <strong>Checkpoint:</strong> <em>[Shell prompt is reachable.]</em></p>
+<p>✅ <strong>Checkpoint:</strong> <em>Flasher prints &quot;Done&quot; and the RAK19003 LED settles into a slow heartbeat pattern.</em></p>
 <hr>
-<h2 id="05-system-setup">05. System setup <a class="heading-anchor" href="#05-system-setup" aria-label="link to this section">#</a></h2>
-<h3 id="51-update">5.1 Update <a class="heading-anchor" href="#51-update" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash"><span class="hljs-built_in">sudo</span> apt update &amp;&amp; <span class="hljs-built_in">sudo</span> apt full-upgrade -y
+<h2 id="05-configure-node">05. Configure node <a class="heading-anchor" href="#05-configure-node" aria-label="link to this section">#</a></h2>
+<p>You can configure either via the official Meshtastic app over Bluetooth, or via the <code>meshtastic</code> CLI over USB. The CLI is faster for scripted multi-node setup — recommended for ChiMesh since you&#39;re provisioning at least 3 nodes identically.</p>
+<h3 id="51-install-the-meshtastic-cli">5.1 Install the Meshtastic CLI <a class="heading-anchor" href="#51-install-the-meshtastic-cli" aria-label="link to this section">#</a></h3>
+<pre><code class="language-bash">pip install --upgrade meshtastic
 </code></pre>
-<h3 id="52-install-dependencies">5.2 Install dependencies <a class="heading-anchor" href="#52-install-dependencies" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash"><span class="hljs-built_in">sudo</span> apt install -y git curl build-essential
+<p>You should see meshtastic-python 2.5.x or newer.</p>
+<h3 id="52-provision-the-node">5.2 Provision the node <a class="heading-anchor" href="#52-provision-the-node" aria-label="link to this section">#</a></h3>
+<p>Use the bundled provisioner — it walks one USB-connected node through the standard ChiMesh config:</p>
+<pre><code class="language-powershell">scripts\cli\provision<span class="hljs-literal">-node</span>.ps1 <span class="hljs-literal">-NodeName</span> chimesh<span class="hljs-literal">-001</span>
 </code></pre>
-<p>✅ <strong>Checkpoint:</strong> <em>[Dependencies present.]</em></p>
+<p>Or set each field manually:</p>
+<pre><code class="language-bash">meshtastic --<span class="hljs-built_in">set</span> lora.region US
+meshtastic --<span class="hljs-built_in">set</span> device.role ROUTER_CLIENT
+meshtastic --ch-set name <span class="hljs-string">&quot;ChiMesh-Test&quot;</span> --ch-index 0
+meshtastic --set-owner chimesh-001
+</code></pre>
+<div class="when" data-when-role="router">
+<p><strong>Role note (ROUTER).</strong> ROUTER means this node relays every packet it hears but never originates user messages. Reserve for true backbone nodes — usually 1 per metro area. For most ChiMesh deployments ROUTER_CLIENT is better because it both relays AND lets you chat from this node.</p>
+</div>
+<div class="when" data-when-role="client">
+<p><strong>Role note (CLIENT).</strong> CLIENT is for portable / handheld use — the node sleeps aggressively to save battery. A sleeping CLIENT will not forward packets. Do NOT use this role for your fixed proof nodes; pick ROUTER_CLIENT for those.</p>
+</div>
+<div class="when" data-when-region="eu868">
+<p><strong>Region note (EU 868).</strong> EU duty-cycle rules limit each device to ~1% airtime on most sub-channels. Meshtastic respects this in firmware, but expect slower message throughput than US 915.</p>
+</div>
+
+<h3 id="53-confirm">5.3 Confirm <a class="heading-anchor" href="#53-confirm" aria-label="link to this section">#</a></h3>
+<pre><code class="language-bash">meshtastic --info
+</code></pre>
+<p>You should see the region you picked, the role you picked, and channel 0 named <code>ChiMesh-Test</code>.</p>
+<p>✅ <strong>Checkpoint:</strong> <em><code>meshtastic --info</code> returns region + role + channel exactly as expected.</em></p>
 <hr>
-<h2 id="06-install-software">06. Install software <a class="heading-anchor" href="#06-install-software" aria-label="link to this section">#</a></h2>
-<pre><code class="language-bash"><span class="hljs-built_in">cd</span> ~
-git <span class="hljs-built_in">clone</span> https://github.com/mindattic/ChiMesh.git
-<span class="hljs-built_in">cd</span> ChiMesh
-bash install.sh
-</code></pre>
-<p>You should see <code>v24.x</code> or newer.</p>
-<p>✅ <strong>Checkpoint:</strong> <em>[Installer exits clean.]</em></p>
-<hr>
-<h2 id="07-api-key">07. API key <a class="heading-anchor" href="#07-api-key" aria-label="link to this section">#</a></h2>
-<ol>
-<li>Visit the provider console.</li>
-<li>Add billing.</li>
-<li>Create a key named <code>chimesh</code>. Copy it now — you can&#39;t see it again.</li>
-<li>Treat it like a password.</li>
-</ol>
-<h3 id="which-model-to-pick">Which model to pick <a class="heading-anchor" href="#which-model-to-pick" aria-label="link to this section">#</a></h3>
+<h2 id="06-deploy">06. Deploy <a class="heading-anchor" href="#06-deploy" aria-label="link to this section">#</a></h2>
+<p>For proof-of-mesh, the 3 nodes have to be positioned so <strong>at least one pair cannot hear each other directly</strong>. Otherwise you&#39;ve built a 1-hop network and proven nothing about multi-hop routing.</p>
+<p>A workable Chicago layout:</p>
 <table>
 <thead>
 <tr>
-<th>Model ID</th>
-<th>Speed</th>
-<th>Quality</th>
-<th>When to use</th>
+<th>Node</th>
+<th>Suggested location</th>
+<th>Why</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>model-fast</code></td>
-<td>Fastest</td>
-<td>Good</td>
-<td>Default.</td>
+<td>Node A</td>
+<td>High-rise apartment window or balcony</td>
+<td>Gateway altitude — sees both B and C</td>
 </tr>
 <tr>
-<td><code>model-balanced</code></td>
-<td>Medium</td>
-<td>Excellent</td>
-<td>Richer answers.</td>
+<td>Node B</td>
+<td>Friend&#39;s apartment / office, ~1–3 km away</td>
+<td>Far enough it can&#39;t reach C directly</td>
 </tr>
 <tr>
-<td><code>model-best</code></td>
-<td>Slowest</td>
-<td>Best</td>
-<td>Hard reasoning only.</td>
+<td>Node C</td>
+<td>Second remote location, ~1–3 km from B in a different direction</td>
+<td>Forces traffic through A</td>
 </tr>
 </tbody></table>
-<hr>
-<h2 id="08-configure-software">08. Configure software <a class="heading-anchor" href="#08-configure-software" aria-label="link to this section">#</a></h2>
-<h3 id="81-create-your-env">8.1 Create your <code>.env</code> <a class="heading-anchor" href="#81-create-your-env" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash"><span class="hljs-built_in">cp</span> .env.template .<span class="hljs-built_in">env</span>
-nano .<span class="hljs-built_in">env</span>
-</code></pre>
-<pre><code class="language-env"><span class="hljs-attr">API_KEY</span>=replace-me
-<span class="hljs-attr">MODEL</span>=model-fast
-</code></pre>
-<div class="when" data-when-variant="a">
-<p><strong>Variant A placeholder.</strong> Appears only when variant A is picked.</p>
+<div class="when" data-when-deployment="apartment_window">
+<p><strong>Apartment-window note.</strong> Indoor through low-E (energy-efficient) glass costs ~10–15 dB of signal. If you have access to a balcony or an exterior fence/eave, use it — Chicago&#39;s lake-effect glass is particularly bad for 915 MHz. Antenna outside the window beats antenna inside, every time.</p>
 </div>
-<div class="when" data-when-variant="b">
-<p><strong>Variant B placeholder.</strong> Appears only when variant B is picked.</p>
+<div class="when" data-when-deployment="rooftop">
+<p><strong>Rooftop note.</strong> Strongest placement. Aim the solar panel south at ~41° tilt (Chicago&#39;s latitude). Mount the enclosure on the north side of any obstruction so the antenna stays clear of metal HVAC, parapets, and roof-edge railings.</p>
+</div>
+<div class="when" data-when-deployment="ground_pole">
+<p><strong>Ground-pole note.</strong> Range from a ground-level node is roughly half of an elevated one — buildings, cars, and foliage block line-of-sight. Useful as a yard pin but not as your gateway node. Don&#39;t expect to bridge anything beyond ~500 m.</p>
+</div>
+<div class="when" data-when-antenna="fiberglass8">
+<p><strong>Fiberglass colinear note.</strong> An 8+ dBi fiberglass antenna is heavier, more visible, and needs a real mast or bracket. Pair it with the rooftop deployment only — on a balcony it&#39;s overkill and on a window it&#39;s structurally awkward.</p>
 </div>
 
-<h3 id="82-build">8.2 Build <a class="heading-anchor" href="#82-build" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash">bash build.sh
-</code></pre>
-<p>✅ <strong>Checkpoint:</strong> <em>[Build exits clean.]</em></p>
+<p><strong>Solar panel aim.</strong> Face south, tilt ~41° (matches Chicago&#39;s latitude). Don&#39;t lay panels flat — flat panels collect snow and bird droppings, and the December sun angle is so low that flat-mount harvest drops ~30%.</p>
+<p><strong>Antenna orientation.</strong> Vertical. Most Meshtastic networks are vertically polarized; a sideways antenna costs you ~3 dB instantly.</p>
+<p>✅ <strong>Checkpoint:</strong> <em>All 3 nodes deployed, solar panels facing the sky, antennas vertical, enclosure lids closed and sealed.</em></p>
 <hr>
-<h2 id="09-healthcheck">09. Healthcheck <a class="heading-anchor" href="#09-healthcheck" aria-label="link to this section">#</a></h2>
-<pre><code class="language-bash">bash ~/healthcheck.sh
+<h2 id="07-verify-mesh">07. Verify mesh <a class="heading-anchor" href="#07-verify-mesh" aria-label="link to this section">#</a></h2>
+<h3 id="71-pair-with-the-meshtastic-app">7.1 Pair with the Meshtastic app <a class="heading-anchor" href="#71-pair-with-the-meshtastic-app" aria-label="link to this section">#</a></h3>
+<p>Install the Meshtastic app — see https://meshtastic.org/docs/software/apps/ for the official download links. Pair with Node A over Bluetooth (default PIN is <code>123456</code> unless you changed it).</p>
+<h3 id="72-check-the-node-list">7.2 Check the node list <a class="heading-anchor" href="#72-check-the-node-list" aria-label="link to this section">#</a></h3>
+<p>The app&#39;s <strong>Nodes</strong> tab should list all 3 nodes within a few minutes — A directly (paired to your phone) plus B and C via radio. The gear icon next to each remote node shows hop count: <code>1 hop</code> = direct, <code>2 hops</code> = routed through another node.</p>
+<h3 id="73-the-actual-test">7.3 The actual test <a class="heading-anchor" href="#73-the-actual-test" aria-label="link to this section">#</a></h3>
+<p>Send a text from the app (paired to A) to Node C. If it arrives at C, and the path shows <code>via B</code> in the app, you&#39;ve proven multi-hop routing.</p>
+<p>If every node shows <code>1 hop</code>, the nodes are too close together — separate them further until at least one pair can&#39;t see each other directly.</p>
+<p>✅ <strong>Checkpoint:</strong> <em>A message from your phone (paired to A) reaches C with a <code>via B</code> hop indicator in the app.</em></p>
+<h3 id="74-run-the-bundled-healthcheck">7.4 Run the bundled healthcheck <a class="heading-anchor" href="#74-run-the-bundled-healthcheck" aria-label="link to this section">#</a></h3>
+<pre><code class="language-powershell">scripts\cli\healthcheck<span class="hljs-literal">-mesh</span>.ps1
 </code></pre>
-<p>✅ <strong>Checkpoint:</strong> <em>[All checks green.]</em></p>
+<p>Connects to whichever node is on the USB cable, queries <code>--info</code>, and reports the count of known peers + the last-heard timestamps. Use it as a one-shot sanity check before calling the deployment done.</p>
 <hr>
-<h2 id="10-run">10. Run <a class="heading-anchor" href="#10-run" aria-label="link to this section">#</a></h2>
-<h3 id="manual-launch">Manual launch <a class="heading-anchor" href="#manual-launch" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash">bash run.sh
-</code></pre>
-<h3 id="start-on-boot">Start on boot <a class="heading-anchor" href="#start-on-boot" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash">bash startup.sh
-<span class="hljs-built_in">sudo</span> systemctl status chimesh.service
-</code></pre>
-<h3 id="live-logs">Live logs <a class="heading-anchor" href="#live-logs" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash">journalctl -u chimesh.service -f
-</code></pre>
-<hr>
-<h2 id="11-case">11. Case <a class="heading-anchor" href="#11-case" aria-label="link to this section">#</a></h2>
-<div class="when" data-when-case="none">
-<p>You picked <strong>no case</strong>. Placeholder text for the no-case path.</p>
-</div>
-<div class="when" data-when-case="fdm,sla">
-<p>Placeholder text for printed case options. Links to STL files will land here.</p>
-</div>
-
-<hr>
-<h2 id="12-troubleshooting">12. Troubleshooting <a class="heading-anchor" href="#12-troubleshooting" aria-label="link to this section">#</a></h2>
-<h3 id="nothing-works">Nothing works <a class="heading-anchor" href="#nothing-works" aria-label="link to this section">#</a></h3>
+<h2 id="08-troubleshooting">08. Troubleshooting <a class="heading-anchor" href="#08-troubleshooting" aria-label="link to this section">#</a></h2>
+<h3 id="nothing-comes-up-on-the-web-flasher">Nothing comes up on the web flasher <a class="heading-anchor" href="#nothing-comes-up-on-the-web-flasher" aria-label="link to this section">#</a></h3>
 <ul>
-<li>Placeholder symptom + fix.</li>
+<li>Chrome or Edge only — Web Serial isn&#39;t in Firefox/Safari.</li>
+<li>Try a different USB-C cable. Many &quot;charging only&quot; cables don&#39;t carry USB data.</li>
+<li>On Windows, check Device Manager for the COM port; if it&#39;s missing, install Nordic&#39;s USB driver.</li>
 </ul>
-<h3 id="something-works-but-slowly">Something works but slowly <a class="heading-anchor" href="#something-works-but-slowly" aria-label="link to this section">#</a></h3>
+<h3 id="flashed-but-no-led-activity">Flashed, but no LED activity <a class="heading-anchor" href="#flashed-but-no-led-activity" aria-label="link to this section">#</a></h3>
 <ul>
-<li>Placeholder symptom + fix.</li>
+<li>The RAK19003 red LED only lights when current is drawn — if the cell is dead or the jumper is wrong, the board sits at 0 V.</li>
+<li>Check cell voltage with a multimeter: a healthy LFP reads 3.2–3.65 V.</li>
+<li>Confirm the TP5000 jumper is set for LFP (3.6 V), not Li-ion (4.2 V).</li>
 </ul>
-<h3 id="service-wont-start">Service won&#39;t start <a class="heading-anchor" href="#service-wont-start" aria-label="link to this section">#</a></h3>
-<pre><code class="language-bash"><span class="hljs-built_in">sudo</span> systemctl status chimesh.service --no-pager
-journalctl -u chimesh.service -n 60 --no-pager
+<h3 id="nodes-cant-see-each-other">Nodes can&#39;t see each other <a class="heading-anchor" href="#nodes-cant-see-each-other" aria-label="link to this section">#</a></h3>
+<ul>
+<li>Verify all nodes are on the same region (<code>meshtastic --info</code> shows <code>lora.region</code>).</li>
+<li>Verify all nodes are on the same channel name AND PSK.</li>
+<li>Move one node within 10 m of another to rule out a config bug vs a range issue.</li>
+</ul>
+<h3 id="solar-isnt-keeping-up">Solar isn&#39;t keeping up <a class="heading-anchor" href="#solar-isnt-keeping-up" aria-label="link to this section">#</a></h3>
+<ul>
+<li>Confirm the panel is generating: disconnect from the TP5000, measure open-circuit voltage in sunlight — should be ~6 V.</li>
+<li>Confirm the TP5000 is charging: re-connect, measure across the cell — should rise toward 3.6 V over an hour of sun.</li>
+<li>December low-light is the close case. If a node won&#39;t survive the worst week, upgrade to a 5 W panel.</li>
+</ul>
+<h3 id="radio-not-responding-via-cli">Radio not responding via CLI <a class="heading-anchor" href="#radio-not-responding-via-cli" aria-label="link to this section">#</a></h3>
+<pre><code class="language-powershell">scripts\cli\healthcheck<span class="hljs-literal">-mesh</span>.ps1 <span class="hljs-literal">-Verbose</span>
 </code></pre>
+<p>Reads the connected node and prints any error states from <code>--info</code>.</p>
 <hr>
 <h2 id="reference">Reference <a class="heading-anchor" href="#reference" aria-label="link to this section">#</a></h2>
 <ul>
+<li><strong>Meshtastic firmware:</strong> <a href="https://github.com/meshtastic/firmware">https://github.com/meshtastic/firmware</a></li>
+<li><strong>Meshtastic web flasher:</strong> https://flash.meshtastic.org</li>
+<li><strong>Meshtastic apps (mobile + desktop):</strong> https://meshtastic.org/docs/software/apps/</li>
+<li><strong>RAK4631 product page:</strong> <a href="https://store.rakwireless.com/products/rak4631-lpwan-node">https://store.rakwireless.com/products/rak4631-lpwan-node</a></li>
+<li><strong>RAK19003 product page:</strong> <a href="https://store.rakwireless.com/products/wisblock-base-board-rak19003">https://store.rakwireless.com/products/wisblock-base-board-rak19003</a></li>
 <li><strong>Project repo:</strong> <a href="https://github.com/mindattic/ChiMesh">https://github.com/mindattic/ChiMesh</a></li>
-<li><strong>Provider docs:</strong> <em>TBD</em></li>
-<li><strong>Pricing:</strong> <em>TBD</em></li>
 </ul>
 <hr>
 <h2 id="summary-stack">Summary stack <a class="heading-anchor" href="#summary-stack" aria-label="link to this section">#</a></h2>
@@ -788,35 +879,46 @@ journalctl -u chimesh.service -n 60 --no-pager
 </tr>
 </thead>
 <tbody><tr>
-<td>Hardware</td>
-<td><em>TBD</em></td>
+<td>Radio</td>
+<td>Semtech SX1262 LoRa, 915 MHz US ISM</td>
 </tr>
 <tr>
-<td>OS</td>
-<td><em>TBD</em></td>
+<td>MCU</td>
+<td>Nordic nRF52840 (ARM Cortex-M4F @ 64 MHz)</td>
 </tr>
 <tr>
-<td>Wake / trigger</td>
-<td><em>TBD</em></td>
+<td>Board</td>
+<td>RAK4631 (RAK Wireless WisBlock Core) on RAK19003 Mini Base</td>
 </tr>
 <tr>
-<td>Transport</td>
-<td><em>TBD</em></td>
+<td>Firmware</td>
+<td>Meshtastic 2.5.x (stock, unmodified)</td>
 </tr>
 <tr>
-<td>Brain</td>
-<td><em>TBD</em></td>
+<td>Mesh protocol</td>
+<td>Meshtastic managed flood routing</td>
 </tr>
 <tr>
-<td>Service manager</td>
-<td><em>TBD</em></td>
+<td>Power</td>
+<td>5 V / 2 W solar → TP5000 (LFP-configured) → LiFePO4 18650</td>
+</tr>
+<tr>
+<td>App / config</td>
+<td>Meshtastic mobile/desktop over BLE, or <code>meshtastic</code> CLI over USB</td>
+</tr>
+<tr>
+<td>Enclosure</td>
+<td>IP65 ABS junction box, M12 gland for solar lead</td>
 </tr>
 </tbody></table>
 <hr>
 <h2 id="update-notes">Update Notes <a class="heading-anchor" href="#update-notes" aria-label="link to this section">#</a></h2>
 <h3 id="20260522a">2026.05.22a <a class="heading-anchor" href="#20260522a" aria-label="link to this section">#</a></h3>
 <ul>
-<li><strong>Scaffold imported.</strong> Cloned the Claudia hardware-page layout into ChiMesh as a content-free shell so the look-and-feel can be reviewed before real copy lands. Every section header, callout style, code block, table, checkpoint, and configurator hook is in place with placeholder text. Real content lands incrementally after this scaffold is checked in.</li>
+<li><strong>First real content.</strong> Replaced the Claudia-derived scaffold (PiSugar voice assistant) with the ChiMesh v0 proof-of-mesh build: three solar-powered RAK4631 nodes in IP65 enclosures.</li>
+<li><strong>New config axes:</strong> region (LoRa band), node role, deployment scenario, antenna gain. Conditional sections show region-specific and deployment-specific advice as the user toggles axes.</li>
+<li><strong>Real BOM with compatibility-checked links.</strong> Ten parts, each with Official / Amazon / Reputable tiered links and a Google Shopping search. Signal path verified end-to-end: solar → TP5000 (LFP) → LFP cell → RAK19003 → RAK4631 → IPEX → SMA → antenna.</li>
+<li><strong>Scripts swapped.</strong> Removed Pi-flavored chatbot install + healthcheck (irrelevant — Meshtastic nodes are microcontrollers, no shell). Added <code>scripts/cli/provision-node.ps1</code> and <code>scripts/cli/healthcheck-mesh.ps1</code> that drive the <code>meshtastic</code> CLI over USB.</li>
 </ul>
 
 
@@ -861,7 +963,7 @@ journalctl -u chimesh.service -n 60 --no-pager
 // data-when-KEY="val1,val2,..." attributes is shown only when the saved
 // config[KEY] is in that list (or, with a leading "!", NOT in it).
 (function () {
-  var AXES = [{"key":"battery","default":"no"},{"key":"asr","default":"whisper-cpp"},{"key":"tts","default":"openai"},{"key":"case","default":"none"},{"key":"smarthome","default":"none"}];
+  var AXES = [{"key":"region","default":"us915"},{"key":"role","default":"router_client"},{"key":"deployment","default":"balcony"},{"key":"antenna","default":"rubber5"}];
   var SAVED_KEY = 'chimesh-build-config';
 
   function loadConfig() {

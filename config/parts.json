@@ -1,69 +1,229 @@
 {
-  "_description": "Stub parts catalog for the ChiMesh build. Schema mirrors Claudia's parts.json so build-html.js renders the gallery using placeholder data. Real parts land later; for now these three exist only to exercise the gallery layout, the per-part card, the specs table, and the multi-tier 'find-deals' link list.",
-  "_priorityOrder": ["amazon", "official", "reputable"],
+  "_description": "Parts catalog for the ChiMesh v0 build — 3 solar-powered RAK4631 Meshtastic nodes for proof-of-mesh in Chicago. Prices are per node; the page widget multiplies by node count. All ten parts are compatibility-checked end-to-end: Solar panel (5V) -> TP5000 (LFP-configured) -> LiFePO4 cell -> JST-PHR-2 on RAK19003 -> RAK4631 -> IPEX -> SMA pigtail -> 915 MHz antenna.",
+  "_priorityOrder": ["official", "amazon", "reputable"],
 
   "pricesAsOf": "2026-05-22",
-  "pricesNote": "Placeholder prices for layout review. Replace before publishing.",
+  "pricesNote": "Per-node estimates in USD. Stock varies; verify via the Google Shopping link on each card before ordering.",
 
   "categories": {
-    "core": "Required for every build.",
-    "optional": "Optional add-ons."
+    "core": "Required for every node — one of each per node.",
+    "consumable": "Cheap misc parts you may already have. Order once, share across all 3 nodes."
   },
 
   "parts": [
     {
-      "id": "stub-part-a",
+      "id": "rak4631",
       "category": "core",
-      "name": "Stub Part A",
-      "match": "**Stub Part A**",
-      "price": 19,
-      "note": "Placeholder note. Real note lands later — usually one specific gotcha first-time builders hit (variant to pick, version to avoid, etc.).",
+      "name": "RAK4631 WisBlock Core (nRF52840 + SX1262 LoRa)",
+      "price": 25,
+      "note": "The brain. Nordic nRF52840 MCU with Semtech SX1262 LoRa radio on one module. Listens at ~7 mA (vs ~17 mA for Heltec V3) which is what makes solar viable in Chicago winter. Make sure you get the 915 MHz US variant, not the 868 MHz EU variant.",
       "specs": [
-        { "label": "SKU",   "value": "STUB-A-0001" },
-        { "label": "Spec1", "value": "Placeholder value 1" },
-        { "label": "Spec2", "value": "Placeholder value 2" },
-        { "label": "Form",  "value": "00 × 00 mm" }
+        { "label": "MCU",      "value": "Nordic nRF52840 @ 64 MHz (ARM Cortex-M4F)" },
+        { "label": "Radio",    "value": "Semtech SX1262 LoRa, up to +22 dBm" },
+        { "label": "Frequency","value": "915 MHz (US) — pick correct SKU for region" },
+        { "label": "RAM/Flash","value": "256 KB SRAM / 1 MB flash" },
+        { "label": "Wireless", "value": "BLE 5 + LoRa (no Wi-Fi)" },
+        { "label": "RX current","value": "~6–8 mA listening" },
+        { "label": "Sleep",    "value": "~3 µA System OFF, ~7 µA w/ RAM retain" },
+        { "label": "Antenna",  "value": "IPEX (u.FL) connector on-module" }
       ],
-      "searchFor": "https://www.google.com/search?udm=28&q=placeholder+part+a",
+      "searchFor": "https://www.google.com/search?udm=28&q=RAK4631+WisBlock+Core+915MHz",
       "tiers": [
-        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=placeholder+part+a" },
-        { "tier": "official",  "url": "https://example.com/stub-part-a" },
-        { "tier": "reputable", "url": "https://example.com/reseller/stub-part-a" }
+        { "tier": "official",  "url": "https://store.rakwireless.com/products/rak4631-lpwan-node" },
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=RAK4631+WisBlock+915MHz" },
+        { "tier": "reputable", "url": "https://www.mouser.com/c/?q=RAK4631" },
+        { "tier": "reputable", "url": "https://store.rokland.com/search?q=RAK4631" }
       ]
     },
     {
-      "id": "stub-part-b",
+      "id": "rak19003",
       "category": "core",
-      "name": "Stub Part B",
-      "match": "**Stub Part B**",
-      "price": 12,
-      "note": "Placeholder note for Stub Part B.",
+      "name": "RAK19003 WisBlock Mini Base Board",
+      "price": 10,
+      "note": "Carrier board for the RAK4631. Adds USB-C (for flashing only — do NOT use to charge LFP), JST-PHR-2 battery connector, and IPEX antenna pass-through. The Mini variant is the smallest base and fits inside a 100x68x50mm enclosure with room for the cell and panel cable.",
       "specs": [
-        { "label": "SKU",      "value": "STUB-B-0002" },
-        { "label": "Capacity", "value": "Placeholder capacity" },
-        { "label": "Speed",    "value": "Placeholder speed rating" }
+        { "label": "Battery in", "value": "JST-PHR-2 (2.5 mm pitch)" },
+        { "label": "USB",        "value": "USB-C, flashing/console only" },
+        { "label": "Antenna",    "value": "IPEX pass-through to module" },
+        { "label": "Form",       "value": "~35 x 60 mm" },
+        { "label": "Slots",      "value": "1 core + 1 IO (sensors optional)" }
       ],
-      "searchFor": "https://www.google.com/search?udm=28&q=placeholder+part+b",
+      "searchFor": "https://www.google.com/search?udm=28&q=RAK19003+WisBlock+Mini+Base",
       "tiers": [
-        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=placeholder+part+b" },
-        { "tier": "reputable", "url": "https://example.com/reseller/stub-part-b" }
+        { "tier": "official",  "url": "https://store.rakwireless.com/products/wisblock-base-board-rak19003" },
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=RAK19003" },
+        { "tier": "reputable", "url": "https://www.mouser.com/c/?q=RAK19003" }
       ]
     },
     {
-      "id": "stub-part-c",
-      "category": "optional",
-      "name": "Stub Part C",
-      "match": "**Stub Part C**",
-      "price": 35,
-      "note": "Placeholder note for an optional add-on part.",
+      "id": "lfp-18650",
+      "category": "core",
+      "name": "LiFePO4 18650 Cell (IFR18650, ~1500 mAh)",
+      "price": 5,
+      "note": "MUST be LiFePO4 (LFP / IFR18650), NOT Li-ion. Chicago winters charge below 0°C; Li-ion plates lithium permanently in those conditions and kills the cell in one winter. LFP charges safely to ~-10°C and lasts 2000-5000 cycles vs 500-1000 for Li-ion. Half the mAh in the same form factor is the price of admission.",
       "specs": [
-        { "label": "SKU",  "value": "STUB-C-0003" },
-        { "label": "Type", "value": "Placeholder type" }
+        { "label": "Chemistry","value": "LiFePO4 (IFR18650)" },
+        { "label": "Nominal",  "value": "3.2 V" },
+        { "label": "Charge",   "value": "3.6 V termination (NOT 4.2)" },
+        { "label": "Capacity", "value": "~1500 mAh typical" },
+        { "label": "Charge T", "value": "-10°C to +55°C" },
+        { "label": "Cycles",   "value": "~2000-5000" }
       ],
-      "searchFor": "https://www.google.com/search?udm=28&q=placeholder+part+c",
+      "searchFor": "https://www.google.com/search?udm=28&q=LiFePO4+18650+IFR18650+1500mAh",
       "tiers": [
-        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=placeholder+part+c" },
-        { "tier": "official",  "url": "https://example.com/stub-part-c" }
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=LiFePO4+18650+IFR+1500mAh" },
+        { "tier": "reputable", "url": "https://batteryhookup.com/collections/lifepo4" },
+        { "tier": "reputable", "url": "https://www.aliexpress.us/w/wholesale-IFR18650.html" }
+      ]
+    },
+    {
+      "id": "18650-holder",
+      "category": "core",
+      "name": "Single 18650 Battery Holder with Leads",
+      "price": 1,
+      "note": "Plain plastic single-cell holder with pre-soldered red/black wires. Get the 'with leads' variant, not the PCB-mount type — you need wires you can crimp into the JST-PHR-2 connector on the RAK19003.",
+      "specs": [
+        { "label": "Cells",   "value": "1 x 18650" },
+        { "label": "Leads",   "value": "Red + black, ~150 mm" },
+        { "label": "Material","value": "ABS plastic" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=18650+battery+holder+single+wire+leads",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=18650+battery+holder+single+wire+leads" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/4288" }
+      ]
+    },
+    {
+      "id": "tp5000-lfp",
+      "category": "core",
+      "name": "TP5000 Solar Charge Controller (LFP-configurable)",
+      "price": 2,
+      "note": "CRITICAL: this board has a jumper that selects between Li-ion (4.2 V termination) and LFP (3.6 V termination). Set it for LFP before connecting. Stock charge controllers in cheap solar lamps are tuned for Li-ion and will damage an LFP cell — that is why we bypass anything that came with the panel and use this module instead. Solar panel goes to this module's IN+/IN-; LFP cell connects to its BAT+/BAT-; the BAT output then feeds the RAK19003 JST-PHR-2 directly.",
+      "specs": [
+        { "label": "IC",         "value": "TP5000" },
+        { "label": "Input",      "value": "4.5–8 V DC (5 V solar panel fits)" },
+        { "label": "Charge curr","value": "Adjustable, up to ~1 A" },
+        { "label": "Chemistry",  "value": "Li-ion 4.2 V OR LFP 3.6 V via jumper" },
+        { "label": "MPPT",       "value": "No (linear) — fine for 2 W class panels" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=TP5000+LiFePO4+charger+module",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=TP5000+LiFePO4+charging+module" },
+        { "tier": "reputable", "url": "https://www.aliexpress.us/w/wholesale-TP5000.html" }
+      ]
+    },
+    {
+      "id": "solar-panel-5v-2w",
+      "category": "core",
+      "name": "5V / 2W Monocrystalline Solar Panel (~110 x 80 mm)",
+      "price": 5,
+      "note": "Sized for the Chicago winter floor: ~150-200 mAh/day harvest in December assuming 1.5 peak sun hours and a slightly dirty panel face. Summer harvests 3-5x more, plenty of margin. Open-circuit voltage ~6.5 V, MPP ~5 V; pairs cleanly with the TP5000 input range. Output wires usually bare — terminate into the TP5000 IN+/IN- screw terminal or solder.",
+      "specs": [
+        { "label": "Cell type","value": "Monocrystalline silicon" },
+        { "label": "Rated",   "value": "5 V / 2 W (~400 mA short-circuit)" },
+        { "label": "Voc",     "value": "~6.5 V open-circuit" },
+        { "label": "Form",    "value": "~110 x 80 mm, epoxy-coated" },
+        { "label": "Output",  "value": "Bare wire pair (red/black)" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=5V+2W+mini+solar+panel+monocrystalline",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=5V+2W+mini+solar+panel+monocrystalline" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/category/57" },
+        { "tier": "reputable", "url": "https://voltaicsystems.com/2-watt-panel" }
+      ]
+    },
+    {
+      "id": "antenna-915-sma",
+      "category": "core",
+      "name": "915 MHz SMA Antenna (~5 dBi rubber duck)",
+      "price": 5,
+      "note": "Must be SMA (not RP-SMA). Match the frequency to your region — 915 MHz for US/AU, 868 MHz for EU, 433 MHz for AS923. A 5 dBi whip gives the best size-vs-range tradeoff for proof-of-mesh; upgrade to a fiberglass colinear (8+ dBi) later if you put a node on a rooftop. Antenna stays vertical for matching polarization with the rest of the Meshtastic network.",
+      "specs": [
+        { "label": "Connector","value": "SMA male (NOT RP-SMA)" },
+        { "label": "Frequency","value": "902–928 MHz (US ISM)" },
+        { "label": "Gain",    "value": "~5 dBi" },
+        { "label": "VSWR",    "value": "≤ 1.5 typical" },
+        { "label": "Length",  "value": "~195 mm" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=915MHz+SMA+5dBi+antenna+rubber+duck",
+      "tiers": [
+        { "tier": "official",  "url": "https://store.rakwireless.com/collections/antennas" },
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=915MHz+SMA+5dBi+antenna" },
+        { "tier": "reputable", "url": "https://www.mouser.com/c/passive-components/antennas/?frequency=915%20MHz" }
+      ]
+    },
+    {
+      "id": "pigtail-ipex-sma",
+      "category": "core",
+      "name": "IPEX (u.FL) to SMA Pigtail, ~10 cm",
+      "price": 3,
+      "note": "The RAK4631 module has an IPEX (u.FL) antenna footprint; this cable adapts it to a standard SMA bulkhead through the enclosure wall. Get the female-SMA-bulkhead version (panel-mount nut) so it threads through the hole you drill in the case. RG178 coax is standard; 100–150 mm is the right length for a 100 mm box.",
+      "specs": [
+        { "label": "End A",   "value": "IPEX / u.FL (mates RAK4631)" },
+        { "label": "End B",   "value": "SMA female bulkhead w/ panel nut" },
+        { "label": "Length",  "value": "~100–150 mm" },
+        { "label": "Coax",    "value": "RG178" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=IPEX+ufl+to+SMA+bulkhead+pigtail",
+      "tiers": [
+        { "tier": "official",  "url": "https://store.rakwireless.com/products/u-fl-to-rp-sma-cable" },
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=IPEX+ufl+to+SMA+bulkhead+pigtail+RG178" },
+        { "tier": "reputable", "url": "https://www.adafruit.com/product/851" }
+      ]
+    },
+    {
+      "id": "enclosure-ip65",
+      "category": "core",
+      "name": "IP65 ABS Weatherproof Junction Box (~100 x 68 x 50 mm)",
+      "price": 5,
+      "note": "Cheap clear or grey ABS box from any hardware site. IP65 is enough for a vertical wall mount; if you flat-mount it skyward, look for IP66+. Internal volume fits the RAK19003 + Mini base + 18650 holder + TP5000 + slack cable. Drill one hole on top/side for the antenna SMA bulkhead and one on the bottom for the panel cable gland.",
+      "specs": [
+        { "label": "Rating",  "value": "IP65 (dust + jets)" },
+        { "label": "Material","value": "ABS or polycarbonate" },
+        { "label": "External","value": "~100 x 68 x 50 mm" },
+        { "label": "Mount",   "value": "Wall-mount tabs or DIN" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=IP65+ABS+junction+box+100x68x50mm",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=IP65+ABS+junction+box+100x68x50" },
+        { "tier": "reputable", "url": "https://www.mcmaster.com/electrical-enclosures/" },
+        { "tier": "reputable", "url": "https://www.hammfg.com/electrical/products/plastic" }
+      ]
+    },
+    {
+      "id": "cable-gland-m12",
+      "category": "core",
+      "name": "M12 IP68 Cable Gland (for solar panel pass-through)",
+      "price": 1,
+      "note": "Threaded gland that seals around the solar panel's output cable as it enters the enclosure. M12 fits a small drilled hole; M16 if you have a thicker cable. Skip if you'd rather use silicone sealant in a smaller hole, but the gland is reusable when you swap parts.",
+      "specs": [
+        { "label": "Thread",  "value": "M12 x 1.5" },
+        { "label": "Rating",  "value": "IP68" },
+        { "label": "Cable OD","value": "3-6.5 mm" },
+        { "label": "Material","value": "Nylon (PA66)" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=M12+nylon+cable+gland+IP68",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=M12+nylon+cable+gland+IP68" },
+        { "tier": "reputable", "url": "https://www.mcmaster.com/cable-glands/" }
+      ]
+    },
+    {
+      "id": "misc-wire-jst-screws",
+      "category": "consumable",
+      "name": "JST-PHR-2 connectors + 22 AWG silicone wire + M3 screws",
+      "price": 2,
+      "note": "Buy once, share across all 3 nodes. JST-PHR-2 male housings + crimp terminals connect the battery holder leads to the RAK19003. 22 AWG silicone-jacket wire handles all the low-voltage hops cleanly. M3x6 / M3x8 screws + double-sided VHB foam tape mount the panel and board to the enclosure interior.",
+      "specs": [
+        { "label": "JST",   "value": "PHR-2 housings + crimp pins (2.0 mm pitch)" },
+        { "label": "Wire",  "value": "22 AWG silicone, red + black, ~1 m each" },
+        { "label": "Screws","value": "M3x6 + M3x8, ~10 ea" },
+        { "label": "Tape",  "value": "3M VHB or generic foam, ~25 mm wide" }
+      ],
+      "searchFor": "https://www.google.com/search?udm=28&q=JST+PHR-2+connector+kit",
+      "tiers": [
+        { "tier": "amazon",    "url": "https://www.amazon.com/s?k=JST+PHR-2+crimp+connector+kit" },
+        { "tier": "reputable", "url": "https://www.digikey.com/en/products/filter/rectangular-connectors-housings/315?s=N4IgjCBcoLQOxVAYygMwIYBsDOBTANCAPZQDaIATAAwiUC6AvowDb2vsCu1jIAdgPYBLAE4Bjas34A2YbwAOIWZTBN6HEAF8gA" }
       ]
     }
   ]

@@ -158,30 +158,27 @@ function loadPartImageLocal(part) {
 // all reference the same source of truth.
 // ──────────────────────────────────────────────────────────────────────
 const BUILD_CONFIG_AXES = [
-    { key: 'battery', label: 'Battery / portability', default: 'no', options: [
-        ['no',  'No - desktop, wall-powered'],
-        ['yes', 'Yes - PiSugar 3 (portable)'],
+    { key: 'region', label: 'LoRa region', default: 'us915', options: [
+        ['us915', 'US — 915 MHz (default)'],
+        ['eu868', 'EU — 868 MHz'],
+        ['au915', 'AU — 915 MHz'],
+        ['as923', 'AS — 923 MHz'],
     ]},
-    { key: 'asr', label: 'Speech-to-text (ASR)', default: 'whisper-cpp', options: [
-        ['whisper-cpp', 'Whisper (local, free)'],
-        ['openai',      'OpenAI Whisper API (cloud, fast)'],
-        ['google',      'Google STT (cloud)'],
+    { key: 'role', label: 'Node role', default: 'router_client', options: [
+        ['router_client', 'ROUTER_CLIENT — fixed node, relays + chats (default)'],
+        ['router',        'ROUTER — fixed backbone, relay only'],
+        ['client',        'CLIENT — portable, low power'],
     ]},
-    { key: 'tts', label: 'Text-to-speech (TTS)', default: 'openai', options: [
-        ['openai',     'OpenAI gpt-4o-mini-tts (recommended, native)'],
-        ['elevenlabs', 'ElevenLabs (best quality, requires patch)'],
-        ['piper',      'Piper (local, free, robotic)'],
+    { key: 'deployment', label: 'Deployment scenario', default: 'balcony', options: [
+        ['balcony',          'Balcony / fence — outdoor, ~2nd-3rd floor (default)'],
+        ['apartment_window', 'Apartment window — indoor, high-rise'],
+        ['rooftop',          'Rooftop — outdoor, max altitude'],
+        ['ground_pole',      'Ground pole / yard — outdoor, low altitude'],
     ]},
-    { key: 'case', label: '3D-printed case', default: 'none', options: [
-        ['none', 'No case'],
-        ['fdm',  'FDM (filament) print'],
-        ['sla',  'SLA (resin) print'],
-    ]},
-    { key: 'smarthome', label: 'Smart-home control', default: 'none', options: [
-        ['none',   'None'],
-        ['kasa',   'TP-Link Kasa (HS103/KP125M)'],
-        ['shelly', 'Shelly Plug US'],
-        ['sonoff', 'Sonoff S31 + Tasmota'],
+    { key: 'antenna', label: 'Antenna upgrade', default: 'rubber5', options: [
+        ['rubber5',     '5 dBi rubber duck (default, fits BOM)'],
+        ['rubber3',     '3 dBi short whip (compact, less range)'],
+        ['fiberglass8', '8+ dBi fiberglass colinear (rooftop only)'],
     ]},
 ];
 

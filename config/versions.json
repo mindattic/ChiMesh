@@ -1,15 +1,20 @@
 {
-  "_description": "External dependency versions referenced in the build guide. Update these when upstream releases new majors. build-html.js injects these into ChiMesh.md wherever placeholders like {{NODE_LABEL}} appear (compile-time substitution, AFTER marked renders).",
-  "versionsAsOf": "2026-05-20",
+  "_description": "External dependency versions referenced in the build guide. Update these when upstream releases new majors. build-html.js injects these into ChiMesh.md wherever placeholders like {{MESHTASTIC_FIRMWARE_LABEL}} appear (compile-time substitution, AFTER marked renders).",
+  "versionsAsOf": "2026-05-22",
 
-  "NODE_MAJOR": "24",
-  "NODE_LABEL": "v24.x",
+  "MESHTASTIC_FIRMWARE_MAJOR": "2.5",
+  "MESHTASTIC_FIRMWARE_LABEL": "Meshtastic 2.5.x",
 
-  "PYTHON_SYSTEM_MAJOR": "3.12",
-  "PYTHON_SYSTEM_LABEL": "Python 3.12 (Raspberry Pi OS default)",
+  "MESHTASTIC_CLI_LABEL": "meshtastic-python 2.5.x",
 
-  "RPI_OS_LABEL": "Raspberry Pi OS 64-bit",
+  "BOARD_LABEL": "RAK4631 (RAK Wireless WisBlock Core)",
+  "BASE_BOARD_LABEL": "RAK19003 Mini Base",
 
-  "CLAUDE_DEFAULT_MODEL": "claude-haiku-4-5-20251001",
-  "CLAUDE_DEFAULT_MODEL_LABEL": "Claude Haiku 4.5"
+  "REGION_DEFAULT": "US",
+  "REGION_DEFAULT_FREQ": "915 MHz",
+
+  "CHANNEL_DEFAULT": "ChiMesh-Test",
+
+  "FLASHER_URL": "https://flash.meshtastic.org",
+  "MESHTASTIC_APP_URL": "https://meshtastic.org/docs/software/apps/"
 }

@@ -9,7 +9,7 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22d*
+*Last updated: 2026.05.22e*
 
 ---
 
@@ -276,6 +276,10 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22e
+
+- **Custom fonts baked in.** Outfit (variable, 100–900) now drives body text site-wide; the Attic display face renders the `#chimesh` page title. Both fonts are base64-inlined into the HTM via `MindAttic.Content/sync/sync-chimesh.ps1`, so the guide stays a single self-contained file with no external font requests.
 
 ### 2026.05.22d
 

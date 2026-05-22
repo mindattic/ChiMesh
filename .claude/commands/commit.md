@@ -1,4 +1,4 @@
-Stage and commit the current working-tree changes.
+Stage, commit, AND push the current working-tree changes.
 
 Run these in parallel first:
 - `git status` (no `-uall` flag — large repos)
@@ -15,7 +15,8 @@ Then:
    ```
    Pass the message via heredoc so multi-line formatting is preserved.
 5. Run `git status` after the commit and confirm it succeeded.
+6. **Push to origin** — `git push origin <current-branch>`. If the branch has no upstream, use `git push -u origin <current-branch>`. Report the resulting commit-range output (e.g. `abc1234..def5678 main -> main`).
 
-Do NOT push. Do NOT skip hooks (`--no-verify`). If a pre-commit hook fails, fix the underlying issue and create a fresh commit — never amend.
+Do NOT skip hooks (`--no-verify`). If a pre-commit hook fails, fix the underlying issue and create a fresh commit — never amend. Do NOT force-push.
 
-If there are no changes, say so and exit without creating an empty commit.
+If there are no changes, say so and exit without creating an empty commit (and without pushing).

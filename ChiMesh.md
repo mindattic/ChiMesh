@@ -39,7 +39,7 @@ One-time tools, not per-node — most builders already own them. See the shoppin
 - **Heat-shrink tubing** (2–8 mm assortment) + heat gun or lighter
 - **Wire strippers + flush cutters** for 22 AWG
 - **JST crimp tool** (or buy pre-crimped JST-PHR-2 pigtails and skip this)
-- **Digital multimeter** — for verifying LFP cell voltage (3.2–3.65 V) and panel output (~6 V Voc) during troubleshooting
+- **Digital multimeter** — for verifying LFP cell voltage (3.2–3.65 V) and panel output (~6.5 V Voc) during troubleshooting
 - **Drill + bits** — 6 mm for the SMA bulkhead hole, 12 mm for the M12 cable gland (a step bit makes cleaner holes in ABS)
 - **Phillips #1 screwdriver** for the enclosure lid
 
@@ -195,7 +195,7 @@ Rough draw for the RAK4631 (SX1262 + nRF52840) running stock Meshtastic in conti
 - **nRF52840 active** (BLE off, CPU lightly loaded): ~3–6 mA
 - **Combined at 3.3 V:** ~8–12 mA average in steady listen, with brief spikes to ~120 mA on TX bursts.
 
-Over 24 hours that's **~200–280 mAh consumed**. The 3000 mAh LFP cell + 5 W panel handles that comfortably in Chicago summer. The December margin is much thinner — short days, low sun angle, snow on the panel — which is the real reason the v0 panel-aim rule above says "tilt ~41°, never flat."
+Over 24 hours that's **~200–280 mAh consumed**. The ~1500 mAh LFP cell + 5 V / 2 W panel works for Chicago summer — a sunny day harvests ~600–800 mAh, well above draw — but December is tight: 1.5 peak sun hours × 2 W ≈ 150–200 mAh/day in, against ~250 mAh/day out. That's a real-world deficit on the worst weeks, and the reason the v0 panel-aim rule above says "tilt ~41°, never flat." If a node has to survive a Chicago January with no intervention, plan to add a second cell in parallel (~3000 mAh total) or step up to a 5 W panel — both are documented in §08.
 
 ✅ **Checkpoint:** *All 3 nodes deployed, solar panels facing the sky, antennas vertical, enclosure lids closed and sealed.*
 
@@ -225,7 +225,7 @@ If every node shows `1 hop`, the nodes are too close together — separate them 
 scripts\cli\healthcheck-mesh.ps1
 ```
 
-Connects to whichever node is on the USB cable, queries `--info`, and reports the count of known peers + the last-heard timestamps. Use it as a one-shot sanity check before calling the deployment done.
+Connects to whichever node is on the USB cable, queries `--info` and `--nodes`, and reports region, role, channel-0 name, and the count of known peers. Use it as a one-shot sanity check before calling the deployment done.
 
 ---
 
@@ -247,7 +247,7 @@ Connects to whichever node is on the USB cable, queries `--info`, and reports th
 - Move one node within 10 m of another to rule out a config bug vs a range issue.
 
 ### Solar isn't keeping up
-- Confirm the panel is generating: disconnect from the TP5000, measure open-circuit voltage in sunlight — should be ~6 V.
+- Confirm the panel is generating: disconnect from the TP5000, measure open-circuit voltage in sunlight — should be ~6.5 V Voc (closer to ~5 V once it's loaded by the TP5000).
 - Confirm the TP5000 is charging: re-connect, measure across the cell — should rise toward 3.6 V over an hour of sun.
 - December low-light is the close case. If a node won't survive the worst week, upgrade to a 5 W panel.
 
@@ -286,6 +286,19 @@ Reads the connected node and prints any error states from `--info`.
 ---
 
 ## Update Notes
+
+### 2026.05.22l
+
+- **RAK4631 listen-current numbers reconciled with §6.3.** The part card previously said *"Listens at ~7 mA"* in its note and *"~6–8 mA listening"* in its spec table — both pre-dated the §6.3 power-budget section added in `.k`, which gave the realistic combined figure (~8–12 mA: SX1262 ~4.6 mA RX + nRF52840 ~3–6 mA active). The card now matches §6.3, with the Heltec V3 comparison preserved as the "why this board" pitch.
+- **LFP termination voltage standardized to 3.65 V.** The top callout (rule #2) and `parts.json` _description correctly use 3.65 V (the LiFePO4 charge-cutoff spec), but the cell-card spec row still said *"3.6 V termination."* That 50 mV gap is the difference between "topped off" and "starting to plate"; aligned to 3.65 V across the BOM.
+- **RAK19003 JST pitch corrected.** Card spec said *"JST-PHR-2 (2.5 mm pitch)"* — JST PH series is 2.0 mm pitch (PHR-2 = PH series, with retention, 2-pin). The consumables card already used the correct 2.0 mm. Fixed the rak19003 row to match.
+- **AS923 frequency in antenna note.** Said *"433 MHz for AS923"* — that's wrong. AS923 is 920–925 MHz; 433 MHz is a separate regional band and not what an AS923 antenna ships tuned for. Corrected to 920–925 MHz.
+- **§6.3 cell capacity matches the BOM.** The new power-budget paragraph claimed *"3000 mAh LFP cell"* but the BOM ships a single IFR18650 at ~1500 mAh typical. Rewrote to use the actual 1500 mAh cell and added the December reality-check: 1.5 peak sun hours × 2 W ≈ 150–200 mAh/day in vs ~250 mAh/day draw — a genuine deficit in the worst Chicago weeks. Documents the two escape paths (parallel second cell → ~3000 mAh, or step up to 5 W panel) instead of pretending the budget is comfortable.
+- **§6.3 panel rating matches the BOM.** Same paragraph said *"5 W panel"* — the BOM ships a 5 V / 2 W panel. Standardized the in-paragraph language to "5 V / 2 W" so the math (2 W × peak sun hours) actually corresponds to the part the reader bought. The 5 W upgrade path is now an explicit "if this isn't enough" pointer, not the assumed default.
+- **§07.4 healthcheck description trimmed.** Said the script *"reports the count of known peers + the last-heard timestamps"* — it doesn't report timestamps, only the peer count + region/role/channel. Description now matches `healthcheck-mesh.ps1` behavior verbatim.
+- **`provision-node.ps1` read-back is now anchored at word boundaries.** The post-write confirmation used `[regex]::Escape($Region)` and `[regex]::Escape($Role)` on bare substrings, so `Region=US` was satisfied by `USB`, `USE`, or any other US-prefixed token in the verbose `--info` output — a silent false-pass. Region and Role now require `\b…\b`; Channel stays a substring match because user-chosen channel names can contain punctuation that breaks word-boundary semantics.
+- **Solar Voc figure unified at 6.5 V.** The §08 troubleshooting "Solar isn't keeping up" step said the panel should read *"~6 V"* open-circuit; `parts.json` (solar-panel-5v-2w) correctly says ~6.5 V Voc. Three places now agree: panel card, multimeter tool note, and the troubleshooting step (~6.5 V Voc, ~5 V loaded).
+- **§3.1 Tools — multimeter parenthetical aligned.** Said "panel output (~6 V Voc)"; tightened to "(~6.5 V Voc)" so the value matches the panel card and the §08 troubleshooting step bumped in the previous bullet.
 
 ### 2026.05.22k
 

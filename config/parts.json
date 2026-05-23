@@ -18,14 +18,14 @@
       "name": "RAK4631 WisBlock Core (nRF52840 + SX1262 LoRa)",
       "price": 25,
       "imageFile": "images/rak4631.png",
-      "note": "The brain. Nordic nRF52840 MCU with Semtech SX1262 LoRa radio on one module. Listens at ~7 mA (vs ~17 mA for Heltec V3) which is what makes solar viable in Chicago winter. Make sure you get the 915 MHz US variant, not the 868 MHz EU variant.",
+      "note": "The brain. Nordic nRF52840 MCU with Semtech SX1262 LoRa radio on one module. Listens at ~8–12 mA combined (SX1262 RX ~4.6 mA + nRF52840 active ~3–6 mA), vs ~17 mA for Heltec V3 — that delta is what makes solar viable in Chicago winter. See §6.3 for the full budget. Make sure you get the 915 MHz US variant, not the 868 MHz EU variant.",
       "specs": [
         { "label": "MCU",      "value": "Nordic nRF52840 @ 64 MHz (ARM Cortex-M4F)" },
         { "label": "Radio",    "value": "Semtech SX1262 LoRa, up to +22 dBm" },
         { "label": "Frequency","value": "915 MHz (US) — pick correct SKU for region" },
         { "label": "RAM/Flash","value": "256 KB SRAM / 1 MB flash" },
         { "label": "Wireless", "value": "BLE 5 + LoRa (no Wi-Fi)" },
-        { "label": "RX current","value": "~6–8 mA listening" },
+        { "label": "Listen current","value": "~8–12 mA combined (SX1262 + nRF52840)" },
         { "label": "Sleep",    "value": "~3 µA System OFF, ~7 µA w/ RAM retain" },
         { "label": "Antenna",  "value": "IPEX (u.FL) connector on-module" }
       ],
@@ -45,7 +45,7 @@
       "imageFile": "images/rak19003.png",
       "note": "Carrier board for the RAK4631. Adds USB-C (for flashing only — do NOT use to charge LFP), JST-PHR-2 battery connector, and IPEX antenna pass-through. The Mini variant is the smallest base and fits inside a 100x68x50mm enclosure with room for the cell and panel cable.",
       "specs": [
-        { "label": "Battery in", "value": "JST-PHR-2 (2.5 mm pitch)" },
+        { "label": "Battery in", "value": "JST-PHR-2 (2.0 mm pitch)" },
         { "label": "USB",        "value": "USB-C, flashing/console only" },
         { "label": "Antenna",    "value": "IPEX pass-through to module" },
         { "label": "Form",       "value": "~35 x 60 mm" },
@@ -68,7 +68,7 @@
       "specs": [
         { "label": "Chemistry","value": "LiFePO4 (IFR18650)" },
         { "label": "Nominal",  "value": "3.2 V" },
-        { "label": "Charge",   "value": "3.6 V termination (NOT 4.2)" },
+        { "label": "Charge",   "value": "3.65 V termination (NOT 4.2)" },
         { "label": "Capacity", "value": "~1500 mAh typical" },
         { "label": "Charge T", "value": "-10°C to +55°C" },
         { "label": "Cycles",   "value": "~2000-5000" }
@@ -145,7 +145,7 @@
       "name": "915 MHz SMA Antenna (~5 dBi rubber duck)",
       "price": 5,
       "imageFile": "images/antenna-915-sma.png",
-      "note": "Must be SMA (not RP-SMA). Match the frequency to your region — 915 MHz for US/AU, 868 MHz for EU, 433 MHz for AS923. A 5 dBi whip gives the best size-vs-range tradeoff for proof-of-mesh; upgrade to a fiberglass colinear (8+ dBi) later if you put a node on a rooftop. Antenna stays vertical for matching polarization with the rest of the Meshtastic network.",
+      "note": "Must be SMA (not RP-SMA). Match the frequency to your region — 915 MHz for US/AU, 868 MHz for EU, 920–925 MHz for AS923. A 5 dBi whip gives the best size-vs-range tradeoff for proof-of-mesh; upgrade to a fiberglass colinear (8+ dBi) later if you put a node on a rooftop. Antenna stays vertical for matching polarization with the rest of the Meshtastic network.",
       "specs": [
         { "label": "Connector","value": "SMA male (NOT RP-SMA)" },
         { "label": "Frequency","value": "902–928 MHz (US ISM)" },
@@ -299,7 +299,7 @@
       "name": "Digital multimeter",
       "price": 25,
       "inTotal": false,
-      "note": "Used during troubleshooting to verify cell voltage (3.2-3.65 V on a healthy LFP), panel open-circuit voltage (~6 V), and TP5000 output. Any cheap DMM works — even a $15 Harbor Freight model is enough for DC volts in this range. Auto-ranging is convenient but not required.",
+      "note": "Used during troubleshooting to verify cell voltage (3.2-3.65 V on a healthy LFP), panel open-circuit voltage (~6.5 V Voc), and TP5000 output. Any cheap DMM works — even a $15 Harbor Freight model is enough for DC volts in this range. Auto-ranging is convenient but not required.",
       "specs": [
         { "label": "DC Volts","value": "0-20 V range minimum" },
         { "label": "Continuity","value": "Yes (for finding broken solder joints)" },

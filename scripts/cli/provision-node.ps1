@@ -110,12 +110,16 @@ if ($LASTEXITCODE -ne 0) {
     exit 0
 }
 
-# 5. Read back and confirm.
-Write-Info 'reading back config ...'
+# 5. Read back and confirm. Word-boundary anchor on Region and Role so short
+# tokens like 'US' don't false-match against substrings ('USB', 'USE', etc.)
+# in the verbose `--info` output. Channel name is user-chosen and can contain
+# arbitrary punctuation, so it stays a plain escaped substring match.
+$confirmText = $confirm -join "`n"
+$regionOk  = $confirmText -match ('\b' + [regex]::Escape($Region) + '\b')
+$roleOk    = $confirmText -match ('\b' + [regex]::Escape($Role)   + '\b')
+$channelOk = $confirmText -match [regex]::Escape($Channel)
 
-$regionOk  = ($confirm -join "`n") -match [regex]::Escape($Region)
-$roleOk    = ($confirm -join "`n") -match [regex]::Escape($Role)
-$channelOk = ($confirm -join "`n") -match [regex]::Escape($Channel)
+Write-Info 'reading back config ...'
 
 if ($regionOk -and $roleOk -and $channelOk) {
     Write-Ok ("provisioned: $NodeName  ($Region / $Role / channel `"$Channel`")")

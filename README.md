@@ -1,6 +1,35 @@
 # ChiMesh
 
-> **Chicago LoRa Meshtastic mesh.** A community-built LoRa mesh network for Chicago, deployed on solar-powered RAK4631 nodes in IP65 enclosures. v0 ships three nodes to prove multi-hop routing; v2 disguises them as solar wall lamps. The build guide is a single self-contained HTML page rendered from a Markdown source of truth.
+**Off-grid Chicago. A solar-powered LoRa mesh that runs without the internet, the grid, or anyone's permission.**
+
+ChiMesh is a community-built LoRa Meshtastic network for Chicago, deployed on solar-powered RAK4631 nodes in IP65 enclosures. v0 ships three nodes to prove multi-hop routing across neighborhoods. v2 disguises them as solar wall lamps so they can hide in plain sight on alley walls, back fences, and rooftops. No SIM, no Wi-Fi, no cloud — just sub-GHz radio, sunlight, and the protocol.
+
+The build guide is a single self-contained HTML page rendered from a Markdown source of truth — same toolchain as Claudia, same `build-html.js`, same FTP deploy.
+
+**Why ChiMesh:**
+
+- **Truly off-grid.** Each node is a LiFePO4 battery, a 5W panel, and an RAK4631 in IP65. No external power, no SIM, no internet uplink.
+- **Hardware that hides.** v2's enclosure looks like a generic solar wall lamp — the entire project is a mesh of nodes nobody notices.
+- **Self-contained guide.** One Markdown file builds one HTML file. No CMS, no static site generator, no `npm run dev` server. Open `ChiMesh.htm` and you have the entire build guide, offline.
+- **Tiered shopping links.** Every part in the BOM has Official / Amazon / Reputable links plus a Google Shopping search URL — so an out-of-stock primary source never blocks a build.
+- **Save-to-rebuild.** A Claude Code `PostToolUse` hook re-runs `build-html.js` on every save to `ChiMesh.md`, so the styled page stays in sync while you edit.
+- **Boilerplate for other hardware builds.** Layout, build pipeline, parts schema, and config-widget pattern carry over unchanged to any sibling hardware-build site.
+
+---
+
+## Table of Contents
+
+- [Layout](#layout)
+- [Build the HTML locally](#build-the-html-locally)
+- [Edit + auto-rebuild](#edit--auto-rebuild)
+- [Provision a node](#provision-a-node)
+- [Healthcheck a deployed node](#healthcheck-a-deployed-node)
+- [Console (interactive)](#console-interactive)
+- [Deploy](#deploy)
+- [Stack](#stack)
+- [What this guide IS the boilerplate for](#what-this-guide-is-the-boilerplate-for)
+
+---
 
 ## Layout
 
@@ -66,6 +95,18 @@ scripts\cli\deploy.bat
 ```
 
 Bumps the date stamp in `ChiMesh.md`, rebuilds, mirrors to `index.htm`, and FTPs the three files to `mindattic.com/chimesh/`. Requires `scripts/cli/deploy.settings.json` (gitignored — start from the `.template`).
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| **Hardware** | RAK4631 (nRF52840 + SX1262 LoRa) on RAK19007 baseboard, IP65 enclosure, 5W solar panel, LiFePO4 battery |
+| **Firmware** | [Meshtastic](https://meshtastic.org/) (flashed via flash.meshtastic.org) |
+| **Build pipeline** | Node.js + [marked@4](https://github.com/markedjs/marked) + [highlight.js@11](https://highlightjs.org/) — `scripts/cli/build-html.js` renders `ChiMesh.md` into a single self-contained HTML file |
+| **Provisioning** | Windows PowerShell over USB serial (`meshtastic-cli`) |
+| **Deploy** | FTPS via `curl` to `mindattic.com/chimesh/` |
+| **Front-end components** | Subscribes to [`MindAttic.UIUX`](../MindAttic.UIUX/) for `OutfitFont`, `AtticFont`, and the `BackHomeM` return-home anchor |
+| **Hosting** | Static page on `mindattic.com/chimesh/` — no server-side code, no CMS, no database |
 
 ## What this guide IS the boilerplate for
 

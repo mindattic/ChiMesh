@@ -9,7 +9,7 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.22j*
+*Last updated: 2026.05.23d*
 
 ---
 
@@ -306,11 +306,11 @@ Reads the connected node and prints any error states from `--info`.
 
 ### 2026.05.22j
 
-- **MindAttic.Components rename + re-sync.** Sibling components repo was renamed; `deploy.ps1`'s sync step now points at the new path and the spliced fonts/CSS were re-pulled. Stamp-only republish — no guide content changed.
+- **MindAttic.UIUX rename + re-sync.** Sibling components repo was renamed; `deploy.ps1`'s sync step now points at the new path and the spliced fonts/CSS were re-pulled. Stamp-only republish — no guide content changed.
 
 ### 2026.05.22i
 
-- **Deploy now pulls subscribed components first.** `deploy.ps1` runs `MindAttic.Components/sync/sync-chimesh.ps1` before the version bump, so every deploy picks up the latest fonts and shared CSS from the sibling components repo without a manual sync step. Pass `-NoSync` (or skip if the components repo isn't checked out next to ChiMesh) and the deploy proceeds against whatever is already spliced into `build-html.js`. `.claude/commands/deploy.md` updated to describe the full 5-step flow.
+- **Deploy now pulls subscribed components first.** `deploy.ps1` runs `MindAttic.UIUX/sync/sync-chimesh.ps1` before the version bump, so every deploy picks up the latest fonts and shared CSS from the sibling components repo without a manual sync step. Pass `-NoSync` (or skip if the components repo isn't checked out next to ChiMesh) and the deploy proceeds against whatever is already spliced into `build-html.js`. `.claude/commands/deploy.md` updated to describe the full 5-step flow.
 
 ### 2026.05.22h
 
@@ -334,7 +334,7 @@ Reads the connected node and prints any error states from `--info`.
 
 ### 2026.05.22e
 
-- **Custom fonts baked in.** Outfit (variable, 100–900) now drives body text site-wide; the Attic display face renders the `#chimesh` page title. Both fonts are base64-inlined into the HTM via `MindAttic.Components/sync/sync-chimesh.ps1`, so the guide stays a single self-contained file with no external font requests.
+- **Custom fonts baked in.** Outfit (variable, 100–900) now drives body text site-wide; the Attic display face renders the `#chimesh` page title. Both fonts are base64-inlined into the HTM via `MindAttic.UIUX/sync/sync-chimesh.ps1`, so the guide stays a single self-contained file with no external font requests.
 
 ### 2026.05.22d
 

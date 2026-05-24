@@ -1,20 +1,22 @@
-Deploy the ChiMesh build guide to the FTP server (mindattic.com/chimesh/). Run the following command and report the result:
+Deploy the ChiMesh landing page (`mindattic.com/chimesh.htm`) via **MindAttic.Deploy** (sibling repo at `D:\Projects\MindAttic\MindAttic.Deploy`).
+
+This now uses the standard catalog pipeline: `README.md` is rendered through `template/index.template.htm` with the `Hardware` theme and FTPS-uploaded as a single file. The old 3-file long-form-guide pipeline (`scripts/cli/deploy.ps1` + marker-block splicing + `/chimesh/` subfolder) is retired.
+
+Run this command and report the result:
 
 ```
-powershell -NoProfile -ExecutionPolicy Bypass -File "D:\Projects\MindAttic\ChiMesh\scripts\cli\deploy.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "cd D:\Projects\MindAttic\MindAttic.Deploy; npm run deploy -- --only chimesh"
 ```
 
-Note: do NOT invoke via `cmd /c "D:/.../deploy.bat"` -- the forward slashes in the path get parsed as cmd switches (cmd uses `/` as its switch prefix), so the command silently opens a fresh shell in the directory and exits without running anything. Call deploy.ps1 directly via PowerShell as shown above.
+It will:
 
-This:
+1. Render `D:\Projects\MindAttic\ChiMesh\README.md` through the catalog template (Hardware theme, MindAttic.UIUX components loaded via jsDelivr).
+2. FTPS-upload `out/chimesh.htm` to `/mindattic.com/chimesh.htm`.
 
-1. Pulls latest subscribed components (fonts, shared CSS) from sibling repo `MindAttic.UiUx/sync/sync-chimesh.ps1` into `scripts/cli/build-html.js` (pass `-NoSync` to skip if the components repo isn't checked out locally).
-2. Bumps the per-build letter in `ChiMesh.md`'s `*Last updated:*` line.
-3. Rebuilds `ChiMesh.htm` from `ChiMesh.md`.
-4. Stamps the HTM with the current UTC timestamp and clones it byte-for-byte to `index.htm` so `mindattic.com/chimesh/` serves the full guide directly (no redirect hop).
-5. FTP-uploads all three files to `/mindattic.com/chimesh/`:
-   - `ChiMesh.md` — the canonical markdown source
-   - `ChiMesh.htm` — the self-contained styled page
-   - `index.htm` — byte-identical clone of `ChiMesh.htm`
+After running, summarize the result and flag any failures.
 
-After running, summarize how many files were uploaded successfully and flag any failures.
+Notes:
+- Catalog entry: `MindAttic.Deploy/projects.json` -> `projects[]` slug `chimesh` (theme: Hardware).
+- Credentials: `MindAttic.Deploy/secrets/ftp.json` (gitignored).
+- `scripts/cli/` in this repo is dead code awaiting cleanup -- do not invoke `deploy.bat` / `deploy.ps1` from here.
+- Old subfolder URL `mindattic.com/chimesh/` still exists on the FTP server until you manually delete it.

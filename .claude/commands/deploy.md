@@ -8,7 +8,7 @@ Note: do NOT invoke via `cmd /c "D:/.../deploy.bat"` -- the forward slashes in t
 
 This:
 
-1. Pulls latest subscribed components (fonts, shared CSS) from sibling repo `MindAttic.UIUX/sync/sync-chimesh.ps1` into `scripts/cli/build-html.js` (pass `-NoSync` to skip if the components repo isn't checked out locally).
+1. Pulls latest subscribed components (fonts, shared CSS) from sibling repo `MindAttic.UiUx/sync/sync-chimesh.ps1` into `scripts/cli/build-html.js` (pass `-NoSync` to skip if the components repo isn't checked out locally).
 2. Bumps the per-build letter in `ChiMesh.md`'s `*Last updated:*` line.
 3. Rebuilds `ChiMesh.htm` from `ChiMesh.md`.
 4. Stamps the HTM with the current UTC timestamp and clones it byte-for-byte to `index.htm` so `mindattic.com/chimesh/` serves the full guide directly (no redirect hop).

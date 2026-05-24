@@ -1,7 +1,7 @@
 # deploy.ps1 - ChiMesh FTP deploy.
 #
 # 1. Pulls subscribed components (fonts, shared CSS) from
-#    MindAttic.UIUX/sync/sync-chimesh.ps1 into build-html.js.
+#    MindAttic.UiUx/sync/sync-chimesh.ps1 into build-html.js.
 # 2. Regenerates ChiMesh.htm from ChiMesh.md (build-html.js).
 # 3. Stamps index.htm with a "Last Updated" comment.
 # 4. Uploads ChiMesh.md, ChiMesh.htm, and index.htm to the FTP target
@@ -22,25 +22,25 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
 # ---------------------------------------------------------------------------
-# Pull latest subscribed components from MindAttic.UIUX.
-# Sibling repo at ../MindAttic.UIUX splices font / shared-CSS marker
+# Pull latest subscribed components from MindAttic.UiUx.
+# Sibling repo at ../MindAttic.UiUx splices font / shared-CSS marker
 # blocks into scripts/cli/build-html.js. Run BEFORE the version bump so the
 # build that follows reflects any upstream component updates.
 # ---------------------------------------------------------------------------
 if (-not $NoSync) {
-    $componentsRoot = Join-Path (Split-Path -Parent $repoRoot) 'MindAttic.UIUX'
+    $componentsRoot = Join-Path (Split-Path -Parent $repoRoot) 'MindAttic.UiUx'
     $syncScript     = Join-Path $componentsRoot 'sync\sync-chimesh.ps1'
     if (-not (Test-Path $syncScript)) {
         Write-Error @"
-MindAttic.UIUX sync script not found at:
+MindAttic.UiUx sync script not found at:
     $syncScript
 
-Either clone MindAttic.UIUX next to ChiMesh, or pass -NoSync to skip the
+Either clone MindAttic.UiUx next to ChiMesh, or pass -NoSync to skip the
 component refresh and deploy whatever is currently spliced into build-html.js.
 "@
         exit 1
     }
-    Write-Host "Syncing MindAttic.UIUX -> build-html.js ..."
+    Write-Host "Syncing MindAttic.UiUx -> build-html.js ..."
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $syncScript -ChiMeshRoot $repoRoot
     if ($LASTEXITCODE -ne 0) {
         Write-Error "sync-chimesh.ps1 failed (exit $LASTEXITCODE). Aborting deploy."

@@ -105,7 +105,7 @@ Bumps the date stamp in `ChiMesh.md`, rebuilds, mirrors to `index.htm`, and FTPs
 | **Build pipeline** | Node.js + [marked@4](https://github.com/markedjs/marked) + [highlight.js@11](https://highlightjs.org/) — `scripts/cli/build-html.js` renders `ChiMesh.md` into a single self-contained HTML file |
 | **Provisioning** | Windows PowerShell over USB serial (`meshtastic-cli`) |
 | **Deploy** | FTPS via `curl` to `mindattic.com/chimesh/` |
-| **Front-end components** | Subscribes to [`MindAttic.UIUX`](../MindAttic.UIUX/) for `OutfitFont`, `AtticFont`, and the `BackHomeM` return-home anchor |
+| **Front-end components** | Subscribes to [`MindAttic.UiUx`](../MindAttic.UiUx/) for `OutfitFont`, `AtticFont`, and the `BackHomeM` return-home anchor |
 | **Hosting** | Static page on `mindattic.com/chimesh/` — no server-side code, no CMS, no database |
 
 ## What this guide IS the boilerplate for

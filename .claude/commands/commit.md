@@ -11,7 +11,7 @@ Then:
 3. Skip secrets: warn before committing anything that looks like a credential file.
 4. Create a NEW commit (never `--amend`) with this footer:
    ```
-   Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+   Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
    ```
    Pass the message via heredoc so multi-line formatting is preserved.
 5. Run `git status` after the commit and confirm it succeeded.

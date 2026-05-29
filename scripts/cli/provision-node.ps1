@@ -83,9 +83,9 @@ Write-Ok 'node responding'
 # 4. Push config in one pass — the CLI batches --set / --ch-set arguments.
 Write-Info ("setting region={0}, role={1}, owner={2}, channel0={3}" -f $Region, $Role, $NodeName, $Channel)
 $setArgs = @(
-    '--set', "lora.region=$Region",
-    '--set', "device.role=$Role",
-    '--ch-set', "name=$Channel", '--ch-index', '0',
+    '--set', 'lora.region', $Region,
+    '--set', 'device.role', $Role,
+    '--ch-set', 'name', $Channel, '--ch-index', '0',
     '--set-owner', $NodeName
 ) + $portArgs
 
@@ -123,7 +123,7 @@ Write-Info 'reading back config ...'
 
 if ($regionOk -and $roleOk -and $channelOk) {
     Write-Ok ("provisioned: $NodeName  ($Region / $Role / channel `"$Channel`")")
-    Write-Info 'next: repeat for each remaining node, then move on to section 06 (Deploy) in ChiMesh.md'
+    Write-Info 'next: repeat for each remaining node, then move on to section 06 (Deploy) in README.md'
     exit 0
 } else {
     Write-Warn2 'partial success — re-read with `meshtastic --info` and verify manually:'

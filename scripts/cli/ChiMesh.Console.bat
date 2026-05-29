@@ -3,9 +3,9 @@ REM ChiMesh Console launcher.
 REM
 REM No args  -> opens interactive menu.
 REM With args -> dispatches directly, e.g.:
-REM     ChiMesh.Console.bat detect
-REM     ChiMesh.Console.bat set-model claude-sonnet-4-6
-REM     ChiMesh.Console.bat update --clean
+REM     ChiMesh.Console.bat provision chimesh-001
+REM     ChiMesh.Console.bat healthcheck
+REM     ChiMesh.Console.bat find-deals core
 
 setlocal
 set "SCRIPT_DIR=%~dp0"

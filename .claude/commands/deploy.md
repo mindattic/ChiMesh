@@ -18,5 +18,5 @@ After running, summarize the result and flag any failures.
 Notes:
 - Catalog entry: `MindAttic.Deploy/projects.json` -> `projects[]` slug `chimesh` (theme: Hardware).
 - Credentials: `MindAttic.Deploy/secrets/ftp.json` (gitignored).
-- `scripts/cli/` in this repo is dead code awaiting cleanup -- do not invoke `deploy.bat` / `deploy.ps1` from here.
+- `scripts/cli/` now holds only live node/parts tooling (`provision-node`, `healthcheck-mesh`, `find-deals`/`list-parts` via `ChiMesh.Console`, `pull-latest`). The old local build/FTP pipeline (`build-html*`, `bump-version*`, `deploy.ps1`) has been removed -- deploys run only through MindAttic.Deploy.
 - Old subfolder URL `mindattic.com/chimesh/` still exists on the FTP server until you manually delete it.

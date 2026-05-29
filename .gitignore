@@ -3,7 +3,7 @@
 *.user
 *.suo
 
-# Node (build-html.js uses marked + highlight.js)
+# Node
 node_modules/
 package-lock.json
 

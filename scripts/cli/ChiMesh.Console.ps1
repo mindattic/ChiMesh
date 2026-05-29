@@ -5,12 +5,15 @@
 
 .DESCRIPTION
     Single entry point for:
-      - Local dev: install Node deps, render ChiMesh.htm from ChiMesh.md,
-        bump version stamp, FTP-deploy to mindattic.com/chimesh/, browse
-        parts catalog and apply chosen URLs into the guide.
+      - Local dev: refresh Node deps and browse the parts catalog
+        (list-parts / find-deals) to pick the best deal per part.
       - Node management: provision a freshly-flashed RAK4631 (set region,
         role, channel, owner) and run a quick healthcheck against the
         connected node.
+      - Self-update: pull-latest overlays the newest source from git.
+
+    HTML rendering and deploy now live in the MindAttic.Deploy pipeline
+    (run /deploy) — not here.
 
     Meshtastic nodes are microcontrollers — there is no SSH, no system
     services, no shell on the device. Everything node-side goes through
@@ -29,7 +32,7 @@
 
 .EXAMPLE
     .\scripts\cli\ChiMesh.Console.ps1                              # interactive menu
-    .\scripts\cli\ChiMesh.Console.ps1 build-html
+    .\scripts\cli\ChiMesh.Console.ps1 list-parts
     .\scripts\cli\ChiMesh.Console.ps1 provision chimesh-001
     .\scripts\cli\ChiMesh.Console.ps1 healthcheck
 #>
@@ -60,7 +63,7 @@ function Write-Ok($msg)   { Write-Host ('OK  ' + $msg) -ForegroundColor Green }
 function Write-Warn2($msg){ Write-Host ('!!  ' + $msg) -ForegroundColor Yellow }
 function Write-Err2($msg) { Write-Host ('XX  ' + $msg) -ForegroundColor Red }
 
-# --- Local builder commands ----------------------------------------------
+# --- Local dev commands --------------------------------------------------
 function Cmd-Update($a) {
     $clean = $a -contains '--clean'
 
@@ -90,32 +93,16 @@ function Cmd-Update($a) {
     Write-Ok 'deps ready'
 }
 
-function Cmd-BuildHtml($a) {
-    $script = Join-Path $PSScriptRoot 'build-html.ps1'
-    if ($a -and $a.Count -gt 0) { & $script -Source $a[0] } else { & $script }
-}
-
-function Cmd-Deploy($a) {
-    $script = Join-Path $PSScriptRoot 'deploy.ps1'
-    if (-not (Test-Path $script)) { throw "Missing deploy.ps1 at $script" }
-    if ($a -contains '--no-build') { & $script -NoBuild } else { & $script }
-    if ($LASTEXITCODE -ne 0) { throw "deploy failed (exit $LASTEXITCODE)" }
-    Write-Ok 'deploy complete.'
-}
-
-function Cmd-Bump($a) {
-    $script = Join-Path $PSScriptRoot 'bump-version.ps1'
-    if ($a -and $a.Count -gt 0) { & $script -To $a[0] } else { & $script }
-}
-
 # --- Node-side commands (Meshtastic over USB) ----------------------------
 function Cmd-Provision($a) {
     if (-not $a -or $a.Count -lt 1) {
         throw "Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]"
     }
     $script = Join-Path $PSScriptRoot 'provision-node.ps1'
-    # Pass first positional as -NodeName; let the rest fall through as named params.
-    & $script -NodeName $a[0] @($a | Select-Object -Skip 1)
+    # Pass first positional as -NodeName; splat the rest as named params.
+    # Use @var splatting — @(...) would pass one array as a single argument.
+    $extra = @($a | Select-Object -Skip 1)
+    & $script -NodeName $a[0] @extra
 }
 
 function Cmd-Healthcheck($a) {
@@ -287,9 +274,6 @@ function Cmd-PullLatest($a) {
 $commands = [ordered]@{
     'help'        = @{ Help = 'List available commands.';                                                           Action = { Show-Help } }
     'update'      = @{ Help = 'Install/refresh local Node deps. Add --clean to wipe node_modules.';                Action = { param($a) Cmd-Update $a } }
-    'build-html'  = @{ Help = 'Render ChiMesh.md to ChiMesh.htm (self-contained).';                                Action = { param($a) Cmd-BuildHtml $a } }
-    'deploy'      = @{ Help = 'Build + FTP-upload to mindattic.com/chimesh/. Add --no-build to skip the rebuild.'; Action = { param($a) Cmd-Deploy $a } }
-    'bump'        = @{ Help = 'Stamp ChiMesh.md with today''s revision date (or -To <YYYY.MM.DD>) and rebuild.';   Action = { param($a) Cmd-Bump $a } }
     'provision'   = @{ Help = 'Provision a USB-connected RAK4631 node. Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]'; Action = { param($a) Cmd-Provision $a } }
     'healthcheck' = @{ Help = 'Run end-to-end healthcheck against the USB-connected node.';                        Action = { param($a) Cmd-Healthcheck $a } }
     'list-parts'  = @{ Help = 'List parts catalog + which have a chosen URL.';                                     Action = { Cmd-ListParts } }
@@ -308,7 +292,7 @@ function Show-Help {
     }
     Write-Host ""
     Write-Host "  Examples:" -ForegroundColor Yellow
-    Write-Host "    ChiMesh.Console build-html"
+    Write-Host "    ChiMesh.Console list-parts"
     Write-Host "    ChiMesh.Console provision chimesh-001"
     Write-Host "    ChiMesh.Console healthcheck"
     Write-Host "    ChiMesh.Console find-deals core"

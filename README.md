@@ -9,8 +9,6 @@
 
 [github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
 
-*Last updated: 2026.05.23d*
-
 ---
 
 ## 01. Configure
@@ -83,15 +81,15 @@ ChiMesh runs stock Meshtastic firmware. We're not forking — for v0 the value i
 In **Chrome or Edge** (Web Serial isn't in Firefox/Safari), open:
 
 ```
-{{FLASHER_URL}}
+https://flash.meshtastic.org
 ```
 
 ### 4.2 Connect and flash
 
 1. Plug the RAK19003's USB-C into your computer.
 2. Click **Select Device**. Pick **RAK4631** from the dropdown.
-3. Pick the latest stable {{MESHTASTIC_FIRMWARE_LABEL}} build.
-4. Pick **Region: {{REGION_DEFAULT}}** (default; adjust if you're outside the US).
+3. Pick the latest stable Meshtastic 2.5.x build.
+4. Pick **Region: US** (default; adjust if you're outside the US).
 5. Click **Flash**, allow the browser's serial-port prompt.
 6. Wait ~30 seconds. The board reboots into the Meshtastic firmware automatically.
 
@@ -109,7 +107,7 @@ You can configure either via the official Meshtastic app over Bluetooth, or via 
 pip install --upgrade meshtastic
 ```
 
-You should see {{MESHTASTIC_CLI_LABEL}} or newer.
+You should see meshtastic-python 2.5.x or newer.
 
 ### 5.2 Provision the node
 
@@ -122,9 +120,9 @@ scripts\cli\provision-node.ps1 -NodeName chimesh-001
 Or set each field manually:
 
 ```bash
-meshtastic --set lora.region {{REGION_DEFAULT}}
+meshtastic --set lora.region US
 meshtastic --set device.role ROUTER_CLIENT
-meshtastic --ch-set name "{{CHANNEL_DEFAULT}}" --ch-index 0
+meshtastic --ch-set name "ChiMesh-Test" --ch-index 0
 meshtastic --set-owner chimesh-001
 ```
 
@@ -144,7 +142,7 @@ meshtastic --set-owner chimesh-001
 meshtastic --info
 ```
 
-You should see the region you picked, the role you picked, and channel 0 named `{{CHANNEL_DEFAULT}}`.
+You should see the region you picked, the role you picked, and channel 0 named `ChiMesh-Test`.
 
 ✅ **Checkpoint:** *`meshtastic --info` returns region + role + channel exactly as expected.*
 
@@ -205,7 +203,7 @@ Over 24 hours that's **~200–280 mAh consumed**. The ~1500 mAh LFP cell + 5 V /
 
 ### 7.1 Pair with the Meshtastic app
 
-Install the Meshtastic app — see {{MESHTASTIC_APP_URL}} for the official download links. Pair with Node A over Bluetooth (default PIN is `123456` unless you changed it).
+Install the Meshtastic app — see https://meshtastic.org/docs/software/apps/ for the official download links. Pair with Node A over Bluetooth (default PIN is `123456` unless you changed it).
 
 ### 7.2 Check the node list
 
@@ -249,7 +247,7 @@ Connects to whichever node is on the USB cable, queries `--info` and `--nodes`, 
 ### Solar isn't keeping up
 - Confirm the panel is generating: disconnect from the TP5000, measure open-circuit voltage in sunlight — should be ~6.5 V Voc (closer to ~5 V once it's loaded by the TP5000).
 - Confirm the TP5000 is charging: re-connect, measure across the cell — should rise toward 3.6 V over an hour of sun.
-- December low-light is the close case. If a node won't survive the worst week, upgrade to a 5 W panel.
+- December low-light is the close case. If a node won't survive the worst week, upgrade to a 5 W panel, or add a second LFP cell in parallel (~3000 mAh total) to ride through low-light stretches.
 
 ### Radio not responding via CLI
 ```powershell
@@ -262,8 +260,8 @@ Reads the connected node and prints any error states from `--info`.
 ## Reference
 
 - **Meshtastic firmware:** https://github.com/meshtastic/firmware
-- **Meshtastic web flasher:** {{FLASHER_URL}}
-- **Meshtastic apps (mobile + desktop):** {{MESHTASTIC_APP_URL}}
+- **Meshtastic web flasher:** https://flash.meshtastic.org
+- **Meshtastic apps (mobile + desktop):** https://meshtastic.org/docs/software/apps/
 - **RAK4631 product page:** https://store.rakwireless.com/products/rak4631-lpwan-node
 - **RAK19003 product page:** https://store.rakwireless.com/products/wisblock-base-board-rak19003
 - **Project repo:** https://github.com/mindattic/ChiMesh
@@ -276,8 +274,8 @@ Reads the connected node and prints any error states from `--info`.
 |-------|-----------|
 | Radio | Semtech SX1262 LoRa, 915 MHz US ISM |
 | MCU | Nordic nRF52840 (ARM Cortex-M4F @ 64 MHz) |
-| Board | {{BOARD_LABEL}} on {{BASE_BOARD_LABEL}} |
-| Firmware | {{MESHTASTIC_FIRMWARE_LABEL}} (stock, unmodified) |
+| Board | RAK4631 (RAK Wireless WisBlock Core) on RAK19003 Mini Base |
+| Firmware | Meshtastic 2.5.x (stock, unmodified) |
 | Mesh protocol | Meshtastic managed flood routing |
 | Power | 5 V / 2 W solar → TP5000 (LFP-configured) → LiFePO4 18650 |
 | App / config | Meshtastic mobile/desktop over BLE, or `meshtastic` CLI over USB |

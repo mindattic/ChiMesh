@@ -1,5 +1,5 @@
 {
-  "_description": "External dependency versions referenced in the build guide. Update these when upstream releases new majors. build-html.js injects these into ChiMesh.md wherever placeholders like {{MESHTASTIC_FIRMWARE_LABEL}} appear (compile-time substitution, AFTER marked renders).",
+  "_description": "Reference snapshot of external dependency versions used in README.md. These values are now inlined directly into README.md (the local build-html.js injector that did placeholder substitution was retired). When upstream releases new majors, update README.md and keep this file in sync as the canonical list.",
   "versionsAsOf": "2026-05-22",
 
   "MESHTASTIC_FIRMWARE_MAJOR": "2.5",

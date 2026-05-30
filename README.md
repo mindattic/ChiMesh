@@ -7,8 +7,6 @@
 > 1. **LiFePO4, not Li-ion.** Chicago winters charge below 0°C. Li-ion cells permanently plate lithium when charged that cold and can fail dangerously by summer. LFP is non-negotiable for any outdoor ChiMesh node.
 > 2. **Never plug USB-C into the RAK19003 while the LFP cell is wired into the JST.** The RAK19003's onboard charger is Li-ion only (4.2 V termination) and will overcharge an LFP cell (3.65 V max). The safe re-flash procedure is in §6.1: unplug the JST-PHR-2, plug USB-C, do your work, unplug USB-C, plug the JST back in.
 
-[github.com/mindattic/ChiMesh](https://github.com/mindattic/ChiMesh)
-
 ---
 
 ## 01. Configure

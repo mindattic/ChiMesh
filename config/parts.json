@@ -2,6 +2,32 @@
   "_description": "Parts catalog for the ChiMesh v0 build — 3 solar-powered RAK4631 Meshtastic nodes for proof-of-mesh in Chicago. Prices on 'core' parts are per node; 'consumable' parts are shared across all nodes; 'tools' are one-time and excluded from the build estimate. All parts are compatibility-checked end-to-end: Solar panel (5V) -> TP5000 (LFP-configured) -> LiFePO4 cell -> JST-PHR-2 on RAK19003 -> RAK4631 -> IPEX -> SMA pigtail -> 915 MHz SMA antenna. CRITICAL: do NOT charge an LFP cell through the RAK19003 USB-C port; its onboard charger is Li-ion only (4.2 V termination) and will overcharge LFP (3.65 V max). See README.md §6.1 for the safe re-flash workflow.",
   "_priorityOrder": ["official", "amazon", "reputable"],
 
+  "_configAxesNote": "Drives the interactive build configurator on the landing page. Each axis becomes a <select>; the chosen value is matched against the README's <!-- when: key=value --> conditional blocks (and any part's `when` field). 'default' is the value shown on first visit and on Reset. Keys/values here must match the README markers exactly: deployment=rooftop|apartment_window|ground_pole, role=router|client, region=eu868, antenna=fiberglass8.",
+  "configAxes": [
+    { "key": "region", "label": "LoRa region", "default": "us915", "options": [
+      ["us915", "US — 915 MHz (default)"],
+      ["eu868", "EU — 868 MHz"],
+      ["au915", "AU — 915 MHz"],
+      ["as923", "AS — 923 MHz"]
+    ]},
+    { "key": "role", "label": "Node role", "default": "router_client", "options": [
+      ["router_client", "ROUTER_CLIENT — fixed node, relays + chats (default)"],
+      ["router", "ROUTER — fixed backbone, relay only"],
+      ["client", "CLIENT — portable, low power"]
+    ]},
+    { "key": "deployment", "label": "Deployment scenario", "default": "balcony", "options": [
+      ["balcony", "Balcony / fence — outdoor, ~2nd–3rd floor (default)"],
+      ["apartment_window", "Apartment window — indoor, high-rise"],
+      ["rooftop", "Rooftop — outdoor, max altitude"],
+      ["ground_pole", "Ground pole / yard — outdoor, low altitude"]
+    ]},
+    { "key": "antenna", "label": "Antenna upgrade", "default": "rubber5", "options": [
+      ["rubber5", "5 dBi rubber duck (default, fits BOM)"],
+      ["rubber3", "3 dBi short whip (compact, less range)"],
+      ["fiberglass8", "8+ dBi fiberglass colinear (rooftop only)"]
+    ]}
+  ],
+
   "pricesAsOf": "2026-05-22",
   "pricesNote": "Per-node estimates in USD. Tools and consumables are shared / one-time and excluded from the per-node total. Verify via the Google Shopping link on each card before ordering.",
 

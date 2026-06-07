@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mindattic.com/chimesh/schema/part.schema.json",
+  "title": "ChiMesh part",
+  "description": "One row of the ChiMesh build parts catalog. The CANONICAL data lives in /config/parts.json (contractual shape consumed by MindAttic.Deploy/src/parts.js). This schema documents the per-part entity shape so codex doctor can validate it. Stable id = part.<slug>.",
+  "type": "object",
+  "required": ["id", "category", "name", "price"],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable slug, unique within the catalog (e.g. rak4631, tp5000-lfp).",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["core", "consumable", "tools"],
+      "description": "core = one per node (counted in per-node total); consumable = shared kit; tools = one-time, excluded from total."
+    },
+    "name": { "type": "string", "description": "Human-readable part name." },
+    "price": { "type": "number", "minimum": 0, "description": "Estimated USD price." },
+    "inTotal": { "type": "boolean", "description": "Whether the price counts toward the per-node build total. Defaults true for core; explicitly false for consumable/tools." },
+    "imageFile": { "type": "string", "description": "Relative path under config/ to the part image." },
+    "note": { "type": "string" },
+    "when": { "type": "string", "description": "Optional config-axis gate (key=value) matching configAxes." },
+    "specs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "value"],
+        "properties": {
+          "label": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      }
+    },
+    "searchFor": { "type": "string", "format": "uri" },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tier", "url"],
+        "properties": {
+          "tier": { "type": "string", "enum": ["official", "amazon", "reputable"] },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    }
+  }
+}

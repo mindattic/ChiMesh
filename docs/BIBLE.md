@@ -107,7 +107,7 @@ Part facts (price, specs, sources) live only in [`config/parts.json`](../config/
 ## 6. Verified state {#CM-§6}
 Status legend: ✅ done (verified) · 🟡 partial · ⬜ planned · 🗑️ cut · living.
 
-- 🟡 **Content is authored and internally consistent.** `README.md` (sections 01–08), `config/parts.json` (18 parts across core/consumable/tools, 4 config axes), `config/versions.json`, and 10 part images all exist and cross-reference correctly. No automated test asserts this — verified by review only, hence 🟡.
+- 🟡 **Content is authored and internally consistent.** `README.md` (sections 01–08), `config/parts.json` (20 parts across core/consumable/tools — 10 core, 3 consumable, 7 tools — 4 config axes), `config/versions.json`, and 10 part images all exist and cross-reference correctly. No automated test asserts this — verified by review only, hence 🟡.
 - 🟡 **Node tooling exists.** `provision-node.ps1` and `healthcheck-mesh.ps1` are complete and parameter-validated, but exercising them requires physical RAK4631 hardware + the `meshtastic` Python CLI, which is not present in CI. Unproven here → 🟡.
 - ⬜ **Physical proof-of-mesh** (`A → via B → C`) — depends on three assembled nodes; not yet demonstrated in-repo.
 - ⬜ **No build/test command in this repo.** `package.json` is metadata only (no `scripts`); there is no test tree and no `npm test`/`dotnet test`. Rendering + deploy run in the sibling MindAttic.Deploy repo and are out of scope here. The closest in-repo verifier is `tools/codex.ps1 doctor` (docs integrity).

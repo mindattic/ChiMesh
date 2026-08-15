@@ -1,0 +1,516 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ChiMesh</title>
+<meta name="description" content="Version 1.0.0 | Chicago LoRa Meshtastic mesh — proof-of-mesh build.">
+<meta name="generator" content="MindAttic Codex build-readme.ps1">
+<meta name="generated" content="2026-08-14">
+<style>:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+  --border:#30363d;
+  --text:#e6edf3;--muted:#8b949e;
+  --h1:#58a6ff;--h2:#79c0ff;--h3:#d2a8ff;
+  --link:#58a6ff;--code:#f0f6fc;
+  --sidebar-w:272px;--content-max:900px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);font-size:15px;line-height:1.8
+}
+#layout{display:flex;min-height:100vh}
+#sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:var(--bg2);border-right:1px solid var(--border);
+  padding:1.5rem 0
+}
+#sidebar::-webkit-scrollbar{width:4px}
+#sidebar::-webkit-scrollbar-track{background:transparent}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+#toc-inner{padding:0 .75rem}
+.toc-title{
+  display:block;font-size:.68rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.1em;padding:.1rem .5rem .9rem
+}
+.toc-a{
+  display:block;padding:.22rem .5rem;font-size:.79rem;color:var(--muted);
+  border-radius:4px;text-decoration:none;line-height:1.35;margin-bottom:1px;
+  transition:color .15s,background .15s
+}
+.toc-a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.toc-a.active{color:var(--h1);background:rgba(88,166,255,.12);font-weight:500}
+.toc-a.is-h3{padding-left:1.25rem;font-size:.75rem}
+.toc-sep{border:none;border-top:1px solid var(--border);margin:.6rem .5rem}
+#content{
+  flex:1;min-width:0;
+  max-width:calc(var(--sidebar-w) + var(--content-max));
+  padding:2.5rem 3.5rem 5rem
+}
+h1{color:var(--h1);font-size:2rem;font-weight:700;
+   border-bottom:1px solid var(--border);padding-bottom:.5rem;margin-bottom:1.25rem}
+h2{color:var(--h2);font-size:1.35rem;font-weight:600;
+   margin-top:2.75rem;margin-bottom:.75rem;
+   border-bottom:1px solid var(--border);padding-bottom:.3rem}
+h3{color:var(--h3);font-size:1.05rem;font-weight:600;margin-top:1.5rem;margin-bottom:.4rem}
+h4{color:var(--text);font-size:.95rem;font-weight:600;margin-top:1rem}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+p{margin:.7rem 0}
+ul,ol{padding-left:1.75rem;margin:.4rem 0}
+li{margin:.2rem 0}
+li>ul,li>ol{padding-left:1.5rem;margin:.1rem 0}
+hr{border:none;border-top:1px solid var(--border);margin:2.25rem 0}
+blockquote{
+  border-left:3px solid var(--h1);background:var(--bg2);
+  color:var(--muted);padding:.65rem 1rem;margin:1rem 0;
+  border-radius:0 4px 4px 0;font-style:italic
+}
+blockquote p{margin:0}
+code{
+  background:var(--bg2);color:var(--code);
+  padding:.15em .45em;border-radius:4px;font-size:.84em;
+  font-family:'Cascadia Code','Fira Code','Consolas','SF Mono',monospace
+}
+pre{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:6px;padding:1rem 1.25rem;overflow-x:auto;
+  margin:1rem 0;position:relative
+}
+pre code{background:none;padding:0;font-size:.84rem;line-height:1.65;color:var(--code)}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.875rem;overflow-x:auto;display:block}
+thead th{
+  background:var(--bg3);color:var(--h2);font-weight:600;
+  text-align:left;padding:.5rem .75rem;border:1px solid var(--border)
+}
+tbody td{padding:.4rem .75rem;border:1px solid var(--border);vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+.cpbtn{
+  position:absolute;top:.5rem;right:.5rem;
+  background:var(--bg3);color:var(--muted);
+  border:1px solid var(--border);border-radius:4px;
+  padding:.15rem .55rem;font-size:.71rem;font-family:inherit;
+  cursor:pointer;opacity:0;transition:opacity .15s,color .15s;line-height:1.5
+}
+pre:hover .cpbtn{opacity:1}
+.cpbtn:hover{color:var(--text)}
+.cpbtn.ok{color:#7ee787}
+.codex-footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);color:var(--muted);font-size:.78rem}
+@media(max-width:820px){
+  #sidebar{display:none}
+  #content{padding:1.5rem 1.25rem 3.5rem}
+}</style>
+</head>
+<body>
+<div id="layout">
+  <nav id="sidebar" aria-label="Table of contents">
+    <div id="toc-inner"></div>
+  </nav>
+  <main id="content">
+<h1 id="chimesh">ChiMesh</h1>
+<p><strong>Version 1.0.0</strong> | Chicago LoRa Meshtastic mesh — proof-of-mesh build.</p>
+<p><strong>Chicago LoRa Meshtastic mesh — proof-of-mesh build.</strong> Three solar-powered RAK4631 nodes in weatherproof IP65 enclosures that prove multi-hop LoRa routing across the city. About <strong>~$62 per node</strong> (so ~$186 for the proof batch of three), plus ~$25 in shared consumables (wire, JST, solder, heat-shrink) and any one-time tools you don't already own. No lamp disguise yet — that's v2 once the protocol is proven.</p>
+<blockquote><p><strong>Two non-negotiable rules.</strong>  1. <strong>LiFePO4, not Li-ion.</strong> Chicago winters charge below 0°C. Li-ion cells permanently plate lithium when charged that cold and can fail dangerously by summer. LFP is non-negotiable for any outdoor ChiMesh node. 2. <strong>Never plug USB-C into the RAK19003 while the LFP cell is wired into the JST.</strong> The RAK19003's onboard charger is Li-ion only (4.2 V termination) and will overcharge an LFP cell (3.65 V max). The safe re-flash procedure is in §6.1: unplug the JST-PHR-2, plug USB-C, do your work, unplug USB-C, plug the JST back in.</p></blockquote>
+<hr>
+<h2 id="repo-at-a-glance">Repo at a glance</h2>
+<pre><code>ChiMesh/
+├── README.md                     # this file — build narrative (sections 01-08) AND the landing-page
+│                                 #   source, rendered verbatim by MindAttic.Deploy. Its
+│                                 #   &lt;!-- CONFIG-WIDGET --&gt;, &lt;!-- PARTS-GALLERY --&gt;, and
+│                                 #   &lt;!-- when: key=value --&gt;...&lt;!-- end --&gt; markers are filled in
+│                                 #   at render time — do not remove them.
+├── ChiMesh.Console.bat           # root-level shortcut -&gt; scripts/cli/ChiMesh.Console.bat
+├── package.json                  # Node deps (marked, highlight.js) — installed by `Console update`
+├── package-lock.json
+├── config/
+│   ├── parts.json                # L5 canon-as-data: categories, configAxes, parts (price/specs/tiers), chosen picks
+│   ├── versions.json             # pinned upstream version labels (Meshtastic 2.5.x, etc.) — inlined into README.md
+│   └── images/                   # 10 per-part photos, base64-inlined into the rendered parts gallery
+├── scripts/cli/
+│   ├── ChiMesh.Console.ps1       # dispatch-table console: help / update / provision / healthcheck / list-parts / find-deals / pull-latest
+│   ├── ChiMesh.Console.bat       # Windows launcher for ChiMesh.Console.ps1
+│   ├── provision-node.ps1        # set region/role/channel0/owner on a USB-connected RAK4631, idempotent
+│   ├── healthcheck-mesh.ps1      # 6-check smoke test (CLI present, node responds, region, role, channel0, peer count)
+│   └── pull-latest-finisher.ps1  # detached helper that finishes pull-latest's file copy after the console process exits
+├── tools/
+│   └── codex.ps1                 # doctor (validate canon) + digest (regenerate BIBLE.digest.md)
+├── docs/
+│   ├── BIBLE.md                  # L0 source of truth — architecture, laws, glossary, verified state
+│   ├── BIBLE.digest.md           # GENERATED by tools/codex.ps1 digest — never hand-edit
+│   ├── AMENDMENTS.md             # L1 append-only change log (CM-A1, CM-A2, ...) — an amendment wins over the bible
+│   ├── USER_STORIES.md           # L2 acceptance stories (CM-US-*) — every ✅ cites its verifying test
+│   ├── rfc/                      # design notes (e.g. 0001-secured-channel-psk.md)
+│   └── data/                     # L5 registration: parts.json + _schema/part.schema.json
+└── .claude/                      # Claude Code session config: commands (checkpoint/commit/deploy/do),
+                                   #   hooks (inject-digest.ps1, restore-handoff.ps1), statusline.ps1</code></pre>
+<blockquote><p>The landing page (<code>mindattic.com/chimesh.htm</code>) is rendered and deployed by the sibling <strong>MindAttic.Deploy</strong> repo — there is no local build or FTP pipeline in this repo. Run <code>/deploy</code> to trigger it.</p></blockquote>
+<hr>
+<h2 id="architecture">Architecture</h2>
+<p>ChiMesh splits into a <strong>content half</strong> (this repo) and a <strong>render/deploy half</strong> (sibling repo <code>MindAttic.Deploy</code>), plus standalone <strong>node tooling</strong> that talks to physical hardware over USB.</p>
+<ul>
+<li>This repo owns the build narrative (<code>README.md</code>, the file you're reading), the parts catalog (<code>config/parts.json</code>, <code>config/versions.json</code>, <code>config/images/</code>), and the PowerShell scripts that   provision/healthcheck a USB-connected RAK4631 (<code>scripts/cli/</code>).</li>
+<li><code>MindAttic.Deploy</code> (sibling, out of this repo) renders <code>README.md</code> + <code>config/parts.json</code> through its <code>Hardware</code>-theme catalog template into <code>out/chimesh.htm</code> and FTPS-uploads it to   <code>mindattic.com/chimesh.htm</code>. Rendering fills the <code>&lt;!-- CONFIG-WIDGET --&gt;</code> picker, the   <code>&lt;!-- PARTS-GALLERY --&gt;</code> cards + running cost total, and toggles <code>&lt;!-- when: key=value --&gt;</code> copy   blocks. Trigger it with <code>/deploy</code> — see <a href=".claude/commands/deploy.md"><code>.claude/commands/deploy.md</code></a>.</li>
+<li>Physically, each node is one fixed signal chain: solar panel → TP5000 (LFP-configured) → LiFePO4 cell → JST-PHR-2 → RAK19003 → RAK4631 → IPEX pigtail → SMA bulkhead → 915 MHz antenna.</li>
+</ul>
+<p>See <a href="docs/BIBLE.md#CM-§4">docs/BIBLE.md §4</a> for the full architecture diagram, component list, and domain model (nouns/verbs) — this section is a summary, not a duplicate.</p>
+<hr>
+<h2 id="configuration">Configuration</h2>
+<p>Parts, pricing, and version facts are canon-as-data — edit these files, not README prose, and the next <code>/deploy</code> picks up the change:</p>
+<table><thead><tr>
+<th>File</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td><a href="config/parts.json"><code>config/parts.json</code></a></td>
+<td>The parts catalog: <code>categories</code> (<code>core</code> / <code>consumable</code> / <code>tools</code>), <code>configAxes</code> (<code>region</code>, <code>role</code>, <code>deployment</code>, <code>antenna</code> — each becomes a <code>&lt;select&gt;</code> in the landing-page picker, matched against this README's <code>&lt;!-- when: key=value --&gt;</code> blocks), per-part price/specs/purchase tiers (official/amazon/reputable), and <code>chosen</code> (URLs saved by <code>find-deals</code>). Registered as L5 canon via <a href="docs/data/parts.json"><code>docs/data/parts.json</code></a> against <a href="docs/data/_schema"><code>docs/data/_schema/part.schema.json</code></a>; <code>tools/codex.ps1 doctor</code> validates every row against that schema and checks <code>id</code> uniqueness.</td>
+</tr>
+<tr>
+<td><a href="config/versions.json"><code>config/versions.json</code></a></td>
+<td>Reference snapshot of pinned upstream versions (Meshtastic firmware <code>2.5.x</code>, CLI label, board labels, default region/channel, flasher/app URLs). Values are inlined directly into <code>README.md</code>; keep this file in sync when upstream ships a new major.</td>
+</tr>
+<tr>
+<td><a href="config/images"><code>config/images/</code></a></td>
+<td>Per-part photos (10 files: <code>rak4631.png</code>, <code>rak19003.png</code>, <code>tp5000-lfp.jpg</code>, etc.), base64-inlined into the rendered parts gallery by <code>MindAttic.Deploy</code>'s <code>src/parts.js</code>.</td>
+</tr>
+</tbody></table>
+<p>Cite parts from prose as <code>part.&lt;id&gt;</code> rather than restating their fields — see <a href="docs/BIBLE.md#CM-LAW-7">CM-LAW-7</a> (single home per fact).</p>
+<hr>
+<h2 id="console">Console</h2>
+<p>Launch the interactive console from the repo root:</p>
+<pre><code>ChiMesh.Console.bat</code></pre>
+<p>Or dispatch a command directly — <code>ChiMesh.Console.bat &lt;command&gt; [args]</code>:</p>
+<table><thead><tr>
+<th>Command</th>
+<th>What it does</th>
+</tr></thead><tbody>
+<tr>
+<td><code>help</code></td>
+<td>List available commands (also shown with no args, as a looping menu).</td>
+</tr>
+<tr>
+<td><code>update [--clean]</code></td>
+<td>Install/refresh the Node deps in <code>package.json</code> (<code>marked</code>, <code>highlight.js</code>) into <code>node_modules/</code>. <code>--clean</code> wipes <code>node_modules/</code> + <code>package-lock.json</code> first.</td>
+</tr>
+<tr>
+<td><code>provision &lt;node-name&gt; [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]</code></td>
+<td>Runs <code>provision-node.ps1</code> — sets region/role/channel0/owner on the USB-connected node and reads back to confirm.</td>
+</tr>
+<tr>
+<td><code>healthcheck [-Port COMx] [-Verbose]</code></td>
+<td>Runs <code>healthcheck-mesh.ps1</code> — the 6-check smoke test.</td>
+</tr>
+<tr>
+<td><code>list-parts</code></td>
+<td>Lists the parts catalog grouped by category, with price and any already-chosen purchase URL.</td>
+</tr>
+<tr>
+<td>`find-deals [core\</td>
+<td>consumable\</td>
+<td>--all]`</td>
+<td>Opens Search/Official/Amazon/Reputable tabs per part; paste back the URL you picked and it's saved to <code>config/parts.json.chosen</code>.</td>
+</tr>
+<tr>
+<td><code>pull-latest [--force]</code></td>
+<td><code>git fetch</code> + stages the latest tracked branch into a temp clone, then hands off to a detached helper (<code>pull-latest-finisher.ps1</code>) that overlays it onto the repo after the console process exits (so its own files aren't locked mid-copy). <code>--force</code> overwrites even with a dirty working tree.</td>
+</tr>
+</tbody></table>
+<p><strong>Prerequisites:</strong></p>
+<ul>
+<li>PowerShell 5.1 (Windows PowerShell — no <code>pwsh</code> required)</li>
+<li><code>pip install --upgrade meshtastic</code> (for <code>provision</code> and <code>healthcheck</code>)</li>
+<li>Node.js + npm (for <code>update</code>)</li>
+<li><code>git</code> on PATH (for <code>pull-latest</code>)</li>
+</ul>
+<hr>
+<h2 id="build-run-test">Build, run &amp; test</h2>
+<p>There is no application build or automated test suite in this repo. <code>package.json</code> declares two Node deps (<code>marked</code>, <code>highlight.js</code>) that <code>ChiMesh.Console update</code> installs into <code>node_modules/</code>, but nothing under <code>scripts/cli/</code> or <code>tools/</code> currently requires/imports either package — HTML rendering now runs entirely in the sibling <code>MindAttic.Deploy</code> repo (see <a href="docs/AMENDMENTS.md#CM-A1">CM-A1</a>), and these deps predate that move.</p>
+<p>The only in-repo automated verifier is the Codex doctor. It must pass before any docs change is considered done:</p>
+<pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools\codex.ps1 doctor</code></pre>
+<p>Regenerate <code>docs/BIBLE.digest.md</code> (whenever BIBLE §1/§3/§5/§9 or the latest amendment changes):</p>
+<pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File tools\codex.ps1 digest</code></pre>
+<p><code>doctor</code> checks front-matter validity, unique IDs, resolvable cross-references, <code>config/parts.json</code> rows against the L5 schema, that every ✅ story cites an existing-or-best-effort test, cited paths exist, and digest freshness. Node tooling (<code>provision</code>, <code>healthcheck</code>) can only be exercised against physical RAK4631 hardware, so it's unproven in CI — see <a href="docs/BIBLE.md#CM-§6">docs/BIBLE.md §6</a> for the honest, per-item verified-state ledger, and <a href="docs/USER<em>STORIES.md">docs/USER</em>STORIES.md</a> for per-story test citations.</p>
+<hr>
+<h2 id="01-configure">01. Configure</h2>
+<p>&lt;!-- CONFIG-WIDGET --&gt;</p>
+<hr>
+<h2 id="02-shopping-list">02. Shopping list</h2>
+<p>The total below counts <strong>core parts per node</strong> only. Multiply by your planned node count — minimum 3 to actually prove multi-hop routing (otherwise there's no chain to forward through). The consumables and tools categories show one-time / shared items and are excluded from the per-node total.</p>
+<p>&lt;!-- PARTS-GALLERY --&gt;</p>
+<hr>
+<h2 id="03-assemble">03. Assemble</h2>
+<p><strong>Total time:</strong> <em>~30 minutes per node, once parts are in hand.</em></p>
+<h3 id="31-tools-youll-need">3.1 Tools you'll need</h3>
+<p>One-time tools, not per-node — most builders already own them. See the shopping list for specific picks if you don't:</p>
+<ul>
+<li><strong>Temperature-controlled soldering iron</strong> + 60/40 rosin-core solder (0.8 mm)</li>
+<li><strong>Heat-shrink tubing</strong> (2–8 mm assortment) + heat gun or lighter</li>
+<li><strong>Wire strippers + flush cutters</strong> for 22 AWG</li>
+<li><strong>JST crimp tool</strong> (or buy pre-crimped JST-PHR-2 pigtails and skip this)</li>
+<li><strong>Digital multimeter</strong> — for verifying LFP cell voltage (3.2–3.65 V) and panel output (~6.5 V Voc) during troubleshooting</li>
+<li><strong>Drill + bits</strong> — 6 mm for the SMA bulkhead hole, 12 mm for the M12 cable gland (a step bit makes cleaner holes in ABS)</li>
+<li><strong>Phillips #1 screwdriver</strong> for the enclosure lid</li>
+</ul>
+<h3 id="32-wiring-overview">3.2 Wiring overview</h3>
+<p>One signal path with two sub-paths:</p>
+<pre><code>Solar panel  →  TP5000 (LFP jumper set!)  →  LiFePO4 cell  →  JST-PHR-2  →  RAK19003  →  RAK4631
+RAK4631 IPEX  →  pigtail  →  SMA bulkhead  →  915 MHz antenna</code></pre>
+<h3 id="33-build-steps">3.3 Build steps</h3>
+<blockquote><p><strong>DO NOT INSTALL THE LFP CELL UNTIL SECTION 06.</strong> Sections 04 and 05 want you connecting USB-C to the RAK19003 for flashing and provisioning. The RAK19003's onboard charger terminates at 4.2 V (Li-ion), which will overcharge an LFP cell (3.65 V max). Cell goes in AFTER firmware + config are done.</p></blockquote>
+<ol>
+<li><strong>Set the TP5000 jumper to LFP (3.6 V).</strong> This is the single most important step. The board ships with the jumper in either position; LFP termination is usually labeled <code>4.2/3.6</code> or <code>Li-ion/LiFePO4</code>. Wrong jumper = dead cell in weeks.</li>
+<li><strong>Solder the solar panel leads to the TP5000 <code>IN+</code> / <code>IN-</code> pads.</strong> Red to <code>+</code>, black to <code>-</code>. Heat-shrink the joint — the enclosure isn't fully sealed if the panel cable enters with bare conductors.</li>
+<li><strong>Solder the LFP cell holder leads to the TP5000 <code>BAT+</code> / <code>BAT-</code> pads.</strong> Don't insert the cell yet.</li>
+<li><strong>Crimp a JST-PHR-2 onto a short pair of 22 AWG wires</strong>, then solder the other end of those wires to the TP5000's <code>BAT+</code> / <code>BAT-</code> pads (in parallel with the cell-holder leads). This is the output that feeds the RAK19003.</li>
+<li><strong>Snap the RAK4631 onto the RAK19003 Mini Base.</strong> Align the silk-screen markers, press until the board-to-board connector seats fully.</li>
+<li><strong>Connect the IPEX pigtail.</strong> The u.FL connector on the RAK4631 is fragile — press straight down with a thumbnail until it clicks. Mount the SMA bulkhead end through the drilled hole in the top of the enclosure (panel nut on the outside). <strong>SMA, not RP-SMA</strong> — they look identical but won't mate with a LoRa antenna.</li>
+<li><strong>Plug the JST-PHR-2 from the TP5000 into the RAK19003 battery input.</strong> It only fits one way. Leave the cell holder EMPTY for now — power for sections 04 and 05 comes from USB-C, not the battery path.</li>
+<li><strong>Mount everything inside the enclosure.</strong> Foam-tape the TP5000 to one wall, the RAK19003 + Mini Base to the opposite wall, the cell holder along the floor (empty). Route the panel cable out through the M12 gland.</li>
+<li><strong>Visual sanity check.</strong> Antenna is vertical when the enclosure is mounted in its final orientation. No bare wire near the SMA bulkhead. Cell holder is empty and ready.</li>
+</ol>
+<p>&lt;!-- when: deployment=rooftop --&gt; <strong>Rooftop note.</strong> Grounding is a real concern when the antenna is your highest point. Add a gas-discharge tube (GDT) lightning arrestor on the SMA line before the radio — cheap insurance for a board you can't easily reach. &lt;!-- end --&gt;</p>
+<p>✅ <strong>Checkpoint:</strong> <em>Boards mounted, antenna threaded through enclosure wall, panel cable sealed at the gland, cell holder empty and ready for sections 04–05.</em></p>
+<hr>
+<h2 id="04-flash-firmware">04. Flash firmware</h2>
+<p>ChiMesh runs stock Meshtastic firmware. We're not forking — for v0 the value is in deployment + config conventions, not custom firmware.</p>
+<h3 id="41-open-the-web-flasher">4.1 Open the web flasher</h3>
+<p>In <strong>Chrome or Edge</strong> (Web Serial isn't in Firefox/Safari), open:</p>
+<pre><code>https://flash.meshtastic.org</code></pre>
+<h3 id="42-connect-and-flash">4.2 Connect and flash</h3>
+<ol>
+<li>Plug the RAK19003's USB-C into your computer.</li>
+<li>Click <strong>Select Device</strong>. Pick <strong>RAK4631</strong> from the dropdown.</li>
+<li>Pick the latest stable Meshtastic 2.5.x build.</li>
+<li>Pick <strong>Region: US</strong> (default; adjust if you're outside the US).</li>
+<li>Click <strong>Flash</strong>, allow the browser's serial-port prompt.</li>
+<li>Wait ~30 seconds. The board reboots into the Meshtastic firmware automatically.</li>
+</ol>
+<p>✅ <strong>Checkpoint:</strong> <em>Flasher prints "Done" and the RAK19003 LED settles into a slow heartbeat pattern.</em></p>
+<hr>
+<h2 id="05-configure-node">05. Configure node</h2>
+<p>You can configure either via the official Meshtastic app over Bluetooth, or via the <code>meshtastic</code> CLI over USB. The CLI is faster for scripted multi-node setup — recommended for ChiMesh since you're provisioning at least 3 nodes identically.</p>
+<h3 id="51-install-the-meshtastic-cli">5.1 Install the Meshtastic CLI</h3>
+<pre><code class="language-bash">pip install --upgrade meshtastic</code></pre>
+<p>You should see meshtastic-python 2.5.x or newer.</p>
+<h3 id="52-provision-the-node">5.2 Provision the node</h3>
+<p>Use the bundled provisioner — it walks one USB-connected node through the standard ChiMesh config:</p>
+<pre><code class="language-powershell">scripts\cli\provision-node.ps1 -NodeName chimesh-001</code></pre>
+<p>Or set each field manually:</p>
+<pre><code class="language-bash">meshtastic --set lora.region US
+meshtastic --set device.role ROUTER_CLIENT
+meshtastic --ch-set name "ChiMesh-Test" --ch-index 0
+meshtastic --set-owner chimesh-001</code></pre>
+<p>&lt;!-- when: role=router --&gt; <strong>Role note (ROUTER).</strong> ROUTER means this node relays every packet it hears but never originates user messages. Reserve for true backbone nodes — usually 1 per metro area. For most ChiMesh deployments ROUTER<em>CLIENT is better because it both relays AND lets you chat from this node. &lt;!-- end --&gt; &lt;!-- when: role=client --&gt; <strong>Role note (CLIENT).</strong> CLIENT is for portable / handheld use — the node sleeps aggressively to save battery. A sleeping CLIENT will not forward packets. Do NOT use this role for your fixed proof nodes; pick ROUTER</em>CLIENT for those. &lt;!-- end --&gt; &lt;!-- when: region=eu868 --&gt; <strong>Region note (EU 868).</strong> EU duty-cycle rules limit each device to ~1% airtime on most sub-channels. Meshtastic respects this in firmware, but expect slower message throughput than US 915. &lt;!-- end --&gt;</p>
+<h3 id="53-confirm">5.3 Confirm</h3>
+<pre><code class="language-bash">meshtastic --info</code></pre>
+<p>You should see the region you picked, the role you picked, and channel 0 named <code>ChiMesh-Test</code>.</p>
+<p>✅ <strong>Checkpoint:</strong> <em><code>meshtastic --info</code> returns region + role + channel exactly as expected.</em></p>
+<hr>
+<h2 id="06-deploy">06. Deploy</h2>
+<h3 id="61-install-the-lfp-cell-finally">6.1 Install the LFP cell — finally</h3>
+<p>With firmware flashed and config written, <strong>unplug USB-C</strong> from the RAK19003. Now insert the LFP cell into the holder. The RAK19003 red LED should blip briefly as the board powers up from the TP5000's <code>BAT</code> output. From this point forward, never plug USB-C in unless you've first unplugged the JST-PHR-2 from the RAK19003 — the onboard charger will overcharge LFP otherwise.</p>
+<p>If you need to re-flash later: power down (unplug JST), plug USB-C, flash, unplug USB-C, plug JST back in. Tedious but safe.</p>
+<h3 id="62-placement-strategy">6.2 Placement strategy</h3>
+<p>For proof-of-mesh, the 3 nodes have to be positioned so <strong>at least one pair cannot hear each other directly</strong>. Otherwise you've built a 1-hop network and proven nothing about multi-hop routing.</p>
+<p>A workable Chicago layout:</p>
+<table><thead><tr>
+<th>Node</th>
+<th>Suggested location</th>
+<th>Why</th>
+</tr></thead><tbody>
+<tr>
+<td>Node A</td>
+<td>High-rise apartment window or balcony</td>
+<td>Gateway altitude — sees both B and C</td>
+</tr>
+<tr>
+<td>Node B</td>
+<td>Friend's apartment / office, ~1–3 km away</td>
+<td>Far enough it can't reach C directly</td>
+</tr>
+<tr>
+<td>Node C</td>
+<td>Second remote location, ~1–3 km from B in a different direction</td>
+<td>Forces traffic through A</td>
+</tr>
+</tbody></table>
+<p>&lt;!-- when: deployment=apartment<em>window --&gt; <strong>Apartment-window note.</strong> Indoor through low-E (energy-efficient) glass costs ~10–15 dB of signal. If you have access to a balcony or an exterior fence/eave, use it — Chicago's lake-effect glass is particularly bad for 915 MHz. Antenna outside the window beats antenna inside, every time. &lt;!-- end --&gt; &lt;!-- when: deployment=rooftop --&gt; <strong>Rooftop note.</strong> Strongest placement. Aim the solar panel south at ~41° tilt (Chicago's latitude). Mount the enclosure on the north side of any obstruction so the antenna stays clear of metal HVAC, parapets, and roof-edge railings. &lt;!-- end --&gt; &lt;!-- when: deployment=ground</em>pole --&gt; <strong>Ground-pole note.</strong> Range from a ground-level node is roughly half of an elevated one — buildings, cars, and foliage block line-of-sight. Useful as a yard pin but not as your gateway node. Don't expect to bridge anything beyond ~500 m. &lt;!-- end --&gt; &lt;!-- when: antenna=fiberglass8 --&gt; <strong>Fiberglass colinear note.</strong> An 8+ dBi fiberglass antenna is heavier, more visible, and needs a real mast or bracket. Pair it with the rooftop deployment only — on a balcony it's overkill and on a window it's structurally awkward. &lt;!-- end --&gt;</p>
+<p><strong>Solar panel aim.</strong> Face south, tilt ~41° (matches Chicago's latitude). Don't lay panels flat — flat panels collect snow and bird droppings, and the December sun angle is so low that flat-mount harvest drops ~30%.</p>
+<p><strong>Antenna orientation.</strong> Vertical. Most Meshtastic networks are vertically polarized; a sideways antenna costs you ~3 dB instantly.</p>
+<h3 id="63-power-budget">6.3 Power budget</h3>
+<p>Rough draw for the RAK4631 (SX1262 + nRF52840) running stock Meshtastic in continuous receive:</p>
+<ul>
+<li><strong>SX1262 in RX:</strong> ~4.6 mA</li>
+<li><strong>nRF52840 active</strong> (BLE off, CPU lightly loaded): ~3–6 mA</li>
+<li><strong>Combined at 3.3 V:</strong> ~8–12 mA average in steady listen, with brief spikes to ~120 mA on TX bursts.</li>
+</ul>
+<p>Over 24 hours that's <strong>~200–280 mAh consumed</strong>. The ~1500 mAh LFP cell + 5 V / 2 W panel works for Chicago summer — a sunny day harvests ~600–800 mAh, well above draw — but December is tight: 1.5 peak sun hours × 2 W ≈ 150–200 mAh/day in, against ~250 mAh/day out. That's a real-world deficit on the worst weeks, and the reason the v0 panel-aim rule above says "tilt ~41°, never flat." If a node has to survive a Chicago January with no intervention, plan to add a second cell in parallel (~3000 mAh total) or step up to a 5 W panel — both are documented in §08.</p>
+<p>✅ <strong>Checkpoint:</strong> <em>All 3 nodes deployed, solar panels facing the sky, antennas vertical, enclosure lids closed and sealed.</em></p>
+<hr>
+<h2 id="07-verify-mesh">07. Verify mesh</h2>
+<h3 id="71-pair-with-the-meshtastic-app">7.1 Pair with the Meshtastic app</h3>
+<p>Install the Meshtastic app — see https://meshtastic.org/docs/software/apps/ for the official download links. Pair with Node A over Bluetooth (default PIN is <code>123456</code> unless you changed it).</p>
+<h3 id="72-check-the-node-list">7.2 Check the node list</h3>
+<p>The app's <strong>Nodes</strong> tab should list all 3 nodes within a few minutes — A directly (paired to your phone) plus B and C via radio. The gear icon next to each remote node shows hop count: <code>1 hop</code> = direct, <code>2 hops</code> = routed through another node.</p>
+<h3 id="73-the-actual-test">7.3 The actual test</h3>
+<p>Send a text from the app (paired to A) to Node C. If it arrives at C, and the path shows <code>via B</code> in the app, you've proven multi-hop routing.</p>
+<p>If every node shows <code>1 hop</code>, the nodes are too close together — separate them further until at least one pair can't see each other directly.</p>
+<p>✅ <strong>Checkpoint:</strong> <em>A message from your phone (paired to A) reaches C with a <code>via B</code> hop indicator in the app.</em></p>
+<h3 id="74-run-the-bundled-healthcheck">7.4 Run the bundled healthcheck</h3>
+<pre><code class="language-powershell">scripts\cli\healthcheck-mesh.ps1</code></pre>
+<p>Connects to whichever node is on the USB cable, queries <code>--info</code> and <code>--nodes</code>, and reports region, role, channel-0 name, and the count of known peers. Use it as a one-shot sanity check before calling the deployment done.</p>
+<hr>
+<h2 id="08-troubleshooting">08. Troubleshooting</h2>
+<h3 id="nothing-comes-up-on-the-web-flasher">Nothing comes up on the web flasher</h3>
+<ul>
+<li>Chrome or Edge only — Web Serial isn't in Firefox/Safari.</li>
+<li>Try a different USB-C cable. Many "charging only" cables don't carry USB data.</li>
+<li>On Windows, check Device Manager for the COM port; if it's missing, install Nordic's USB driver.</li>
+</ul>
+<h3 id="flashed-but-no-led-activity">Flashed, but no LED activity</h3>
+<ul>
+<li>The RAK19003 red LED only lights when current is drawn — if the cell is dead or the jumper is wrong, the board sits at 0 V.</li>
+<li>Check cell voltage with a multimeter: a healthy LFP reads 3.2–3.65 V.</li>
+<li>Confirm the TP5000 jumper is set for LFP (3.6 V), not Li-ion (4.2 V).</li>
+</ul>
+<h3 id="nodes-cant-see-each-other">Nodes can't see each other</h3>
+<ul>
+<li>Verify all nodes are on the same region (<code>meshtastic --info</code> shows <code>lora.region</code>).</li>
+<li>Verify all nodes are on the same channel name AND PSK.</li>
+<li>Move one node within 10 m of another to rule out a config bug vs a range issue.</li>
+</ul>
+<h3 id="solar-isnt-keeping-up">Solar isn't keeping up</h3>
+<ul>
+<li>Confirm the panel is generating: disconnect from the TP5000, measure open-circuit voltage in sunlight — should be ~6.5 V Voc (closer to ~5 V once it's loaded by the TP5000).</li>
+<li>Confirm the TP5000 is charging: re-connect, measure across the cell — should rise toward 3.6 V over an hour of sun.</li>
+<li>December low-light is the close case. If a node won't survive the worst week, upgrade to a 5 W panel, or add a second LFP cell in parallel (~3000 mAh total) to ride through low-light stretches.</li>
+</ul>
+<h3 id="radio-not-responding-via-cli">Radio not responding via CLI</h3>
+<pre><code class="language-powershell">scripts\cli\healthcheck-mesh.ps1 -Verbose</code></pre>
+<p>Reads the connected node and prints any error states from <code>--info</code>.</p>
+<hr>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><strong>Meshtastic firmware:</strong> https://github.com/meshtastic/firmware</li>
+<li><strong>Meshtastic web flasher:</strong> https://flash.meshtastic.org</li>
+<li><strong>Meshtastic apps (mobile + desktop):</strong> https://meshtastic.org/docs/software/apps/</li>
+<li><strong>RAK4631 product page:</strong> https://store.rakwireless.com/products/rak4631-lpwan-node</li>
+<li><strong>RAK19003 product page:</strong> https://store.rakwireless.com/products/wisblock-base-board-rak19003</li>
+<li><strong>Project repo:</strong> https://github.com/mindattic/ChiMesh</li>
+</ul>
+<hr>
+<h2 id="summary-stack">Summary stack</h2>
+<table><thead><tr>
+<th>Layer</th>
+<th>What it is</th>
+</tr></thead><tbody>
+<tr>
+<td>Radio</td>
+<td>Semtech SX1262 LoRa, 915 MHz US ISM</td>
+</tr>
+<tr>
+<td>MCU</td>
+<td>Nordic nRF52840 (ARM Cortex-M4F @ 64 MHz)</td>
+</tr>
+<tr>
+<td>Board</td>
+<td>RAK4631 (RAK Wireless WisBlock Core) on RAK19003 Mini Base</td>
+</tr>
+<tr>
+<td>Firmware</td>
+<td>Meshtastic 2.5.x (stock, unmodified)</td>
+</tr>
+<tr>
+<td>Mesh protocol</td>
+<td>Meshtastic managed flood routing</td>
+</tr>
+<tr>
+<td>Power</td>
+<td>5 V / 2 W solar → TP5000 (LFP-configured) → LiFePO4 18650</td>
+</tr>
+<tr>
+<td>App / config</td>
+<td>Meshtastic mobile/desktop over BLE, or <code>meshtastic</code> CLI over USB</td>
+</tr>
+<tr>
+<td>Enclosure</td>
+<td>IP65 ABS junction box, M12 gland for solar lead</td>
+</tr>
+</tbody></table>
+
+    <p class="codex-footer">Generated 2026-08-14 by the shared MindAttic Codex engine (<code>codex-standard/build-readme.ps1</code>) from <code>README.md</code>. Edit the Markdown source, not this file.</p>
+  </main>
+</div>
+<script>(function(){
+  'use strict';
+  var inner   = document.getElementById('toc-inner');
+  var content = document.getElementById('content');
+  if(!inner||!content) return;
+
+  var headings = Array.from(content.querySelectorAll('h2,h3'));
+  if(headings.length){
+    var title = document.createElement('span');
+    title.className = 'toc-title';
+    title.textContent = 'Contents';
+    inner.appendChild(title);
+
+    headings.forEach(function(h){
+      var a = document.createElement('a');
+      a.href      = '#'+h.id;
+      a.textContent = h.textContent.replace(/[#¶]/g,'').trim();
+      a.className = 'toc-a'+(h.tagName==='H3'?' is-h3':'');
+      if(h.tagName==='H2' && inner.children.length>1){
+        var sep=document.createElement('hr');
+        sep.className='toc-sep';
+        inner.appendChild(sep);
+      }
+      inner.appendChild(a);
+    });
+  }
+
+  var tocLinks = inner.querySelectorAll('.toc-a');
+  if(tocLinks.length && 'IntersectionObserver' in window){
+    var idMap={};
+    tocLinks.forEach(function(l){idMap[decodeURIComponent(l.getAttribute('href').slice(1))]=l;});
+    var active=null;
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          if(active)active.classList.remove('active');
+          active=idMap[e.target.id]||null;
+          if(active){
+            active.classList.add('active');
+            var sidebar=document.getElementById('sidebar');
+            if(sidebar){
+              var ar=active.getBoundingClientRect();
+              var sr=sidebar.getBoundingClientRect();
+              if(ar.top<sr.top||ar.bottom>sr.bottom)
+                active.scrollIntoView({block:'nearest'});
+            }
+          }
+        }
+      });
+    },{rootMargin:'-8% 0px -78% 0px',threshold:0});
+    headings.forEach(function(h){obs.observe(h);});
+  }
+
+  content.querySelectorAll('pre').forEach(function(pre){
+    var btn=document.createElement('button');
+    btn.className='cpbtn';
+    btn.textContent='copy';
+    btn.setAttribute('aria-label','Copy code');
+    btn.addEventListener('click',function(){
+      var text=(pre.querySelector('code')||pre).textContent;
+      if(!navigator.clipboard){return;}
+      navigator.clipboard.writeText(text).then(function(){
+        btn.textContent='copied!';btn.classList.add('ok');
+        setTimeout(function(){btn.textContent='copy';btn.classList.remove('ok');},1800);
+      }).catch(function(){});
+    });
+    pre.appendChild(btn);
+  });
+}());</script>
+</body>
+</html>

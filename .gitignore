@@ -1,4 +1,4 @@
-# Visual Studio
+﻿# Visual Studio
 .vs/
 *.user
 *.suo
@@ -15,7 +15,7 @@ __pycache__/
 Thumbs.db
 .DS_Store
 
-# Local secrets — never commit a real .env / FTP creds
+# Local secrets â€” never commit a real .env / FTP creds
 .env
 config/.env
 config/*.local.*
@@ -32,4 +32,4 @@ dist/
 # Runtime logs from the .claude PostToolUse hook
 .claude/html-rebuild.log
 .claude/pull-latest.log
-.claude/checkpoint.md
+.claude/quicksave.md

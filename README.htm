@@ -571,10 +571,6 @@ meshtastic --set-owner chimesh-001</code></pre>
 <td>List the commands (also shown with no arguments, as a looping menu).</td>
 </tr>
 <tr>
-<td><code>update [--clean]</code></td>
-<td>Run <code>npm install</code> for <code>package.json</code> (which currently declares no dependencies). <code>--clean</code> first deletes <code>node_modules</code> and <code>package-lock.json</code>.</td>
-</tr>
-<tr>
 <td><code>provision &lt;node-name&gt;</code></td>
 <td>Run <code>provision-node.ps1</code>: set region, role, channel 0 and owner on the USB-connected node and read back to confirm. Options: <code>-Region</code>, <code>-Role</code>, <code>-Channel</code>, <code>-Port</code>.</td>
 </tr>
@@ -600,7 +596,6 @@ meshtastic --set-owner chimesh-001</code></pre>
 <ul>
 <li>Windows PowerShell 5.1 (no <code>pwsh</code> needed)</li>
 <li><code>pip install --upgrade meshtastic</code>, for <code>provision</code> and <code>healthcheck</code></li>
-<li>Node.js and npm, for <code>update</code></li>
 <li><code>git</code> on PATH, for <code>pull-latest</code></li>
 </ul>
 <h2 id="configuration">Configuration</h2>
@@ -626,7 +621,6 @@ meshtastic --set-owner chimesh-001</code></pre>
 <pre><code class="language-text">ChiMesh/
   README.md                    project page and build guide (this file)
   ChiMesh.Console.bat          root shortcut to scripts/cli/ChiMesh.Console.bat
-  package.json                 project metadata
   config/
     parts.json                 parts catalog, build options, prices
     versions.json              pinned upstream versions

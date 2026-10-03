@@ -57,7 +57,7 @@ ChiMesh is content + data (the README and `config/`) plus node tooling (`scripts
 - **`config/parts.json`** — L5 canon-as-data: the parts catalog, `configAxes` (region/role/deployment/antenna), category definitions, and prices. Registered via [`docs/data/parts.json`](data/parts.json) against [`part.schema.json`](data/_schema/part.schema.json).
 - **`config/versions.json`** — reference snapshot of pinned upstream versions (Meshtastic firmware/CLI, board labels, region/channel defaults). Values are inlined into `README.md`; this file is the canonical list to keep in sync.
 - **`config/images/*`** — per-part photos, linked as images from the README.
-- **`scripts/cli/ChiMesh.Console.ps1`** — single dispatch-table entry point for local + node tasks (`update`, `provision`, `healthcheck`, `list-parts`, `find-deals`, `pull-latest`).
+- **`scripts/cli/ChiMesh.Console.ps1`** — single dispatch-table entry point for parts-catalog + node tasks (`provision`, `healthcheck`, `list-parts`, `find-deals`, `pull-latest`).
 - **`scripts/cli/provision-node.ps1`** — provisions one USB node (region/role/channel0/owner) idempotently and reads back to confirm.
 - **`scripts/cli/healthcheck-mesh.ps1`** — six-check smoke test against a connected node.
 - **`tools/build-readme.ps1`** — regenerates the local `README.htm` preview through the shared engine in `codex-standard`.
@@ -110,7 +110,7 @@ Status legend: ✅ done (verified) · 🟡 partial · ⬜ planned · living.
 - 🟡 **Content is authored and internally consistent.** `README.md` (sections 01–08), `config/parts.json` (20 parts across core/consumable/tools — 10 core, 3 consumable, 7 tools — 4 config axes), `config/versions.json`, and 10 part images all exist and cross-reference correctly. No automated test asserts this — verified by review only, hence 🟡.
 - 🟡 **Node tooling exists.** `provision-node.ps1` and `healthcheck-mesh.ps1` are complete and parameter-validated, but exercising them requires physical RAK4631 hardware + the `meshtastic` Python CLI, which is not present in CI. Unproven here → 🟡.
 - ⬜ **Physical proof-of-mesh** (`A → via B → C`) — depends on three assembled nodes; not yet demonstrated in-repo.
-- ⬜ **No build/test command in this repo.** `package.json` is metadata only (no `scripts`); there is no test tree and no `npm test`/`dotnet test`. The closest in-repo verifier is `tools/codex.ps1 doctor` (docs integrity).
+- ⬜ **No build/test command in this repo.** There is no Node or .NET project, no test tree and no `npm test`/`dotnet test`. The closest in-repo verifier is `tools/codex.ps1 doctor` (docs integrity).
 
 **Build/test evidence (this repo, 2026-06-07):** No application build or unit-test command exists. `pwsh` is unavailable on this host; tooling runs under Windows PowerShell 5.1 via `powershell -File`. `tools/codex.ps1 doctor` is the authoritative in-repo gate — see [USER_STORIES](USER_STORIES.md) for per-story test citations (the codex tooling stories cite `codex.ps1 doctor`).
 

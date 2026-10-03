@@ -5,8 +5,8 @@
 
 .DESCRIPTION
     Single entry point for:
-      - Local dev: refresh Node deps and browse the parts catalog
-        (list-parts / find-deals) to pick the best deal per part.
+      - Parts catalog: browse it (list-parts / find-deals) to pick the
+        best deal per part.
       - Node management: provision a freshly-flashed RAK4631 (set region,
         role, channel, owner) and run a quick healthcheck against the
         connected node.
@@ -50,7 +50,7 @@ $repoRoot   = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $configDir  = Join-Path $repoRoot 'config'
 
 # Windows PowerShell 5.1's "-Encoding UTF8" writes UTF-8 *with* BOM, which
-# breaks JSON parsers (npm, node, jq). Use this helper for every JSON / file
+# breaks JSON parsers (node, jq). Use this helper for every JSON / file
 # write so output is portable.
 function Write-Utf8NoBom([string]$Path, [string]$Content) {
     $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
@@ -61,36 +61,6 @@ function Write-Info($msg) { Write-Host ('-> ' + $msg) -ForegroundColor Cyan }
 function Write-Ok($msg)   { Write-Host ('OK  ' + $msg) -ForegroundColor Green }
 function Write-Warn2($msg){ Write-Host ('!!  ' + $msg) -ForegroundColor Yellow }
 function Write-Err2($msg) { Write-Host ('XX  ' + $msg) -ForegroundColor Red }
-
-# --- Local dev commands --------------------------------------------------
-function Cmd-Update($a) {
-    $clean = $a -contains '--clean'
-
-    if (-not (Get-Command node -ErrorAction SilentlyContinue) -or
-        -not (Get-Command npm  -ErrorAction SilentlyContinue)) {
-        throw "Node.js / npm not found on PATH. Install from https://nodejs.org."
-    }
-    Write-Info ("node {0}   npm {1}" -f (& node --version), (& npm --version))
-
-    $pkgPath = Join-Path $repoRoot 'package.json'
-    if (-not (Test-Path $pkgPath)) {
-        throw "package.json missing at $pkgPath."
-    }
-
-    Push-Location $repoRoot
-    try {
-        if ($clean) {
-            $nm   = Join-Path $repoRoot 'node_modules'
-            $lock = Join-Path $repoRoot 'package-lock.json'
-            if (Test-Path $nm)   { Write-Info 'removing node_modules';      Remove-Item $nm -Recurse -Force }
-            if (Test-Path $lock) { Write-Info 'removing package-lock.json'; Remove-Item $lock -Force }
-        }
-        Write-Info 'npm install'
-        & npm install --no-audit --no-fund
-        if ($LASTEXITCODE -ne 0) { throw "npm install failed (exit $LASTEXITCODE)" }
-    } finally { Pop-Location }
-    Write-Ok 'deps ready'
-}
 
 # --- Node-side commands (Meshtastic over USB) ----------------------------
 function Cmd-Provision($a) {
@@ -272,7 +242,6 @@ function Cmd-PullLatest($a) {
 # --- Dispatch table ------------------------------------------------------
 $commands = [ordered]@{
     'help'        = @{ Help = 'List available commands.';                                                           Action = { Show-Help } }
-    'update'      = @{ Help = 'Install/refresh local Node deps. Add --clean to wipe node_modules.';                Action = { param($a) Cmd-Update $a } }
     'provision'   = @{ Help = 'Provision a USB-connected RAK4631 node. Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]'; Action = { param($a) Cmd-Provision $a } }
     'healthcheck' = @{ Help = 'Run end-to-end healthcheck against the USB-connected node.';                        Action = { param($a) Cmd-Healthcheck $a } }
     'list-parts'  = @{ Help = 'List parts catalog + which have a chosen URL.';                                     Action = { Cmd-ListParts } }

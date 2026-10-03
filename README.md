@@ -345,7 +345,6 @@ Launch the interactive menu from the repo root with `ChiMesh.Console.bat`, or di
 | Command | What it does |
 | --- | --- |
 | `help` | List the commands (also shown with no arguments, as a looping menu). |
-| `update [--clean]` | Run `npm install` for `package.json` (which currently declares no dependencies). `--clean` first deletes `node_modules` and `package-lock.json`. |
 | `provision <node-name>` | Run `provision-node.ps1`: set region, role, channel 0 and owner on the USB-connected node and read back to confirm. Options: `-Region`, `-Role`, `-Channel`, `-Port`. |
 | `healthcheck` | Run `healthcheck-mesh.ps1`, the six-check smoke test. Options: `-Port`, `-Verbose`. |
 | `list-parts` | List the parts catalog by category, with price and any chosen purchase URL. |
@@ -358,7 +357,6 @@ Prerequisites:
 
 - Windows PowerShell 5.1 (no `pwsh` needed)
 - `pip install --upgrade meshtastic`, for `provision` and `healthcheck`
-- Node.js and npm, for `update`
 - `git` on PATH, for `pull-latest`
 
 ## Configuration
@@ -377,7 +375,6 @@ Parts, prices and version facts are data. Edit these files rather than restating
 ChiMesh/
   README.md                    project page and build guide (this file)
   ChiMesh.Console.bat          root shortcut to scripts/cli/ChiMesh.Console.bat
-  package.json                 project metadata
   config/
     parts.json                 parts catalog, build options, prices
     versions.json              pinned upstream versions

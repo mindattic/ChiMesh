@@ -9,7 +9,7 @@ updated: 2026-10-03
 
 # ChiMesh — User Stories
 > ✅ done (shipped & tested) · 🟡 partial · ⬜ planned. Every ✅ cites the test.
-> Note: this repo has no application build or unit-test suite (`package.json` is metadata only).
+> Note: this repo has no application build or unit-test suite.
 > The only automated verifier in-repo is `tools/codex.ps1 doctor`; node tooling can only be
 > proven against physical RAK4631 hardware. Stories not provable in-repo are honestly marked 🟡/⬜.
 

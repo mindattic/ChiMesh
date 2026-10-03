@@ -12,8 +12,7 @@
         connected node.
       - Self-update: pull-latest overlays the newest source from git.
 
-    HTML rendering and deploy now live in the MindAttic.Deploy pipeline
-    (run /deploy) — not here.
+    There is no web deploy: the GitHub README is the project page.
 
     Meshtastic nodes are microcontrollers — there is no SSH, no system
     services, no shell on the device. Everything node-side goes through

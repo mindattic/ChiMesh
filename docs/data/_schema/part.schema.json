@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://mindattic.com/chimesh/schema/part.schema.json",
   "title": "ChiMesh part",
-  "description": "One row of the ChiMesh build parts catalog. The CANONICAL data lives in /config/parts.json (contractual shape consumed by MindAttic.Deploy/src/parts.js). This schema documents the per-part entity shape so codex doctor can validate it. Stable id = part.<slug>.",
+  "description": "One row of the ChiMesh build parts catalog. The CANONICAL data lives in /config/parts.json (read by scripts/cli/ChiMesh.Console.ps1). This schema documents the per-part entity shape so codex doctor can validate it. Stable id = part.<slug>.",
   "type": "object",
   "required": ["id", "category", "name", "price"],
   "additionalProperties": true,

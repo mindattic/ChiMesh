@@ -338,13 +338,13 @@ function Invoke-Digest {
         $cut     = ([regex]::Matches($st, 'CM-US-[A-Z]\d+\s*🗑')).Count
     }
 
-    # latest amendment head
-    $amendHead = ''
+    # pending decision heads (AMENDMENTS.md is normally empty)
+    $pending = @()
     if (Test-Path $Amend) {
         $at = Read-Text $Amend
         $amPattern = '^##\s+(CM-A\d+.*)$'
         $am = [regex]::Matches($at, $amPattern, [System.Text.RegularExpressions.RegexOptions]::Multiline)
-        if ($am.Count -gt 0) { $amendHead = $am[$am.Count - 1].Groups[1].Value.Trim() }
+        foreach ($m in $am) { $pending += $m.Groups[1].Value.Trim() }
     }
 
     $today = (Get-Date).ToString('yyyy-MM-dd')
@@ -377,9 +377,13 @@ function Invoke-Digest {
     [void]$sb.AppendLine(($(if ($s9) { $s9 } else { '(missing §9)' })))
     [void]$sb.AppendLine('')
     [void]$sb.AppendLine('## Status index')
-    [void]$sb.AppendLine(('- Stories: ' + $done + ' done, ' + $partial + ' partial, ' + $planned + ' planned, ' + $cut + ' cut.'))
-    if ($amendHead) { [void]$sb.AppendLine(('- Latest amendment: ' + $amendHead)) }
+    [void]$sb.AppendLine(('- Stories: ' + $done + ' done, ' + $partial + ' partial, ' + $planned + ' planned.'))
     [void]$sb.AppendLine('')
+    if ($pending.Count -gt 0) {
+        [void]$sb.AppendLine('## Pending decisions')
+        foreach ($h in $pending) { [void]$sb.AppendLine(('- ' + $h)) }
+        [void]$sb.AppendLine('')
+    }
 
     $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
     [System.IO.File]::WriteAllText($Digest, $sb.ToString(), $utf8NoBom)

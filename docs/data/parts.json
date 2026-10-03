@@ -5,7 +5,7 @@
   "layer": "data",
   "status": "living",
   "updated": "2026-06-07",
-  "_comment": "L5 canon-as-data MANIFEST for the ChiMesh parts catalog. Single home per fact: the actual catalog rows live in /config/parts.json (contractual shape consumed by MindAttic.Deploy/src/parts.js) and MUST NOT be duplicated here. codex doctor validates each row of config/parts.json[parts] against _schema/part.schema.json and checks id uniqueness. Cite parts from prose as part.<id>.",
+  "_comment": "L5 canon-as-data MANIFEST for the ChiMesh parts catalog. Single home per fact: the actual catalog rows live in /config/parts.json (read by scripts/cli/ChiMesh.Console.ps1; the README parts table is copied from it by hand) and MUST NOT be duplicated here. codex doctor validates each row of config/parts.json[parts] against _schema/part.schema.json and checks id uniqueness. Cite parts from prose as part.<id>.",
   "schema": "_schema/part.schema.json",
   "source": "../../config/parts.json",
   "sourcePointer": "parts",

@@ -20,8 +20,7 @@ $preamble = @"
 The following is the project's canonical bible digest (generated from docs/BIBLE.md).
 Treat it as the source of truth for what ChiMesh is, is NOT, and its Laws. When this digest and
 any other context disagree, the digest (and the full docs/BIBLE.md it summarizes) wins. Project
-code: CM. Full detail: docs/BIBLE.md; change log: docs/AMENDMENTS.md (amendment wins over bible);
-stories: docs/USER_STORIES.md; org-wide rules: MindAttic.HouseRules.md.
+code: CM. Full detail: docs/BIBLE.md; stories: docs/USER_STORIES.md; org-wide rules: MindAttic.HouseRules.md.
 
 "@
 

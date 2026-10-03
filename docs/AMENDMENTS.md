@@ -40,3 +40,22 @@ MindAttic, and inherit the org-wide [House Rules](../../MindAttic.HouseRules.md)
 **Migration.** No content was deleted. `config/parts.json` and `config/versions.json` remain the
 canonical data homes (the bible cites them; it does not copy them). No application/source code was
 changed.
+
+## CM-A3 — MindAttic.Deploy render + parts addon retired; README is a static GitHub page (supersedes CM-A1's render half and the bible's render/picker canon) {#CM-A3}
+**What changed.** On 2026-10-03 MindAttic.Deploy retired its catalog pipeline (its amendment DEP-A6): the
+README → `chimesh.htm` render, the `parts` addon (`src/parts.js`, which read `config/parts.json` and
+`config/images` to fill `<!-- CONFIG-WIDGET -->`, `<!-- PARTS-GALLERY -->` and `<!-- when: -->` blocks) and
+the upload are gone, and `mindattic.com/chimesh.htm` 301-redirects to https://github.com/mindattic/ChiMesh.
+`README.md` is now the project page as GitHub shows it, with a static parts table; there is no interactive
+configurator. `config/parts.json` stays the canonical parts/price data ([CM-LAW-7](BIBLE.md#CM-LAW-7)) and
+`config/images/` the part photos the README links.
+
+**Bible.** §1 (rendered landing page + picker), §2 (interactive picker), §3 (static HTML rendered by Deploy;
+render lives in Deploy), §4 (two halves, README markers, gallery images, the Deploy component), §4.2/§9 config
+axis "picker" wording, §4.3 Render, CM-LAW-7's render clause, §6's "rendering + deploy run in Deploy", §8 item 3
+and the §9 MindAttic.Deploy entry are struck through and marked superseded. §7 gains a note that the
+configurator is retired. The §3 mention of the retired local deploy script (a stale path the doctor warned
+about) is reworded without the filename. **Stories.** CM-US-A1 now cites the README's static parts table;
+CM-US-D1 (picker) is cut 🗑️.
+
+**Migration.** None. `/deploy` already says there is no web deploy. No application code changed.

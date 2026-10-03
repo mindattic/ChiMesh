@@ -7,7 +7,7 @@ code: CM
 layer: bible
 status: living
 generatedFrom: CM-§1,CM-§3,CM-§5,CM-§9
-updated: 2026-06-07
+updated: 2026-10-03
 ---
 
 # ChiMesh — Bible Digest

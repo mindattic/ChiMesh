@@ -39,7 +39,7 @@ ChiMesh has two halves: the **content/data half** (this repo) and the **render/d
   config/parts.json ... parts + axes     ├──►  index.template.htm (Hardware theme)
   config/images/*  .... part photos      ┘        + src/parts.js (CONFIG-WIDGET,
                                                     PARTS-GALLERY, when/end blocks)
-                                                 ──► out/chimesh.htm ──► FTPS ──► mindattic.com/chimesh.htm
+                                                 ──► (retired, DEP-A6) — project page is now the GitHub README: https://github.com/mindattic/ChiMesh
 
   NODE TOOLING (this repo, scripts/cli, runs against a USB-connected node via the meshtastic Python CLI)
   ──────────────────────────────────────────────────────────────────────────────────────────────────

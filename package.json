@@ -2,5 +2,5 @@
   "name": "chimesh",
   "version": "1.0.0",
   "private": true,
-  "description": "Project metadata for ChiMesh (Chicago LoRa Meshtastic proof-of-mesh build). HTML rendering + deploy now run through the MindAttic.Deploy pipeline (see .claude/commands/deploy.md)."
+  "description": "Project metadata for ChiMesh (Chicago LoRa Meshtastic proof-of-mesh build). No web deploy: the GitHub README is the project page (MindAttic.Deploy DEP-A6, CM-A3)."
 }

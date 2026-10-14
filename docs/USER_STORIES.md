@@ -39,3 +39,12 @@ Dependency-ordered toward the headline goal (CM-US-C2, proven multi-hop):
 4. **CM-US-C2** — the proof: capture `A → via B → C`.
 5. Secured channel PSK ([RFC 0001](rfc/0001-secured-channel-psk.md)) before any non-test deployment.
 6. Winter power-margin upgrade (second cell / 5 W panel) for any node overwintering unattended.
+
+## Tickets
+> Permanent log of every change and fix — this repo's ticket system. Rows are append-only: never
+> delete or reword one; only move its Status (open → closed / wont-do) and fill in Ref. Status is
+> a word, not a glyph, so tickets don't count toward the story index. Keep this section last.
+
+| ID | Date | Type | Status | Summary | Ref |
+|---|---|---|---|---|---|
+| CM-T1 | 2026-10-12 | docs | closed | Start the permanent ticket log in USER_STORIES.md | — |

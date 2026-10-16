@@ -50,3 +50,4 @@ Dependency-ordered toward the headline goal (CM-US-C2, proven multi-hop):
 |---|---|---|---|---|---|
 | CM-T1 | 2026-10-12 | docs | closed | Start the permanent ticket log in USER_STORIES.md | — |
 | CM-T2 | 2026-10-15 | chore | closed | Remove duplicate command copies (/deploy, /do, /quickload, /quicksave) now centralized at the user level (~/.claude/commands) | M.FLOW-T14 |
+| CM-T3 | 2026-10-16 | chore | closed | install.ps1 adds this repo's 8 .prose/commands stubs for the shared global commands, so any LLM client finds them | mindattic-agent-standard/install.ps1 run 2026-10-16 |

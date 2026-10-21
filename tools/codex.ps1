@@ -283,15 +283,15 @@ function Invoke-Doctor {
     Section '8. Digest is present and not stale'
     if (-not (Test-Path $Digest)) {
         Add-Err 'docs/BIBLE.digest.md missing — run: codex.ps1 digest'
-    } else {
-        $bibleMtime  = (Get-Item $Bible).LastWriteTimeUtc
-        $digestMtime = (Get-Item $Digest).LastWriteTimeUtc
-        if ($bibleMtime -gt $digestMtime) {
-            Add-Err 'docs/BIBLE.digest.md is STALE (BIBLE.md changed after it) — run: codex.ps1 digest'
-        } else {
-            Add-Ok 'digest is fresh (generatedFrom BIBLE.md, mtime ok)'
-        }
+    } elseif (Test-Path $Bible) {
+        # Compare content, not mtimes: a fresh clone or worktree checks files
+        # out in arbitrary order, so mtimes say nothing about staleness.
         $dtext = Read-Text $Digest
+        if ((Get-DigestComparable (Get-DigestText).Text) -cne (Get-DigestComparable $dtext)) {
+            Add-Err 'docs/BIBLE.digest.md is STALE (differs from what BIBLE.md now generates) — run: codex.ps1 digest'
+        } else {
+            Add-Ok 'digest is fresh (matches what BIBLE.md generates)'
+        }
         if ($dtext -notmatch 'AUTHORITATIVE') { Add-Warn 'digest missing AUTHORITATIVE header line' }
     }
 
@@ -318,8 +318,8 @@ function Get-Section([string]$text, [string]$anchor) {
     return $null
 }
 
-function Invoke-Digest {
-    if (-not (Test-Path $Bible)) { Write-Host 'BIBLE.md not found; cannot build digest' -ForegroundColor Red; exit 1 }
+# Build the digest text from BIBLE.md + USER_STORIES.md + AMENDMENTS.md (no write).
+function Get-DigestText {
     $b = Read-Text $Bible
     $fm = Get-FrontMatter $b
 
@@ -385,10 +385,22 @@ function Invoke-Digest {
         [void]$sb.AppendLine('')
     }
 
+    return @{ Text = $sb.ToString(); Done = $done; Partial = $partial; Planned = $planned }
+}
+
+# Digest text with line endings normalized and the 'updated:' date blanked, so
+# two digests compare equal when only the generation date differs.
+function Get-DigestComparable([string]$text) {
+    return (($text -replace "`r`n", "`n") -replace '(?m)^updated: .*$', 'updated:').TrimEnd()
+}
+
+function Invoke-Digest {
+    if (-not (Test-Path $Bible)) { Write-Host 'BIBLE.md not found; cannot build digest' -ForegroundColor Red; exit 1 }
+    $d = Get-DigestText
     $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-    [System.IO.File]::WriteAllText($Digest, $sb.ToString(), $utf8NoBom)
+    [System.IO.File]::WriteAllText($Digest, $d.Text, $utf8NoBom)
     Write-Host ('digest written: ' + (Get-RelPath $Digest)) -ForegroundColor Green
-    Write-Host ('  stories: ' + $done + ' done / ' + $partial + ' partial / ' + $planned + ' planned')
+    Write-Host ('  stories: ' + $d.Done + ' done / ' + $d.Partial + ' partial / ' + $d.Planned + ' planned')
 }
 
 switch ($Command) {

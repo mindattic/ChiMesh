@@ -37,6 +37,11 @@ function Write-Ok($msg)   { Write-Host ('  PASS  ' + $msg) -ForegroundColor Gree
 function Write-Bad($msg)  { Write-Host ('  FAIL  ' + $msg) -ForegroundColor Red }
 function Write-Warn2($msg){ Write-Host ('  WARN  ' + $msg) -ForegroundColor Yellow }
 
+# Set explicitly: when run via ChiMesh.Console this script would otherwise
+# inherit its 'Stop', and Windows PowerShell 5.1 then turns any meshtastic
+# stderr line (captured with 2>&1) into a terminating NativeCommandError.
+$ErrorActionPreference = 'Continue'
+
 $exitCode = 0
 $portArgs = @()
 if ($Port) { $portArgs = @('--port', $Port) }

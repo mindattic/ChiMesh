@@ -202,7 +202,11 @@ function Cmd-PullLatest($a) {
         if ($LASTEXITCODE -ne 0) { throw "git fetch failed (exit $LASTEXITCODE)" }
 
         $branch = (& git rev-parse --abbrev-ref HEAD).Trim()
+        # No upstream makes git write to stderr; under 'Stop' Windows PowerShell
+        # 5.1 would throw on that instead of reaching the warning below.
+        $ErrorActionPreference = 'Continue'
         $upstream = & git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>$null
+        $ErrorActionPreference = 'Stop'
         if (-not $upstream) {
             Write-Warn2 "no upstream set for branch '$branch'"
             return

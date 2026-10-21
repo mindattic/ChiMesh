@@ -51,7 +51,11 @@ param(
     [string]$Port
 )
 
-$ErrorActionPreference = 'Stop'
+# 'Continue', not 'Stop': under Windows PowerShell 5.1, 'Stop' turns any
+# stderr line from the meshtastic CLI (captured with 2>&1) into a terminating
+# NativeCommandError, which would skip the exit-code checks and the reboot
+# retry loop below. Every native call checks $LASTEXITCODE explicitly.
+$ErrorActionPreference = 'Continue'
 
 function Write-Info($msg) { Write-Host ('-> ' + $msg) -ForegroundColor Cyan }
 function Write-Ok($msg)   { Write-Host ('OK  ' + $msg) -ForegroundColor Green }

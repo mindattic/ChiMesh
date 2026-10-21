@@ -1,0 +1,4 @@
+# cmd.exe misparses LF-only batch files (badly so under a UTF-8 console code
+# page), so batch files are always checked out with CRLF line endings.
+*.bat text eol=crlf
+*.cmd text eol=crlf

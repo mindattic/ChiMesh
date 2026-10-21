@@ -14,7 +14,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%ChiMesh.Con
 
 set "RC=%ERRORLEVEL%"
 if "%~1"=="" (
-    REM Interactive session — don't auto-close.
+    REM Interactive session - don't auto-close.
     exit /b %RC%
 )
 if not "%RC%"=="0" (

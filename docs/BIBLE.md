@@ -61,7 +61,7 @@ ChiMesh is content + data (the README and `config/`) plus node tooling (`scripts
 - **`scripts/cli/provision-node.ps1`** — provisions one USB node (region/role/channel0/owner) idempotently and reads back to confirm.
 - **`scripts/cli/healthcheck-mesh.ps1`** — six-check smoke test against a connected node.
 - **`tools/build-readme.ps1`** — regenerates the local `README.htm` preview through the shared engine in `codex-standard`.
-- **[`.claude/commands/deploy.md`](../.claude/commands/deploy.md)** — `/deploy` only tells the user there is no web deploy.
+- **`/deploy`** — the shared global router (`~/.claude/commands/deploy.md`, no per-repo copy) finds no deploy mechanism here and tells the user there is no web deploy.
 
 ### 4.2 Domain model (NOUNS)
 - **Node** — one assembled unit (RAK4631 + RAK19003 + power chain + enclosure + antenna). Owner name like `chimesh-001`.

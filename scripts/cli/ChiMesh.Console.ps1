@@ -212,6 +212,7 @@ function Cmd-PullLatest($a) {
             return
         }
         Write-Info "branch: $branch   upstream: $upstream"
+        $upstreamSha = ((& git rev-parse '@{u}') -join '').Trim()
 
         $ahead  = [int]((& git rev-list --count "$upstream..HEAD")  -join '')
         $behind = [int]((& git rev-list --count "HEAD..$upstream")  -join '')
@@ -240,11 +241,11 @@ function Cmd-PullLatest($a) {
     & git clone --quiet --branch (& git -C $repoRoot rev-parse --abbrev-ref HEAD).Trim() "$repoRoot" "$stage"
     if ($LASTEXITCODE -ne 0) { throw "stage clone failed" }
 
-    Push-Location $stage
-    try {
-        & git fetch origin --quiet
-        & git reset --hard ("origin/" + (& git rev-parse --abbrev-ref HEAD).Trim()) | Out-Null
-    } finally { Pop-Location }
+    # The stage is a clone of the local repo, so its 'origin' is the local repo
+    # itself and origin/<branch> is the old local HEAD. Reset to the upstream
+    # commit fetched above instead (a local clone carries all of its objects).
+    & git -C $stage reset --hard --quiet $upstreamSha
+    if ($LASTEXITCODE -ne 0) { throw "stage reset to $upstream ($upstreamSha) failed" }
 
     $myPid = $PID
     $finisherSrc = Join-Path $PSScriptRoot 'pull-latest-finisher.ps1'

@@ -33,6 +33,15 @@ $Stories  = Join-Path $DocsDir 'USER_STORIES.md'
 $Amend    = Join-Path $DocsDir 'AMENDMENTS.md'
 $Digest   = Join-Path $DocsDir 'BIBLE.digest.md'
 
+# The workspace root holding MindAttic.HouseRules.md is the parent of the main
+# checkout. In a linked worktree (e.g. MindAttic.worktrees\ChiMesh\<ticket>) the
+# repo's own parent is not the workspace, so find the main checkout through git.
+$MainRoot = $RepoRoot
+try {
+    $common = & git -C $RepoRoot rev-parse --path-format=absolute --git-common-dir 2>$null
+    if ($LASTEXITCODE -eq 0 -and $common) { $MainRoot = Split-Path -Parent ("$common".Trim()) }
+} catch { }
+
 # --- output helpers ------------------------------------------------------
 $script:Errors   = New-Object System.Collections.Generic.List[string]
 $script:Warnings = New-Object System.Collections.Generic.List[string]
@@ -226,6 +235,9 @@ function Invoke-Doctor {
             if ($p -match '^https?:') { continue }
             if ($p -eq '') { continue }
             $resolved = Join-Path $DocsDir $p
+            # A link that leaves the repo (../../MindAttic.HouseRules.md) resolves
+            # against the main checkout when this is a linked worktree.
+            if (-not (Test-Path $resolved) -and $p -like '../../*') { $resolved = Join-Path (Join-Path $MainRoot 'docs') $p }
             if (Test-Path $resolved) { $pathOk++ }
             else { Add-Err ("bible cites missing path: " + $p); $pathErr++ }
         }
@@ -261,7 +273,7 @@ function Invoke-Doctor {
     # ---- 7. house-rules link resolves ----
     Section '7. House rules inherited link resolves'
     $houseRel = '..\MindAttic.HouseRules.md'
-    $housePath = Join-Path $RepoRoot $houseRel
+    $housePath = Join-Path $MainRoot $houseRel
     if (Test-Path $housePath) {
         Add-Ok 'MindAttic.HouseRules.md found (inherited, not modified)'
         # verify referenced HOUSE-LAW anchors exist there

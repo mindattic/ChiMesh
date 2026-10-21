@@ -63,20 +63,42 @@ function Write-Warn2($msg){ Write-Host ('!!  ' + $msg) -ForegroundColor Yellow }
 function Write-Err2($msg) { Write-Host ('XX  ' + $msg) -ForegroundColor Red }
 
 # --- Node-side commands (Meshtastic over USB) ----------------------------
+# Turn "-Name value -Switch" tokens into a hashtable for named splatting.
+# Splatting a string array binds every element positionally, so "-Region"
+# would arrive as a value, not a parameter name.
+function ConvertTo-NamedArgs([string[]]$tokens) {
+    $named = @{}
+    $tokens = @($tokens | Where-Object { $_ })
+    $i = 0
+    while ($i -lt $tokens.Count) {
+        $tok = $tokens[$i]
+        if (-not $tok.StartsWith('-') -or $tok.Length -lt 2) { throw "unexpected argument '$tok' (expected -Name value)" }
+        $name = $tok.TrimStart('-').TrimEnd(':')
+        if ($i + 1 -lt $tokens.Count -and -not $tokens[$i + 1].StartsWith('-')) {
+            $named[$name] = $tokens[$i + 1]
+            $i += 2
+        } else {
+            $named[$name] = $true
+            $i += 1
+        }
+    }
+    return $named
+}
+
 function Cmd-Provision($a) {
     if (-not $a -or $a.Count -lt 1) {
         throw "Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]"
     }
     $script = Join-Path $PSScriptRoot 'provision-node.ps1'
     # Pass first positional as -NodeName; splat the rest as named params.
-    # Use @var splatting -- @(...) would pass one array as a single argument.
-    $extra = @($a | Select-Object -Skip 1)
+    $extra = ConvertTo-NamedArgs @($a | Select-Object -Skip 1)
     & $script -NodeName $a[0] @extra
 }
 
 function Cmd-Healthcheck($a) {
     $script = Join-Path $PSScriptRoot 'healthcheck-mesh.ps1'
-    & $script @a
+    $named = ConvertTo-NamedArgs @($a)
+    & $script @named
 }
 
 # --- Parts catalog walker ------------------------------------------------

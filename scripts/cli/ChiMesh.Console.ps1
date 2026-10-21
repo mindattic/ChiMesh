@@ -52,6 +52,10 @@ $configDir  = Join-Path $repoRoot 'config'
 # Windows PowerShell 5.1's "-Encoding UTF8" writes UTF-8 *with* BOM, which
 # breaks JSON parsers (node, jq). Use this helper for every JSON / file
 # write so output is portable.
+# Exit code of the dispatched command, passed back to the caller (and the .bat)
+# so a failed provision/healthcheck is not reported as success.
+$script:ExitCode = 0
+
 function Write-Utf8NoBom([string]$Path, [string]$Content) {
     $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
     [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
@@ -93,12 +97,14 @@ function Cmd-Provision($a) {
     # Pass first positional as -NodeName; splat the rest as named params.
     $extra = ConvertTo-NamedArgs @($a | Select-Object -Skip 1)
     & $script -NodeName $a[0] @extra
+    $script:ExitCode = $LASTEXITCODE
 }
 
 function Cmd-Healthcheck($a) {
     $script = Join-Path $PSScriptRoot 'healthcheck-mesh.ps1'
     $named = ConvertTo-NamedArgs @($a)
     & $script @named
+    $script:ExitCode = $LASTEXITCODE
 }
 
 # --- Parts catalog walker ------------------------------------------------
@@ -323,3 +329,4 @@ function Show-Menu {
 
 if (-not $Command) { Show-Menu; exit 0 }
 Invoke-ChiMeshCommand -Name $Command -Args2 $Rest
+exit $script:ExitCode

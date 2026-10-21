@@ -111,7 +111,9 @@ function Cmd-Healthcheck($a) {
 function Read-PartsCatalog {
     $path = Join-Path $configDir 'parts.json'
     if (-not (Test-Path $path)) { throw "config/parts.json not found." }
-    return Get-Content $path -Raw | ConvertFrom-Json
+    # -Encoding UTF8: the file is BOM-less UTF-8, which Windows PowerShell 5.1
+    # would read as ANSI and find-deals would then write back as mojibake.
+    return Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json
 }
 
 function Write-PartsCatalog($catalog) {

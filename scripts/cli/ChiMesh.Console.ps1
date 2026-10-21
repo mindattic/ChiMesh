@@ -304,7 +304,10 @@ function Invoke-ChiMeshCommand([string]$Name, [string[]]$Args2) {
     if (-not $commands.Contains($Name)) {
         Write-Err2 "unknown command: $Name"
         Show-Help
-        exit 2
+        # Not 'exit': in the interactive menu that would kill the whole console
+        # on a typo. Direct dispatch still exits 2 via $script:ExitCode.
+        $script:ExitCode = 2
+        return
     }
     & $commands[$Name].Action $Args2
 }

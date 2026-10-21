@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    ChiMesh console — local builder tasks for the guide + USB-connected
+    ChiMesh console -- local builder tasks for the guide + USB-connected
     Meshtastic node management.
 
 .DESCRIPTION
@@ -14,7 +14,7 @@
 
     There is no web deploy: the GitHub README is the project page.
 
-    Meshtastic nodes are microcontrollers — there is no SSH, no system
+    Meshtastic nodes are microcontrollers -- there is no SSH, no system
     services, no shell on the device. Everything node-side goes through
     the `meshtastic` Python CLI over USB. Install once:
         pip install --upgrade meshtastic
@@ -69,7 +69,7 @@ function Cmd-Provision($a) {
     }
     $script = Join-Path $PSScriptRoot 'provision-node.ps1'
     # Pass first positional as -NodeName; splat the rest as named params.
-    # Use @var splatting — @(...) would pass one array as a single argument.
+    # Use @var splatting -- @(...) would pass one array as a single argument.
     $extra = @($a | Select-Object -Skip 1)
     & $script -NodeName $a[0] @extra
 }

@@ -5,8 +5,8 @@
 .DESCRIPTION
     Uses the `meshtastic` Python CLI to set region, role, channel-zero name,
     and owner name on whichever Meshtastic device is on the first serial port
-    the CLI finds. The channel PSK is left at the Meshtastic default — generate
-    one separately when you're ready for the deployment phase. Idempotent —
+    the CLI finds. The channel PSK is left at the Meshtastic default -- generate
+    one separately when you're ready for the deployment phase. Idempotent --
     re-running on an already-provisioned node is safe and just confirms the
     existing values.
 
@@ -80,7 +80,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Ok 'node responding'
 
-# 4. Push config in one pass — the CLI batches --set / --ch-set arguments.
+# 4. Push config in one pass -- the CLI batches --set / --ch-set arguments.
 Write-Info ("setting region={0}, role={1}, owner={2}, channel0={3}" -f $Region, $Role, $NodeName, $Channel)
 $setArgs = @(
     '--set', 'lora.region', $Region,
@@ -97,7 +97,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # The CLI reboots the node after writes. Poll `--info` rather than guess at
 # a fixed sleep: nRF52840 reboots in ~2 s typically, but USB-CDC re-enumeration
-# can take up to ~8 s on some Windows hosts. Retry up to 5×2s before giving up.
+# can take up to ~8 s on some Windows hosts. Retry up to 5x2s before giving up.
 Write-Info 'waiting for node to come back from reboot ...'
 $confirm = $null
 for ($i = 0; $i -lt 5; $i++) {
@@ -126,7 +126,7 @@ if ($regionOk -and $roleOk -and $channelOk) {
     Write-Info 'next: repeat for each remaining node, then move on to section 06 (Deploy) in README.md'
     exit 0
 } else {
-    Write-Warn2 'partial success — re-read with `meshtastic --info` and verify manually:'
+    Write-Warn2 'partial success -- re-read with `meshtastic --info` and verify manually:'
     if (-not $regionOk)  { Write-Warn2 "  region not confirmed (wanted $Region)" }
     if (-not $roleOk)    { Write-Warn2 "  role not confirmed (wanted $Role)" }
     if (-not $channelOk) { Write-Warn2 "  channel name not confirmed (wanted $Channel)" }

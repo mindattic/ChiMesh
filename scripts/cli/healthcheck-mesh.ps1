@@ -11,14 +11,14 @@
       5. At least one peer node is in the local NodeDB (proves mesh saw a neighbor)
 
     Returns exit 0 on all-green, exit 1 on any failure. Useful as the last
-    step before declaring a deployment "done" — and as the bundled command
+    step before declaring a deployment "done" -- and as the bundled command
     in section 07.4 of the build guide.
 
 .PARAMETER Port
     Optional explicit serial port (e.g. COM5). If omitted the CLI auto-detects.
 
 .PARAMETER Verbose
-    PowerShell common parameter — pass -Verbose to dump the full `--info`
+    PowerShell common parameter -- pass -Verbose to dump the full `--info`
     output alongside the checks.
 
 .EXAMPLE
@@ -71,7 +71,7 @@ Write-Step '3. LoRa region configured'
 if ($infoText -match 'region["\s:=]+([A-Z0-9_]+)') {
     $region = $matches[1]
     if ($region -eq 'UNSET' -or -not $region) {
-        Write-Bad "lora.region is UNSET — run provision-node.ps1 first"
+        Write-Bad "lora.region is UNSET -- run provision-node.ps1 first"
         $exitCode = 1
     } else {
         Write-Ok "region = $region"
@@ -94,20 +94,20 @@ if ($infoText -match 'role["\s:=]+([A-Z_]+)') {
 }
 
 # 5. Channel 0 name? Match the channelName= query param embedded in the
-# Primary channel URL — that's the one deterministic place across CLI
+# Primary channel URL -- that's the one deterministic place across CLI
 # versions. The bare "name:" heuristic is too broad (it matches owner
 # name, board name, region name, etc., depending on output ordering).
 Write-Step '5. channel 0 name'
 if ($infoText -match 'channelName=([^&\s"]+)') {
     Write-Ok ("channel name = " + $matches[1])
 } elseif ($infoText -match 'Primary channel URL') {
-    Write-Warn2 'primary channel URL present but channelName param not parsed — verify manually'
+    Write-Warn2 'primary channel URL present but channelName param not parsed -- verify manually'
 } else {
     Write-Warn2 'could not parse channel name from --info'
 }
 
 # 6. NodeDB has at least one peer (proves the mesh saw a neighbor at some point)?
-# Count node IDs (`!XXXXXXXX` — 8 hex chars after a bang) instead of parsing
+# Count node IDs (`!XXXXXXXX` -- 8 hex chars after a bang) instead of parsing
 # the CLI's ASCII table border, which has changed shape across versions.
 Write-Step '6. NodeDB peer count'
 $nodes = & meshtastic @portArgs --nodes 2>&1

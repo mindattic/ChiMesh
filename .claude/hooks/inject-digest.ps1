@@ -1,5 +1,5 @@
 <#
-  SessionStart hook — inject the ChiMesh bible digest as authoritative context.
+  SessionStart hook -- inject the ChiMesh bible digest as authoritative context.
   Reads docs/BIBLE.digest.md and emits Claude Code SessionStart hook JSON.
   If the digest is missing/empty, emits {}.
   Escapes all non-ASCII to \uXXXX so the JSON is safe under Windows PowerShell 5.1 / Win-1252.
@@ -16,7 +16,7 @@ $body = [System.IO.File]::ReadAllText($digest)
 if (-not $body -or $body.Trim().Length -eq 0) { Write-Output '{}'; exit 0 }
 
 $preamble = @"
-[ChiMesh Codex — AUTHORITATIVE SESSION CONTEXT]
+[ChiMesh Codex -- AUTHORITATIVE SESSION CONTEXT]
 The following is the project's canonical bible digest (generated from docs/BIBLE.md).
 Treat it as the source of truth for what ChiMesh is, is NOT, and its Laws. When this digest and
 any other context disagree, the digest (and the full docs/BIBLE.md it summarizes) wins. Project

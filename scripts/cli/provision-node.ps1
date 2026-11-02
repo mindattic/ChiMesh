@@ -70,6 +70,10 @@ if (-not $cli) {
 }
 Write-Info ('using ' + $cli.Source)
 
+# Meshtastic has no AU_915 region code: Australia/NZ 915-928 MHz is 'ANZ'.
+# Writing 'AU_915' makes the CLI reject the value and the read-back fail.
+$regionCode = if ($Region -eq 'AU_915') { 'ANZ' } else { $Region }
+
 # 2. Build the port-selector argument once and reuse it.
 $portArgs = @()
 if ($Port) { $portArgs = @('--port', $Port) }
@@ -85,9 +89,9 @@ if ($LASTEXITCODE -ne 0) {
 Write-Ok 'node responding'
 
 # 4. Push config in one pass -- the CLI batches --set / --ch-set arguments.
-Write-Info ("setting region={0}, role={1}, owner={2}, channel0={3}" -f $Region, $Role, $NodeName, $Channel)
+Write-Info ("setting region={0}, role={1}, owner={2}, channel0={3}" -f $regionCode, $Role, $NodeName, $Channel)
 $setArgs = @(
-    '--set', 'lora.region', $Region,
+    '--set', 'lora.region', $regionCode,
     '--set', 'device.role', $Role,
     '--ch-set', 'name', $Channel, '--ch-index', '0',
     '--set-owner', $NodeName
@@ -119,19 +123,19 @@ if ($LASTEXITCODE -ne 0) {
 # in the verbose `--info` output. Channel name is user-chosen and can contain
 # arbitrary punctuation, so it stays a plain escaped substring match.
 $confirmText = $confirm -join "`n"
-$regionOk  = $confirmText -match ('\b' + [regex]::Escape($Region) + '\b')
+$regionOk  = $confirmText -match ('\b' + [regex]::Escape($regionCode) + '\b')
 $roleOk    = $confirmText -match ('\b' + [regex]::Escape($Role)   + '\b')
 $channelOk = $confirmText -match [regex]::Escape($Channel)
 
 Write-Info 'reading back config ...'
 
 if ($regionOk -and $roleOk -and $channelOk) {
-    Write-Ok ("provisioned: $NodeName  ($Region / $Role / channel `"$Channel`")")
+    Write-Ok ("provisioned: $NodeName  ($regionCode / $Role / channel `"$Channel`")")
     Write-Info 'next: repeat for each remaining node, then move on to section 06 (Deploy) in README.md'
     exit 0
 } else {
     Write-Warn2 'partial success -- re-read with `meshtastic --info` and verify manually:'
-    if (-not $regionOk)  { Write-Warn2 "  region not confirmed (wanted $Region)" }
+    if (-not $regionOk)  { Write-Warn2 "  region not confirmed (wanted $regionCode)" }
     if (-not $roleOk)    { Write-Warn2 "  role not confirmed (wanted $Role)" }
     if (-not $channelOk) { Write-Warn2 "  channel name not confirmed (wanted $Channel)" }
     exit 4

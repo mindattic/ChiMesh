@@ -13,7 +13,7 @@
   "REGION_DEFAULT": "US",
   "REGION_DEFAULT_FREQ": "915 MHz",
 
-  "CHANNEL_DEFAULT": "ChiMesh-Test",
+  "CHANNEL_DEFAULT": "ChiMeshTest",
 
   "FLASHER_URL": "https://flash.meshtastic.org",
   "MESHTASTIC_APP_URL": "https://meshtastic.org/docs/software/apps/"

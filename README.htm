@@ -6,7 +6,7 @@
 <title>ChiMesh</title>
 <meta name="description" content="Off-grid Chicago: three solar-powered LoRa Meshtastic nodes, about $62 each, that prove multi-hop messaging across the city without the internet, the power grid or anyone's permission.">
 <meta name="generator" content="MindAttic Codex build-readme.ps1">
-<meta name="generated" content="2026-10-03">
+<meta name="generated" content="2026-11-02">
 <style>:root{
   --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
   --border:#30363d;
@@ -465,7 +465,7 @@ RAK4631 IPEX  -&gt;  pigtail  -&gt;  SMA bulkhead  -&gt;  915 MHz antenna</code>
 <p>Or set each field by hand:</p>
 <pre><code class="language-bash">meshtastic --set lora.region US
 meshtastic --set device.role ROUTER_CLIENT
-meshtastic --ch-set name "ChiMesh-Test" --ch-index 0
+meshtastic --ch-set name "ChiMeshTest" --ch-index 0
 meshtastic --set-owner chimesh-001</code></pre>
 <p>Notes for non-default choices:</p>
 <ul>
@@ -473,7 +473,7 @@ meshtastic --set-owner chimesh-001</code></pre>
 <li><code>CLIENT</code> is for portable or handheld use; the node sleeps aggressively and a sleeping client will not forward packets. Do not use it for fixed proof nodes.</li>
 <li>EU 868: duty-cycle rules limit each device to about 1% airtime on most sub-channels. Meshtastic enforces this in firmware; expect slower throughput than US 915.</li>
 </ul>
-<p>Confirm the config. You should see your region, your role, and channel 0 named <code>ChiMesh-Test</code>.</p>
+<p>Confirm the config. You should see your region, your role, and channel 0 named <code>ChiMeshTest</code>.</p>
 <pre><code class="language-bash">meshtastic --info</code></pre>
 <p>Checkpoint: <code>meshtastic --info</code> returns region, role and channel exactly as expected.</p>
 <h2 id="deploy-the-nodes">Deploy the nodes</h2>
@@ -587,11 +587,11 @@ meshtastic --set-owner chimesh-001</code></pre>
 <td>Open search, official, Amazon and reputable-seller tabs per part (<code>core</code>, <code>consumable</code> or <code>--all</code>), then save the URL you paste back to the part's <code>chosen</code> field.</td>
 </tr>
 <tr>
-<td><code>pull-latest [--force]</code></td>
-<td>Fetch the latest tracked branch into a temp clone and hand off to <code>pull-latest-finisher.ps1</code>, which overlays it onto the repo after the console exits. <code>--force</code> overwrites a dirty working tree.</td>
+<td><code>pull-latest</code></td>
+<td>Fetch the tracked branch and hand off to <code>pull-latest-finisher.ps1</code>, which fast-forwards the repo (<code>git merge --ff-only</code>) after the console exits. Refuses, touching nothing, when the working tree is dirty or the branch has local commits.</td>
 </tr>
 </tbody></table>
-<p><code>provision-node.ps1</code> accepts <code>-Region</code> <code>US</code>, <code>EU_868</code>, <code>AU_915</code> or <code>AS_923</code> (default <code>US</code>), <code>-Role</code> <code>ROUTER_CLIENT</code>, <code>CLIENT</code>, <code>ROUTER</code> or <code>CLIENT_MUTE</code> (default <code>ROUTER_CLIENT</code>) and <code>-Channel</code> (default <code>ChiMesh-Test</code>).</p>
+<p><code>provision-node.ps1</code> accepts <code>-Region</code> <code>US</code>, <code>EU_868</code>, <code>AU_915</code> (written as Meshtastic's <code>ANZ</code>), or a per-country Asia code <code>SG_923</code>, <code>MY_919</code>, <code>TH</code>, <code>JP</code>, <code>KR</code>, <code>TW</code>, <code>PH_915</code> (default <code>US</code>; <code>AS_923</code> is refused because Meshtastic has no such region), <code>-Role</code> <code>ROUTER_CLIENT</code>, <code>CLIENT</code>, <code>ROUTER</code> or <code>CLIENT_MUTE</code> (default <code>ROUTER_CLIENT</code>) and <code>-Channel</code> (default <code>ChiMeshTest</code>, at most 11 characters, Meshtastic's channel-name limit). It exits nonzero when the config can't be read back and confirmed.</p>
 <p>Prerequisites:</p>
 <ul>
 <li>Windows PowerShell 5.1 (no <code>pwsh</code> needed)</li>
@@ -683,7 +683,7 @@ meshtastic --set-owner chimesh-001</code></pre>
 <p>This repo has no LICENSE file. All rights reserved.</p>
 <p>Part of <a href="https://mindattic.com">MindAttic</a> — see more projects at <a href="https://github.com/mindattic">github.com/mindattic</a>. Related: <a href="https://github.com/mindattic/Claudia">Claudia</a>, another MindAttic hardware build.</p>
 
-    <p class="codex-footer">Generated 2026-10-03 by the shared MindAttic Codex engine (<code>codex-standard/build-readme.ps1</code>) from <code>README.md</code>. Edit the Markdown source, not this file.</p>
+    <p class="codex-footer">Generated 2026-11-02 by the shared MindAttic Codex engine (<code>codex-standard/build-readme.ps1</code>) from <code>README.md</code>. Edit the Markdown source, not this file.</p>
   </main>
 </div>
 <script>(function(){

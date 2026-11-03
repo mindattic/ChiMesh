@@ -227,7 +227,7 @@ Or set each field by hand:
 ```bash
 meshtastic --set lora.region US
 meshtastic --set device.role ROUTER_CLIENT
-meshtastic --ch-set name "ChiMesh-Test" --ch-index 0
+meshtastic --ch-set name "ChiMeshTest" --ch-index 0
 meshtastic --set-owner chimesh-001
 ```
 
@@ -237,7 +237,7 @@ Notes for non-default choices:
 - `CLIENT` is for portable or handheld use; the node sleeps aggressively and a sleeping client will not forward packets. Do not use it for fixed proof nodes.
 - EU 868: duty-cycle rules limit each device to about 1% airtime on most sub-channels. Meshtastic enforces this in firmware; expect slower throughput than US 915.
 
-Confirm the config. You should see your region, your role, and channel 0 named `ChiMesh-Test`.
+Confirm the config. You should see your region, your role, and channel 0 named `ChiMeshTest`.
 
 ```bash
 meshtastic --info
@@ -349,9 +349,9 @@ Launch the interactive menu from the repo root with `ChiMesh.Console.bat`, or di
 | `healthcheck` | Run `healthcheck-mesh.ps1`, the six-check smoke test. Options: `-Port`, `-Verbose`. |
 | `list-parts` | List the parts catalog by category, with price and any chosen purchase URL. |
 | `find-deals` | Open search, official, Amazon and reputable-seller tabs per part (`core`, `consumable` or `--all`), then save the URL you paste back to the part's `chosen` field. |
-| `pull-latest [--force]` | Fetch the latest tracked branch into a temp clone and hand off to `pull-latest-finisher.ps1`, which overlays it onto the repo after the console exits. `--force` overwrites a dirty working tree. |
+| `pull-latest` | Fetch the tracked branch and hand off to `pull-latest-finisher.ps1`, which fast-forwards the repo (`git merge --ff-only`) after the console exits. Refuses, touching nothing, when the working tree is dirty or the branch has local commits. |
 
-`provision-node.ps1` accepts `-Region` `US`, `EU_868`, `AU_915` or `AS_923` (default `US`), `-Role` `ROUTER_CLIENT`, `CLIENT`, `ROUTER` or `CLIENT_MUTE` (default `ROUTER_CLIENT`) and `-Channel` (default `ChiMesh-Test`).
+`provision-node.ps1` accepts `-Region` `US`, `EU_868`, `AU_915` (written as Meshtastic's `ANZ`), or a per-country Asia code `SG_923`, `MY_919`, `TH`, `JP`, `KR`, `TW`, `PH_915` (default `US`; `AS_923` is refused because Meshtastic has no such region), `-Role` `ROUTER_CLIENT`, `CLIENT`, `ROUTER` or `CLIENT_MUTE` (default `ROUTER_CLIENT`) and `-Channel` (default `ChiMeshTest`, at most 11 characters, Meshtastic's channel-name limit). It exits nonzero when the config can't be read back and confirmed.
 
 Prerequisites:
 

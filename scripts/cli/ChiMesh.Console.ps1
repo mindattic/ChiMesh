@@ -10,7 +10,7 @@
       - Node management: provision a freshly-flashed RAK4631 (set region,
         role, channel, owner) and run a quick healthcheck against the
         connected node.
-      - Self-update: pull-latest overlays the newest source from git.
+      - Self-update: pull-latest fast-forwards to the newest source from git.
 
     There is no web deploy: the GitHub README is the project page.
 
@@ -91,7 +91,7 @@ function ConvertTo-NamedArgs([string[]]$tokens) {
 
 function Cmd-Provision($a) {
     if (-not $a -or $a.Count -lt 1) {
-        throw "Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]"
+        throw "Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMeshTest] [-Port COMx]"
     }
     $script = Join-Path $PSScriptRoot 'provision-node.ps1'
     # Pass first positional as -NodeName; splat the rest as named params.
@@ -197,7 +197,14 @@ function Cmd-ListParts {
 }
 
 function Cmd-PullLatest($a) {
-    $force = $a -contains '--force'
+    # Fast-forward only. pull-latest used to overlay a temp clone onto the
+    # working tree, which never moved HEAD (leaving the repo dirty and still
+    # "behind") and with --force overwrote local edits. Now it moves HEAD with
+    # `git merge --ff-only` when the tree is clean and the branch has no local
+    # commits, and refuses otherwise. Local work is never overwritten.
+    if ($a -contains '--force') {
+        Write-Warn2 '--force is no longer supported: pull-latest never overwrites local changes or commits.'
+    }
 
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
         throw "git not found on PATH."
@@ -228,45 +235,43 @@ function Cmd-PullLatest($a) {
 
         if ($behind -eq 0) { Write-Ok 'already up to date.'; return }
 
+        if ($ahead -gt 0) {
+            Write-Warn2 "branch '$branch' has $ahead local commit(s) not on $upstream; a fast-forward is impossible."
+            Write-Warn2 'push or rebase them yourself (e.g. git pull --rebase), then re-run pull-latest.'
+            $script:ExitCode = 1
+            return
+        }
+
         $dirty = (& git status --porcelain) -join "`n"
-        if ($dirty -and -not $force) {
-            Write-Warn2 'working tree is dirty:'
+        if ($dirty) {
+            Write-Warn2 'working tree has uncommitted changes; pull-latest will not touch them:'
             Write-Host $dirty
-            Write-Warn2 're-run as `pull-latest --force` to overwrite, or commit/stash first.'
+            Write-Warn2 'commit or stash them, then re-run pull-latest.'
+            $script:ExitCode = 1
             return
         }
     } finally { Pop-Location }
 
-    # Stage the new tree in TEMP, then hand off to a detached helper so the
-    # live .ps1 file isn't held open while files get copied over.
+    # Hand the fast-forward to a detached helper so it runs after this console
+    # exits: the merge rewrites the console's own files (and the .bat that
+    # launched it), which should not change under a running process.
     $stamp   = (Get-Date).ToString('yyyyMMdd_HHmmss')
-    $stage   = Join-Path ([System.IO.Path]::GetTempPath()) ("chimesh-update-" + $stamp)
     $helper  = Join-Path ([System.IO.Path]::GetTempPath()) ("chimesh-update-" + $stamp + ".ps1")
     $logPath = Join-Path $repoRoot '.claude\pull-latest.log'
     if (-not (Test-Path (Split-Path $logPath))) { New-Item -ItemType Directory -Path (Split-Path $logPath) | Out-Null }
-
-    Write-Info ("staging into " + $stage)
-    & git clone --quiet --branch (& git -C $repoRoot rev-parse --abbrev-ref HEAD).Trim() "$repoRoot" "$stage"
-    if ($LASTEXITCODE -ne 0) { throw "stage clone failed" }
-
-    # The stage is a clone of the local repo, so its 'origin' is the local repo
-    # itself and origin/<branch> is the old local HEAD. Reset to the upstream
-    # commit fetched above instead (a local clone carries all of its objects).
-    & git -C $stage reset --hard --quiet $upstreamSha
-    if ($LASTEXITCODE -ne 0) { throw "stage reset to $upstream ($upstreamSha) failed" }
 
     $myPid = $PID
     $finisherSrc = Join-Path $PSScriptRoot 'pull-latest-finisher.ps1'
     if (-not (Test-Path $finisherSrc)) { throw "missing helper: $finisherSrc" }
     Copy-Item -Path $finisherSrc -Destination $helper -Force
 
-    Write-Ok 'staged. spawning detached helper to finish the copy after this process exits.'
+    Write-Ok ("ready to fast-forward to $upstream ($upstreamSha). spawning detached helper to finish after this process exits.")
     Start-Process -FilePath 'powershell.exe' -ArgumentList @(
         '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden',
         '-File', $helper,
         '-WaitPid', $myPid,
-        '-Stage',   $stage,
         '-Repo',    $repoRoot,
+        '-Sha',     $upstreamSha,
         '-Log',     $logPath
     ) -WindowStyle Hidden | Out-Null
 
@@ -277,11 +282,11 @@ function Cmd-PullLatest($a) {
 # --- Dispatch table ------------------------------------------------------
 $commands = [ordered]@{
     'help'        = @{ Help = 'List available commands.';                                                           Action = { Show-Help } }
-    'provision'   = @{ Help = 'Provision a USB-connected RAK4631 node. Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMesh-Test] [-Port COMx]'; Action = { param($a) Cmd-Provision $a } }
+    'provision'   = @{ Help = 'Provision a USB-connected RAK4631 node. Usage: provision <node-name> [-Region US] [-Role ROUTER_CLIENT] [-Channel ChiMeshTest] [-Port COMx]'; Action = { param($a) Cmd-Provision $a } }
     'healthcheck' = @{ Help = 'Run end-to-end healthcheck against the USB-connected node.';                        Action = { param($a) Cmd-Healthcheck $a } }
     'list-parts'  = @{ Help = 'List parts catalog + which have a chosen URL.';                                     Action = { Cmd-ListParts } }
     'find-deals'  = @{ Help = 'Open Official/Amazon/Reputable tabs per part; save your picks. [core|consumable|--all]'; Action = { param($a) Cmd-FindDeals $a } }
-    'pull-latest' = @{ Help = 'git fetch + overlay latest source. Add --force if working tree is dirty.';          Action = { param($a) Cmd-PullLatest $a } }
+    'pull-latest' = @{ Help = 'git fetch + fast-forward to upstream. Refuses on local changes or commits.';       Action = { param($a) Cmd-PullLatest $a } }
 }
 
 function Show-Help {

@@ -10,7 +10,7 @@ updated: 2026-06-07
 # RFC 0001 — Secured channel-0 PSK across the mesh
 
 ## Problem
-`provision-node.ps1` writes channel-0 name (`ChiMesh-Test`) but **leaves the PSK at the Meshtastic
+`provision-node.ps1` writes channel-0 name (`ChiMeshTest`) but **leaves the PSK at the Meshtastic
 default**. A default-PSK channel is effectively open: anyone within RF range running stock
 Meshtastic on the same name/region can read and inject traffic. For a throwaway proof run this is
 acceptable; for any node left deployed it is not. We need a way to generate one PSK and apply it

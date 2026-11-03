@@ -68,14 +68,14 @@ ChiMesh is content + data (the README and `config/`) plus node tooling (`scripts
 - **Part** — a catalog row (`part.<id>`); `category` ∈ {core, consumable, tools}. Canon in [`config/parts.json`](../config/parts.json).
 - **Config axis** — a reader choice (region, role, deployment, antenna), defined in `configAxes` and covered by the README's per-choice notes.
 - **Mesh** — the set of nodes; proven when a message routes through at least one intermediate hop.
-- **Channel** — Meshtastic channel 0 (default name `ChiMesh-Test`), shared name + PSK across nodes.
+- **Channel** — Meshtastic channel 0 (default name `ChiMeshTest`), shared name + PSK across nodes.
 - **Region / Role** — LoRa region (default `US` / 915 MHz) and device role (default `ROUTER_CLIENT`).
 
 ### 4.3 Key services (VERBS)
 - **Provision** — `provision-node.ps1` writes region/role/channel0/owner over USB, reboots, reads back.
 - **Healthcheck** — `healthcheck-mesh.ps1` verifies CLI present, node responds, region set, role set, channel-0 named, ≥1 NodeDB peer.
 - **List / find deals** — `ChiMesh.Console` browses the parts catalog and records chosen purchase URLs.
-- **Pull-latest** — self-update overlay from git via a detached finisher.
+- **Pull-latest** — self-update by fast-forward (`git merge --ff-only`) via a detached finisher; refuses when the tree is dirty or the branch has local commits.
 
 ## 5. The Laws {#CM-§5}
 

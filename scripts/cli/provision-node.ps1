@@ -16,14 +16,18 @@
     Short owner / display name for the node, e.g. chimesh-001. Required.
 
 .PARAMETER Region
-    LoRa region code. Default: US. Other accepted values: EU_868, AU_915, AS_923.
+    LoRa region code. Default: US. Other accepted values: EU_868, AU_915 (written
+    as Meshtastic's ANZ), and the per-country 923/919 MHz codes SG_923, MY_919,
+    TH, JP, KR, TW, PH_915. AS_923 is rejected: Meshtastic has no single
+    AS_923 region, so pick the code for the country the node will run in.
 
 .PARAMETER Role
     Device role. Default: ROUTER_CLIENT. Other accepted values: CLIENT, ROUTER,
     CLIENT_MUTE. For fixed proof-of-mesh nodes use ROUTER_CLIENT.
 
 .PARAMETER Channel
-    Channel-zero name. Default: ChiMesh-Test. The PSK is left at Meshtastic's
+    Channel-zero name, at most 11 characters (Meshtastic's channel-name limit).
+    Default: ChiMeshTest. The PSK is left at Meshtastic's
     default until you generate one for the deployment phase.
 
 .PARAMETER Port
@@ -40,13 +44,13 @@ param(
     [Parameter(Mandatory = $true, Position = 0)]
     [string]$NodeName,
 
-    [ValidateSet('US', 'EU_868', 'AU_915', 'AS_923')]
+    [ValidateSet('US', 'EU_868', 'AU_915', 'AS_923', 'SG_923', 'MY_919', 'TH', 'JP', 'KR', 'TW', 'PH_915')]
     [string]$Region = 'US',
 
     [ValidateSet('ROUTER_CLIENT', 'CLIENT', 'ROUTER', 'CLIENT_MUTE')]
     [string]$Role = 'ROUTER_CLIENT',
 
-    [string]$Channel = 'ChiMesh-Test',
+    [string]$Channel = 'ChiMeshTest',
 
     [string]$Port
 )
@@ -61,6 +65,22 @@ function Write-Info($msg) { Write-Host ('-> ' + $msg) -ForegroundColor Cyan }
 function Write-Ok($msg)   { Write-Host ('OK  ' + $msg) -ForegroundColor Green }
 function Write-Warn2($msg){ Write-Host ('!!  ' + $msg) -ForegroundColor Yellow }
 function Write-Err2($msg) { Write-Host ('XX  ' + $msg) -ForegroundColor Red }
+
+# AS_923 stays in the ValidateSet only so it gets this explanation instead of a
+# bare "not in set" error: Meshtastic has no AS_923 region code, the 920-923 MHz
+# band is split into per-country codes. Refuse rather than guess a country.
+if ($Region -eq 'AS_923') {
+    Write-Err2 "Meshtastic has no AS_923 region. Pick the country code instead: SG_923 (Singapore), MY_919 (Malaysia), TH (Thailand), JP (Japan), KR (Korea), TW (Taiwan), PH_915 (Philippines)."
+    exit 1
+}
+
+# Meshtastic stores the channel name in a 12-byte field (11 characters plus the
+# terminator); a longer name is truncated on the node, so it would never match
+# the name the other nodes were given. Refuse it up front.
+if ([System.Text.Encoding]::UTF8.GetByteCount($Channel) -gt 11) {
+    Write-Err2 ("channel name '{0}' is longer than Meshtastic's 11-character limit." -f $Channel)
+    exit 1
+}
 
 # 1. Ensure the CLI is available.
 $cli = Get-Command meshtastic -ErrorAction SilentlyContinue
@@ -114,8 +134,10 @@ for ($i = 0; $i -lt 5; $i++) {
     if ($LASTEXITCODE -eq 0) { break }
 }
 if ($LASTEXITCODE -ne 0) {
-    Write-Warn2 'read-back failed after 10s (node may still be rebooting). Try `meshtastic --info` again in 10s.'
-    exit 0
+    # Not confirmed is not done [HOUSE-LAW-8]: the config was written but
+    # nothing proved it took, so fail rather than report success.
+    Write-Warn2 'read-back failed after 10s (node may still be rebooting). Try `meshtastic --info` again in 10s and verify the config.'
+    exit 5
 }
 
 # 5. Read back and confirm. Word-boundary anchor on Region and Role so short

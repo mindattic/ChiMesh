@@ -1,12 +1,14 @@
 # pull-latest-finisher.ps1
 # Spawned (detached + hidden) by ChiMesh.Console pull-latest.
 # Waits for the Console PowerShell process to exit so it can release file
-# handles on ChiMesh.Console.ps1, then mirrors the staged tree over the repo.
+# handles on ChiMesh.Console.ps1, then fast-forwards the repo to the fetched
+# upstream commit. Fast-forward only: if the tree became dirty or HEAD moved
+# meanwhile, git refuses and nothing local is overwritten.
 
 param(
     [Parameter(Mandatory)] [int]    $WaitPid,
-    [Parameter(Mandatory)] [string] $Stage,
     [Parameter(Mandatory)] [string] $Repo,
+    [Parameter(Mandatory)] [string] $Sha,
     [Parameter(Mandatory)] [string] $Log
 )
 
@@ -25,19 +27,20 @@ while ($tries -lt 240) {   # ~2 minutes max
     Start-Sleep -Milliseconds 500
     $tries++
 }
-Write-Log ("parent gone after " + $tries + " waits. copying " + $Stage + " -> " + $Repo)
+Write-Log ("parent gone after " + $tries + " waits. fast-forwarding " + $Repo + " to " + $Sha)
 
-# Robocopy mirror, but skip .git / node_modules / .vs (they shouldn't roundtrip
-# through the temp clone, and skipping them keeps the pull idempotent and fast).
-$rc = Start-Process -FilePath robocopy -ArgumentList @(
-    ('"' + $Stage + '"'),
-    ('"' + $Repo  + '"'),
-    '/E', '/XO',
-    '/XD', '.git', 'node_modules', '.vs',
-    '/R:2', '/W:1', '/NFL', '/NDL', '/NJH', '/NJS'
-) -NoNewWindow -Wait -PassThru
+# Re-check: something may have changed the tree while the console was open.
+$dirty = (& git -C $Repo status --porcelain 2>&1) -join "`n"
+if ($dirty) {
+    Write-Log ("REFUSED: working tree has uncommitted changes, nothing was touched:`n" + $dirty)
+    exit 1
+}
 
-Write-Log ("robocopy exit " + $rc.ExitCode + " - codes 0..7 mean success")
-
-Remove-Item -LiteralPath $Stage -Recurse -Force -ErrorAction SilentlyContinue
+$out = (& git -C $Repo merge --ff-only $Sha 2>&1) -join "`n"
+$code = $LASTEXITCODE
+Write-Log $out
+if ($code -ne 0) {
+    Write-Log ("REFUSED: git merge --ff-only exited " + $code + "; local history was left as it was.")
+    exit $code
+}
 Write-Log 'done.'
